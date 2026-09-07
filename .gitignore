@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+predictions.csv
+score.json
+metrics_*/
+data/*.csv
+!data/sample_submission.csv
+.DS_Store
