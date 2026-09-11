@@ -66,6 +66,18 @@ def main() -> None:
     train = pd.read_csv(args.train)
     test = pd.read_csv(args.test)
 
+    # Смоук-прогон платформы может подать урезанный файл (например, без полей
+    # рана). Пишем валидный predictions.csv вместо падения.
+    run_columns = ["goal", "agents", "shared_state", "messages", "artifacts",
+                   "topology"]
+    if any(c not in test.columns for c in run_columns) or \
+            any(c not in train.columns for c in run_columns + ["label", "success"]):
+        print("WARNING: входные файлы без полей рана — пишу константный ответ")
+        ids = test["run_id"] if "run_id" in test.columns else range(len(test))
+        pd.DataFrame({"run_id": ids, "label": "clean", "success": 1,
+                      "fault_turn": -1}).to_csv(args.output, index=False)
+        return
+
     Xtr = pd.DataFrame([featurize(parse_run(r)) for r in train.to_dict("records")])
     test_runs = [parse_run(r) for r in test.to_dict("records")]
     Xte = pd.DataFrame([featurize(r) for r in test_runs]).reindex(

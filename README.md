@@ -37,6 +37,7 @@ python scripts/local_cv.py --train data/train.csv --folds 3
 | [`docs/data_schema.md`](docs/data_schema.md) | поля, JSON-схемы, шум, сдвиг распределения |
 | [`docs/metrics.md`](docs/metrics.md) | формула итогового скора |
 | [`docs/baseline.md`](docs/baseline.md) | как устроен baseline и где он слаб |
+| [`docs/faq.md`](docs/faq.md) | частые вопросы: веса моделей, предобучение, смоук-прогон |
 
 ## Что внутри
 
@@ -52,6 +53,16 @@ tests/        проверки стартового комплекта
 
 Боевые `train.csv` и `test.csv` выдаются платформой в разделе «Данные»;
 датасет в `data/` — демонстрационный, той же природы.
+
+## Окружение запуска
+
+Решение работает в подготовленном образе, **интернета внутри job'а нет**.
+Установлены numpy, pandas, scipy, scikit-learn, LightGBM; в GPU-варианте
+дополнительно torch 2.5.1 + CUDA 12.4, transformers, sentence-transformers,
+xgboost, catboost.
+
+Предобученных моделей в образе нет. Нужна готовая модель — кладите её веса
+в архив сабмита рядом с `solution.py` и загружайте по относительному пути.
 
 ## Тесты
 
