@@ -1,0 +1,119 @@
+{
+  "folds": [
+    {
+      "fold": 0,
+      "n_val": 3334,
+      "macro_f1": 0.7503578142665562,
+      "hit2_rule": 0.39916666666666667,
+      "hit2_new": 0.18666666666666668,
+      "hit2_oracle": 0.1875,
+      "delta_hit2": -0.2125
+    },
+    {
+      "fold": 1,
+      "n_val": 3333,
+      "macro_f1": 0.7652571863592483,
+      "hit2_rule": 0.41458333333333336,
+      "hit2_new": 0.20333333333333334,
+      "hit2_oracle": 0.20333333333333334,
+      "delta_hit2": -0.21125000000000002
+    },
+    {
+      "fold": 2,
+      "n_val": 3333,
+      "macro_f1": 0.7559280372200937,
+      "hit2_rule": 0.4083333333333333,
+      "hit2_new": 0.19916666666666666,
+      "hit2_oracle": 0.2,
+      "delta_hit2": -0.20916666666666667
+    }
+  ],
+  "per_class": {
+    "dropped_handoff": {
+      "n": 1200,
+      "rule": 0.33416666666666667,
+      "new": 0.18666666666666668,
+      "oracle": 0.18666666666666668
+    },
+    "duplicated_work": {
+      "n": 1200,
+      "rule": 0.3458333333333333,
+      "new": 0.005,
+      "oracle": 0.005833333333333334
+    },
+    "deadlock": {
+      "n": 1200,
+      "rule": 0.29583333333333334,
+      "new": 0.24666666666666667,
+      "oracle": 0.24666666666666667
+    },
+    "conflict": {
+      "n": 1200,
+      "rule": 0.8733333333333333,
+      "new": 0.004166666666666667,
+      "oracle": 0.004166666666666667
+    },
+    "goal_drift": {
+      "n": 1200,
+      "rule": 0.33,
+      "new": 0.2891666666666667,
+      "oracle": 0.29
+    },
+    "runaway_loop": {
+      "n": 1200,
+      "rule": 0.265,
+      "new": 0.44666666666666666,
+      "oracle": 0.4483333333333333
+    }
+  },
+  "config": {
+    "folds": 3,
+    "splitter": "StratifiedKFold(shuffle=True, random_state=0)",
+    "n_turn_features": 115,
+    "n_turn_features_plus_label_onehot": 121,
+    "ranker": "LightGBM binary, per fault class, {'n_estimators': 400, 'learning_rate': 0.05, 'num_leaves': 31, 'min_child_samples': 50, 'subsample': 0.9, 'subsample_freq': 1, 'colsample_bytree': 0.7, 'reg_lambda': 1.0, 'n_jobs': -1, 'random_state': 42, 'verbose': -1}",
+    "decision_rule": "argmax over turns within run, model selected by OOF-predicted label",
+    "turn_feature_time_s": 59.7182457447052,
+    "total_runtime_s": 135.5170693397522
+  },
+  "overall": {
+    "macro_f1": 0.7572580862071641,
+    "robustness_f1": 0.7153778055125197,
+    "success_f1": 0.8568961795812648,
+    "hit2_rule": 0.4073611111111111,
+    "hit2_new": 0.1963888888888889,
+    "hit2_oracle": 0.19694444444444445,
+    "delta_hit2": -0.21097222222222223,
+    "composite_rule": 0.7267440325300127,
+    "composite_new": 0.7056468103077905,
+    "delta_composite": -0.02109722222222221,
+    "turn_feature_time_s": 59.7182457447052,
+    "n_turn_features": 115
+  },
+  "err": {
+    "rule": {
+      "n": 5239,
+      "medAE": 1.0,
+      "meanAE": 7.0549723229623975,
+      "exact": 0.46993701087993894,
+      "early": 1743,
+      "late": 1034
+    },
+    "new": {
+      "n": 5248,
+      "medAE": 8.0,
+      "meanAE": 12.681974085365853,
+      "exact": 0.1169969512195122,
+      "early": 4586,
+      "late": 48
+    },
+    "oracle": {
+      "n": 5248,
+      "medAE": 8.0,
+      "meanAE": 12.675876524390244,
+      "exact": 0.1173780487804878,
+      "early": 4582,
+      "late": 50
+    }
+  }
+}

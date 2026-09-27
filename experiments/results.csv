@@ -1,0 +1,1 @@
+exp01,fault_turn_ranker,0.4074,0.1964,-0.2110,0.7267,0.7056,-0.0211,not_promising,"per-class causal LightGBM turn ranker (115 feats), argmax per run, 3-fold OOF, same folds as local_cv.py",experiments/exp01_fault_turn_ranker/RESULTS.md
