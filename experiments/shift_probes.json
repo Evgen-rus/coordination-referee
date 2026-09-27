@@ -1,0 +1,101 @@
+{
+  "train_all__test_long": {
+    "n_train": 10000,
+    "n_test": 4880,
+    "macro_f1": 1.0
+  },
+  "train_all__test_short": {
+    "n_train": 10000,
+    "n_test": 5120,
+    "macro_f1": 1.0
+  },
+  "train_short__test_long": {
+    "n_train": 5120,
+    "n_test": 4880,
+    "macro_f1": 0.6702859871742829
+  },
+  "train_long__test_short": {
+    "n_train": 4880,
+    "n_test": 5120,
+    "macro_f1": 0.7134239545592489
+  },
+  "train_short__test_all": {
+    "n_train": 5120,
+    "n_test": 10000,
+    "macro_f1": 0.8426429739104151
+  },
+  "train_long__test_all": {
+    "n_train": 4880,
+    "n_test": 10000,
+    "macro_f1": 0.8588050311694565
+  },
+  "train_all__test_many_agents": {
+    "n_train": 10000,
+    "n_test": 4295,
+    "macro_f1": 1.0
+  },
+  "train_few_agents__test_many_agents": {
+    "n_train": 5705,
+    "n_test": 4295,
+    "macro_f1": 0.7392611710646549
+  },
+  "train_all__test_rare_topo": {
+    "n_train": 10000,
+    "n_test": 2491,
+    "macro_f1": 1.0
+  },
+  "train_common_topo__test_rare_topo": {
+    "n_train": 7509,
+    "n_test": 2491,
+    "macro_f1": 0.7784993972316159
+  },
+  "length_shift_penalty": -0.3297140128257171,
+  "agent_shift_penalty": -0.26073882893534506,
+  "topology_shift_penalty": -0.22150060276838412,
+  "baseline_in_sample_macro_f1": 1.0,
+  "kw_features_zeroed_at_test": 0.7484776912491679,
+  "goal_alignment_zeroed_at_test": 0.9926601087364941,
+  "all_texts_masked_at_test": 0.6548138562830985,
+  "drift_keywords_removed_from_text": 0.944465821304134,
+  "intents_blanked_at_test": 0.9060785718697364,
+  "refs_stripped_at_test": 0.9648475954332053,
+  "gain_by_group": {
+    "shared_state": 0.15183964802460312,
+    "repetition": 0.14429629009872336,
+    "lexicon": 0.14510978184251724,
+    "artifacts": 0.09509737957676533,
+    "msg_types": 0.1424267610682837,
+    "handoff_accounting": 0.1213540684815074,
+    "volume": 0.04535344085624543,
+    "graph": 0.06334389370339623,
+    "tail": 0.027019613536238565,
+    "goal_alignment": 0.04779127478735258,
+    "senders": 0.012275170751070485,
+    "topology": 0.004092677273296611
+  },
+  "gain_top20": {
+    "state_alternating_flips": 0.13125394442934843,
+    "n_intents": 0.07940691011460294,
+    "kw_repeat_rate": 0.04061376177698762,
+    "max_arts_per_subtask": 0.0382177192298159,
+    "share_status": 0.033944607281160416,
+    "share_handoff": 0.02832782586141142,
+    "type_status": 0.026880040181539635,
+    "assign_result_gap": 0.02501797869685762,
+    "max_assign_per_intent": 0.021857579498070042,
+    "kw_repeat": 0.02139405967303424,
+    "kw_drift_rate": 0.01997598304455303,
+    "arts_per_msg": 0.017904065877672293,
+    "share_inform": 0.01714256972806786,
+    "n_assign": 0.015298719335185663,
+    "kw_recovery_rate": 0.015059971154614668,
+    "g_reciprocity": 0.014982532579947208,
+    "intent_entropy": 0.013919945716712944,
+    "coverage": 0.013878754713024587,
+    "undelivered_ratio": 0.011891946084269167,
+    "intent_max_count": 0.011859376436497425
+  },
+  "gain_share_length_related": 0.5557009095841333,
+  "gain_share_lexicon": 0.19290105662986978,
+  "gain_share_topology": 0.004092677273296612
+}
