@@ -14,12 +14,12 @@ McNemar p=0.0022, 3/3 folds). The pre-registered full model (6_B_ALL) reaches
 
 | # | criterion | target | actual (6_B_ALL) | met? |
 |---|---|---|---|---|
-| 1 | long-run dh F1 | >= +0.03 | **+0.0138** | NO |
+| 1 | long-run dh recall | >= +0.03 | **+0.0138** | NO |
 | 2 | overall dh F1 not worse | >= 0 | +0.0100 | YES |
 | 3 | Macro F1 not worse | >= 0.7758 | 0.7795 | YES |
 | 4 | Robustness | >= 0.7114 | 0.7298 | YES |
 | 5 | improvement on >= 2/3 folds | 2/3 | 2/3 (fold 0 -0.0008) | MARGINAL |
-| 6 | very good: long-run dh | >= +0.05 | +0.0138 | NO |
+| 6 | very good: long-run dh recall | >= +0.05 | +0.0138 | NO |
 | 7 | very good: overall dh | >= +0.02 | +0.0100 | NO |
 | 8 | very good: composite | >= +0.005 | **+0.0061** | YES |
 
@@ -250,6 +250,22 @@ and free of a block with a negative sign.
 Two things must not be claimed: that the long-run target was achieved, and that
 `full - backlog` (+0.0405) is a real result - it is the best of 12 on the same OOF and
 needs independent confirmation before it counts.
+
+### 10a. Post-hoc correction after Exp06b (5-seed replication)
+
+**Two Robustness/`topo_mesh` claims in the paragraph above do not replicate and are
+withdrawn.** Exp06b re-ran these systems across 5 CV splits (`experiments/exp06b_stability/`):
+
+| claim here (1 split) | 5-seed mean | 95% CI | verdict |
+|---|---|---|---|
+| Robustness +0.0154, "best in project" | **+0.0018** (3/5 wins) | [-0.0059, +0.0096] | **withdrawn - spans zero** |
+| `topo_mesh` +0.0092, "reverses Exp05 regression" | **+0.0012** (3/5 wins) | [-0.0056, +0.0081] | **withdrawn - spans zero** |
+| `exp06_ALL` Robustness (same thing) | +0.0003 (2/5 wins) | [-0.0078, +0.0082] | flat |
+
+Both numbers were seed-0 artifacts. They should be read as *no measurable change*, not
+as a small gain. What survives replication is the Macro F1 gain of `full - age`
+(+0.0050, positive on 5/5 splits) and the `dropped_handoff` gain (+0.0121, 5/5).
+
 
 Suggested next step, not started: re-run `full - age` and `full - age - reassign` on a
 **different seed** to separate the confirmed effect from selection noise, and only

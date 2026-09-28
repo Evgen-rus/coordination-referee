@@ -176,10 +176,21 @@ Only structurally defined categories; no ad-hoc heuristics.
 | long runs | 339 | 0.4661 | 0.4661 | 0.4764 |
 | all lifecycles delivered | 20 | — | — | too small, skipped |
 
+**Correction (added after Exp06).** The `long runs` row is labelled F1 above, but
+that number is **not an F1**. Every sub-slice here is defined as *"true
+`dropped_handoff` AND in the run-length band"*, so it contains **only positive
+cases**. Precision is therefore 1.0 **by construction** and the quantity collapses
+to \(2R/(1+R)\) — it is a **recall** diagnostic. 0.4661 corresponds to recall
+0.3038, and 0.4764 to recall 0.3193. The same applies to every sub-slice in this
+table. It was discovered while analysing Exp06, where the identity was verified
+numerically (precision exactly 1.0 on the long slice). The conclusions drawn from
+this table are unaffected, because the quantity is monotone in recall, but the
+number should be read as recall, not as a class F1.
+
 Every structurally meaningful sub-slice improves, including the reassigned cases
 (+0.0259) that the baseline handled worst — direct evidence that the lifecycle
 reconstruction, not the deadlock block, is doing the work. Long-run dropped_handoff
-remains very weak (0.4764); that sub-slice is the largest remaining gap.
+recall remains very weak (0.3193); that sub-slice is the largest remaining gap.
 
 ## 9. Feature importance and group ablation
 
@@ -250,8 +261,9 @@ thresholds met. The composite criterion is cleared with room to spare.
   Robustness barely moves despite the large Macro gain.
 - **hard slice n = 1 290** → ≈ ±0.025 sampling noise on slice estimates.
 - **`dropped_handoff` is still the weakest class at 0.6063**, and long-run
-  dropped_handoff is only 0.4764.
-- Sub-slice F1s with n < 200 (no-intent 148, long runs 339) carry ≈ ±0.05 noise.
+  dropped_handoff recall is only 0.3193.
+- Sub-slice values with n < 200 (no-intent 148, long runs 339) carry ≈ ±0.05 noise.
+  All are recall proxies, not F1s — see the correction in §8.
 
 ## 12. Conclusion
 
@@ -285,7 +297,7 @@ argues against adopting variant C, but both argue against over-claiming it.
 - confirm with a second seed, since the effect is now large enough to matter and
   fold 1 is the only soft spot;
 - investigate the `topo_mesh` regression — it is the only slice that got worse;
-- keep chasing `dropped_handoff` (0.6063) and long-run dropped_handoff (0.4764);
+- keep chasing `dropped_handoff` (0.6063) and long-run dropped_handoff recall (0.3193);
 - consider whether the deadlock block should be kept at all: it costs 13 features
   and +0.0017 of unproven value.
 
