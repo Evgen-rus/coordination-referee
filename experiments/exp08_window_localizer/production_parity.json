@@ -1,0 +1,28 @@
+{
+  "n_rows": 4000,
+  "label_identical": true,
+  "success_identical": true,
+  "fault_turn_changed_rows": 2504,
+  "clean_turn_all_minus1": true,
+  "runtime_sec": {
+    "exp07": 379.7,
+    "exp08": 374.9,
+    "overhead": -4.83
+  },
+  "modules_identical": [
+    "features.py",
+    "localize.py",
+    "new_features.py",
+    "lifecycle.py",
+    "temporal_features.py",
+    "window_features.py",
+    "window_dataset.py",
+    "aggregate.py"
+  ],
+  "pred_sha256": {
+    "exp07": "5ccb52974845905db233cc779c7e0fe7ad377c3cd4850c4b63fabf5b6ee6a1e4",
+    "exp08": "ee84b069df29ecad95c9fa8b4012265250c4d262f44d4d474fd40a2289c8174b"
+  },
+  "train": "D:\\My_dev_project\\coordination-referee\\data\\train.csv",
+  "test": "D:\\My_dev_project\\coordination-referee\\data\\test.csv"
+}

@@ -84,7 +84,42 @@
       "every row held out by exactly one outer validation fold",
       "runner.py model-determining region byte-identical to 078a9575; all edits since are in the artifact-writer block"
     ],
-    "parity": "check_parity.py cv -> PASS"
+    "parity": "check_parity.py cv -> PASS",
+    "peak_seal": {
+      "sealed_by": "experiments/exp08_window_localizer/seal_peaks.py",
+      "retrained": false,
+      "extension_of": "honest_manifest.json (schema 2)",
+      "added_keys": [
+        "pos",
+        "prob",
+        "window_oof_pred",
+        "window_oof_run",
+        "window_oof_y"
+      ],
+      "required_extension": [
+        "pos",
+        "prob"
+      ],
+      "anchor_commits": [
+        "06f92aa3d02c5f345528fdef0615690436b3760d"
+      ],
+      "written_at": "2026-09-29T15:51:04"
+    }
   },
-  "written_at": "2026-09-29T15:29:09"
+  "written_at": "2026-09-29T15:51:04",
+  "window_peak_sha256": {
+    "pos": "2388c694fa28024a49ae6981ea93dff133ca3c0204f17d5b9284efc26727e6aa",
+    "prob": "a9d001ed74e3b70de6d7719a5efaac376bf196b5157a366bdd50151b6252d126",
+    "window_oof_run": "06c24f666daed2342be85d3ed83c5065f323997f82a622f3b7e00eac7081001b",
+    "window_oof_y": "c1c4f1776b8d92db5e82d1271299787b6db41c99fe95a1a510884bca95228f9a",
+    "window_oof_pred": "9912ceb3f172931169e9219486aa6dfdce7ab65e9cb2278e5b4418543b041f8e"
+  },
+  "window_peak_sha256_array": {
+    "pos": "78684d66274bf74ce8f2d93efb0bfdbb7873628593f45f22b2097bd8f0949c3e",
+    "prob": "b13ded9a189472189982bc3a1aa622ba71d4fd533499d4ee1fe929f82785caab",
+    "window_oof_run": "dd35aad8da1a7216db267f2895f55077da3bcfdd7d9fd569283e05c5ef0fcbf7",
+    "window_oof_y": "830368e31d69a2be9a5915f9a3120b722a6b16ea5856307d2dac72db47d0cf9a",
+    "window_oof_pred": "30a73d28b74b6a406e83268b259284a8e0819ae726c3c91ecb3ee12c82bbe4ba"
+  },
+  "window_peak_sha256_note": "Sealed by exp08_window_localizer/seal_peaks.py as a PROVENANCE UPGRADE only. No retrain, no feature change, no prediction change. Keys: pos/prob are the Exp07 runner's window peak position and peak probability matrices ((10000,7), int32/float64) written by runner._finalise and used by diagnostics.py's L1 rule; window_oof_{run,y,pred} are the window-level OOF arrays that pin the per-run window coverage those peaks were computed over. Verified before writing: byte-identical to the git commits that introduced them; the two on-disk copies agree; runs/ clean against git; the base manifest already passed reuse.load; every peak_pos[i,c] is a valid turn index of run i; no row unvalidated; no empty block; and the per-class L1 hit@2 recomputed from these arrays equals the committed diagnostics.json exactly."
 }
