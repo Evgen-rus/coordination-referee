@@ -39,15 +39,27 @@ WINDOW_PARAMS = dict(objective="multiclass", num_class=wd.N_WINDOW_CLASSES,
                      colsample_bytree=0.8, reg_lambda=1.0, random_state=42,
                      verbose=-1)
 
-# The model-determining region of ``run()``: the outer fold loop up to the start
-# of the inner-fit payload build.  Hashing this region is what lets a consumer
-# prove that a change to the artifact WRITER (provenance recording) did not
-# also change the MODEL.  The body of the loop is kept byte-identical to the
-# version that produced the committed CV artifacts, so any edit inside it is a
-# real model change and must invalidate every reusable artifact.
-# Keep these markers in sync with ``reuse.py``.
+# The model-determining region of ``run()``: the outer fold loop through the
+# system-B fit/predict, ending immediately before the ``_finalise(...)`` hand-off
+# that does all artifact writing and metric reporting.
+#
+# It therefore covers every step that can move a probability or a fold:
+#   * fold iteration and the system-A classifier fit/predict_proba
+#   * the honest inner cross-fit and verify_stacking
+#   * inner-fit payload construction and parallel.run_inner_fits
+#   * the outer window model fit and predict_proba
+#   * grouping.predict_runs / aggregate_block for train and validation rows
+#   * Xagg -> B feature matrix construction
+#   * the system-B lgb_label fit and predict_proba
+#
+# Excluded: the artifact/reporting block (``_finalise`` and everything after),
+# which only writes files and prints numbers.  ``modes.py`` supplies the fold
+# ids and is hashed separately as a source file, so FAST-vs-CV selection is
+# still covered by the code hash.
+# Keep these markers in sync with ``reuse.py`` - reuse refuses to verify when
+# the region cannot be located.
 _MODEL_START = "    for f in fold_ids:"
-_MODEL_END = "        CW = wd.class_weight_vector()"
+_MODEL_END = "    return _finalise("
 
 
 def _model_path_sha():
@@ -57,8 +69,9 @@ def _model_path_sha():
     with open(p, "r", encoding="utf-8") as fh:
         lines = fh.readlines()
     i = next(k for k, l in enumerate(lines) if l.startswith(_MODEL_START))
-    j = next(k for k, l in enumerate(lines) if l.startswith(_MODEL_END))
-    return hashlib.sha256("".join(lines[i:j + 1]).encode("utf-8")).hexdigest()
+    j = next(k for k, l in enumerate(lines)
+             if k > i and l.strip().startswith(_MODEL_END.strip()))
+    return hashlib.sha256("".join(lines[i:j]).encode("utf-8")).hexdigest()
 
 
 _MODEL_PATH_SHA = _model_path_sha()

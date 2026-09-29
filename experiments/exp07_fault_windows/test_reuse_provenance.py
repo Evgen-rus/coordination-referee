@@ -18,6 +18,7 @@ import sys
 import tempfile
 
 import numpy as np
+import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
@@ -50,7 +51,6 @@ def check(name, fn):
 
 def build_fixture(tmp, n=10000, seed=0):
     """A complete, fully-verified artifact set.  Returns its context."""
-    import pandas as pd
     train = pd.read_csv(os.path.join(ROOT, "data", "train.csv"),
                         usecols=["run_id", "label"])
     ys = train["label"].values.astype(object)
@@ -301,8 +301,12 @@ def main():
             ctx = build_fixture(os.path.join(tmp, "nomanifest"))
             write_man(ctx)
             os.remove(ctx["manifest_path"])
+            # yi/run_ids are mandatory, so pass them - otherwise the mandatory
+            # check would fire first and this test would prove nothing about
+            # the missing manifest
             try:
                 reuse.load(system=SYSTEM, mode=MD.CV, yi=ctx["yi"],
+                           train_run_ids=ctx["run_ids"],
                            artifact_dir=ctx["dir"])
             except reuse.ArtifactRejected as e:
                 assert "no manifest" in str(e).lower(), e
@@ -333,6 +337,171 @@ def main():
             write_man(ctx, m)
             expect_reject(ctx, "code sha256")
         check("changed feature/model code hash -> REJECTED", t_code)
+
+        # ==================================================================
+        # Hardening round 2: full code closure, whole model path, mandatory
+        # caller context, expected dataset.
+        # ==================================================================
+
+        # ---- per-file coverage: each model-determining source is hashed ---
+        def t_closure_covers(rel):
+            def t():
+                ctx = build_fixture(os.path.join(tmp, "cov_" + rel.replace(
+                    "/", "_")))
+                files = ctx["man"]["code_files_sha256"]
+                assert rel in files, "%s is NOT in code_files_sha256" % rel
+                assert files[rel] == ca.sha256_file(
+                    os.path.join(ROOT, rel.replace("/", os.sep))), rel
+                # and tampering with just that one file must be detected
+                m = dict(ctx["man"])
+                m["code_files_sha256"] = dict(files)
+                m["code_files_sha256"][rel] = "0" * 64
+                write_man(ctx, m)
+                expect_reject(ctx, "model-determining source")
+            check("%s is hashed and a change to it is detected" % rel, t)
+
+        for rel in ("experiments/exp07_fault_windows/aggregate.py",
+                    "experiments/exp07_fault_windows/grouping.py",
+                    "experiments/exp07_fault_windows/parallel.py",
+                    "experiments/exp07_fault_windows/common.py",
+                    "experiments/exp07_fault_windows/modes.py",
+                    "experiments/exp07_fault_windows/window_features.py",
+                    "experiments/exp07_fault_windows/window_dataset.py",
+                    "baseline/features.py", "baseline/localize.py",
+                    "evaluation/metrics.py"):
+            t_closure_covers(rel)
+
+        def t_runner_model_path():
+            ctx = build_fixture(os.path.join(tmp, "modelpath"))
+            write_man(ctx)
+            m = dict(ctx["man"])
+            m["runner_model_path_sha256"] = "0" * 64
+            write_man(ctx, m)
+            expect_reject(ctx, "model path")
+        check("change to the model-determining runner region -> REJECTED",
+              t_runner_model_path)
+
+        def t_model_region_covers_steps():
+            """The hashed region must really contain every model step."""
+            lines = open(reuse.RUNNER_PATH, encoding="utf-8").readlines()
+            txt = "".join(reuse._model_region_lines(lines))
+            need = ("for f in fold_ids:", "mA = lgb_label().fit",
+                    "mA.predict_proba", "verify_stacking", "payloads.append",
+                    "par.run_inner_fits", "mw.fit(", "mw.predict_proba",
+                    "grp.predict_runs", "grp.aggregate_block",
+                    "Xagg_tr[assign == j] = sub[assign == j]",
+                    "Xb_tr = pd.DataFrame", "mB = lgb_label().fit",
+                    "mB.predict_proba", "oof_proba[B_KEY][va] = pB")
+            for k in need:
+                assert k in txt, "model region is missing %r" % k
+            for k in ("np.save(", "to_csv", "json.dump", "honest_manifest"):
+                assert k not in txt, \
+                    "model region wrongly includes artifact writer %r" % k
+        check("model region covers fits/aggregation/B-features, not writing",
+              t_model_region_covers_steps)
+
+        def t_region_not_found():
+            """Fail closed: an unhashable runner must be a rejection."""
+            bad = os.path.join(tmp, "broken_runner.py")
+            with open(bad, "w", encoding="utf-8") as fh:
+                fh.write("def run():\n    return 1\n")
+            try:
+                reuse.runner_model_path_sha256(path=bad)
+            except reuse.ArtifactRejected:
+                return
+            raise AssertionError("unlocatable model region was not rejected")
+        check("unlocatable model region -> REJECTED (fail closed)",
+              t_region_not_found)
+
+        def t_yi_none():
+            ctx = build_fixture(os.path.join(tmp, "yi_none"))
+            write_man(ctx)
+            try:
+                reuse.load(system=SYSTEM, mode=MD.CV, yi=None,
+                           train_run_ids=ctx["run_ids"],
+                           artifact_dir=ctx["dir"])
+            except reuse.ArtifactRejected as e:
+                assert "yi is REQUIRED" in str(e), e
+                return
+            raise AssertionError("yi=None was ACCEPTED")
+        check("yi=None -> REJECTED", t_yi_none)
+
+        def t_rids_none():
+            ctx = build_fixture(os.path.join(tmp, "rids_none"))
+            write_man(ctx)
+            try:
+                reuse.load(system=SYSTEM, mode=MD.CV, yi=ctx["yi"],
+                           train_run_ids=None, artifact_dir=ctx["dir"])
+            except reuse.ArtifactRejected as e:
+                assert "train_run_ids is REQUIRED" in str(e), e
+                return
+            raise AssertionError("train_run_ids=None was ACCEPTED")
+        check("train_run_ids=None -> REJECTED", t_rids_none)
+
+        def t_short_yi():
+            ctx = build_fixture(os.path.join(tmp, "short_yi"))
+            write_man(ctx)
+            try:
+                reuse.load(system=SYSTEM, mode=MD.CV, yi=ctx["yi"][:9999],
+                           train_run_ids=ctx["run_ids"],
+                           artifact_dir=ctx["dir"])
+            except reuse.ArtifactRejected as e:
+                assert "len(yi)" in str(e), e
+                return
+            raise AssertionError("len(yi)!=10000 was ACCEPTED")
+        check("len(yi) != 10000 -> REJECTED", t_short_yi)
+
+        def t_short_rids():
+            ctx = build_fixture(os.path.join(tmp, "short_rids"))
+            write_man(ctx)
+            try:
+                reuse.load(system=SYSTEM, mode=MD.CV, yi=ctx["yi"],
+                           train_run_ids=ctx["run_ids"][:9999],
+                           artifact_dir=ctx["dir"])
+            except reuse.ArtifactRejected as e:
+                assert "len(train_run_ids)" in str(e), e
+                return
+            raise AssertionError("len(train_run_ids)!=10000 was ACCEPTED")
+        check("len(train_run_ids) != 10000 -> REJECTED", t_short_rids)
+
+        def t_manifest_nruns():
+            ctx = build_fixture(os.path.join(tmp, "bad_nruns"))
+            m = dict(ctx["man"])
+            m["n_runs"] = 9999
+            write_man(ctx, m)
+            expect_reject(ctx, "n_runs")
+        check("manifest n_runs != 10000 -> REJECTED", t_manifest_nruns)
+
+        def t_unverified_reader():
+            """The exploratory reader must exist and flag itself."""
+            import warnings
+            d = MD.outdir(MD.CV)
+            with warnings.catch_warnings(record=True) as w:
+                warnings.simplefilter("always")
+                r = reuse.load_unverified(system=SYSTEM, mode=MD.CV)
+            assert r["ok"] is False, "load_unverified must not claim ok"
+            assert r["provenance"] is None, r["provenance"]
+            assert r["proba"] is not None and r["proba"].shape == (10000, 7), \
+                r["proba"].shape
+            assert w, "load_unverified must warn"
+        check("load_unverified() reads but flags ok=False", t_unverified_reader)
+
+        def t_real_artifact():
+            """The REAL Exp07 CV artifact must be ACCEPTED."""
+            train = pd.read_csv(os.path.join(ROOT, "data", "train.csv"),
+                                usecols=["run_id", "label"])
+            ys = train["label"].values.astype(object)
+            yi = np.array([L2I[l] for l in ys], dtype=int)
+            rids = [str(x) for x in train["run_id"]]
+            r = reuse.load(system=SYSTEM, mode=MD.CV, yi=yi,
+                           train_run_ids=rids)
+            assert r["ok"], r
+            assert r["proba"].shape == (10000, 7), r["proba"].shape
+            assert r["labels"].shape == (10000,), r["labels"].shape
+            assert r["n_runs"] == 10000, r["n_runs"]
+            assert np.isfinite(r["proba"]).all()
+            assert (r["proba"].argmax(1) == r["labels"]).all()
+        check("real Exp07 CV artifact -> ACCEPTED", t_real_artifact)
 
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

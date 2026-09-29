@@ -6,8 +6,27 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 CACHE_DIR = os.path.join(HERE, ".cache")
 
+# Every source file whose CONTENT can change the OOF matrices that Exp07
+# writes.  This list was previously short enough to miss the modules that turn
+# window probabilities into run-level features and predictions, so it is now
+# the full model-determining closure of ``runner.run()``, derived by walking the
+# import graph rather than by hand:
+#
+#   features.py, localize.py, metrics.py  -> parsing / localisation / scoring
+#   new_features.py, lifecycle.py, exp06/features.py -> foundation matrix
+#   window_features.py, window_dataset.py, aggregate.py -> windows + aggregates
+#   grouping.py   -> window rows mapped back to runs, aggregation call sites
+#   parallel.py   -> the actual inner window LightGBM fits
+#   common.py     -> build_all, lgb_label, lgb_window, slices, label order
+#   modes.py      -> which folds a mode evaluates, and where artifacts go
+#
+# Deliberately NOT included: diagnostics.py, significance.py, RESULTS.md,
+# check_parity.py, verify_*.py, and the artifact-writing block of runner.py -
+# none of them can change a probability or a fold.
 FEATURE_SOURCES = [
     os.path.join(ROOT, "baseline", "features.py"),
+    os.path.join(ROOT, "baseline", "localize.py"),
+    os.path.join(ROOT, "evaluation", "metrics.py"),
     os.path.join(ROOT, "experiments", "exp03_length_normalization",
                  "new_features.py"),
     os.path.join(ROOT, "experiments", "exp05_handoff_lifecycle",
@@ -15,6 +34,11 @@ FEATURE_SOURCES = [
     os.path.join(ROOT, "experiments", "exp06_temporal_dynamics", "features.py"),
     os.path.join(HERE, "window_features.py"),
     os.path.join(HERE, "window_dataset.py"),
+    os.path.join(HERE, "aggregate.py"),
+    os.path.join(HERE, "grouping.py"),
+    os.path.join(HERE, "parallel.py"),
+    os.path.join(HERE, "common.py"),
+    os.path.join(HERE, "modes.py"),
 ]
 DATA_SOURCES = [os.path.join(ROOT, "data", "train.csv")]
 

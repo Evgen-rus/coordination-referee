@@ -13,17 +13,32 @@ That makes every check *optional*: an old or truncated manifest silently
 degrades verification down to "the file exists and has the right shape".  A
 consumer that cannot tell a verified artifact from an unverified one must not
 be handed the unverified one, so every check below is MANDATORY.  If a field is
-missing the artifact is REJECTED.  There is no ``strict=False`` escape hatch for
-the mandatory checks; ``allow_unverified`` exists only for interactive
-exploration and is refused when the data/code hashes are missing, because those
-cannot be substituted for.
+missing the artifact is REJECTED.
+
+``yi`` and ``train_run_ids`` are MANDATORY arguments to ``load()``.  They are
+what turn two of the checks from a formality into evidence:
+
+  * without ``yi`` the outer folds cannot be re-derived, so fold verification
+    collapses to "the recorded sizes sum to n" - which cannot detect a fold
+    that was reshuffled while keeping its sizes;
+  * without ``train_run_ids`` the stored run ORDER cannot be compared to the
+    rows the probabilities will be attached to, so a permuted artifact would
+    pass.
+
+Neither has a fallback in ``load()``.  ``load_unverified()`` is the separate,
+deliberately unchecked reader, named so the loss of provenance is obvious at the
+call site.
 
 What is verified, every time, before a single array is returned:
 
+  * the caller supplied the current ``yi`` and ``train_run_ids``;
   * manifest exists, parses, and declares ``verified: true``;
   * ``seed`` / ``n_outer`` / ``n_inner`` equal the current code's;
   * ``data_sha256`` - the exact ``train.csv`` bytes the run consumed;
-  * ``code_sha256`` - every Exp07 feature/model source file, byte for byte;
+  * ``code_sha256`` - every model-determining source file, byte for byte;
+  * ``runner_model_path_sha256`` - the whole model-determining region of
+    ``runner.run()``: fold loop, both classifiers, inner-fit payloads, the
+    window fits, the aggregation and the B feature matrix;
   * ``run_id_sha256`` - the run ORDER, compared against the stored
     ``oof_runid.json`` and against the current train, not just the count;
   * ``fold_val_sha256`` - the exact outer-validation INDEX VECTOR of every fold,
@@ -31,7 +46,9 @@ What is verified, every time, before a single array is returned:
     with different members are rejected;
   * ``proba_sha256`` - every ``oof_proba_*`` matrix;
   * ``label_sha256`` - hard labels, cross-checked against ``argmax(proba)``;
-  * shape exactly ``(n_runs, 7)``, all probabilities finite, rows summing to 1;
+  * ``n_runs == len(yi) == len(train_run_ids) == 10000``;
+  * proba shape exactly ``(10000, 7)``, labels exactly ``(10000,)``, all
+    probabilities finite, rows summing to 1;
   * every row covered by exactly one outer validation fold;
   * ``full_coverage`` - the run was CV mode and was not early-stopped, so no
     row is an un-scored zero.
@@ -94,33 +111,63 @@ def fold_assignments(yi, n_outer=N_OUTER, seed=SEED):
 # The runner's artifact-WRITING block was fixed after the CV run (the committed
 # version crashed before it could write anything), so runner.py as a whole can
 # never hash-equal the commit that added the artifacts.  What must not have
-# changed is the part of ``run()`` that DECIDES THE MODEL: the fold loop, the
-# estimators, the features, the seeds.  That region is hashed instead, and a
-# missing/unparseable region is a hard failure, never a silent pass.
+# changed is the part of ``run()`` that DECIDES THE MODEL, and that region now
+# runs from the outer fold loop all the way to the ``_finalise(...)`` hand-off,
+# covering the inner-fit payloads, the window fits, the aggregation, the B
+# feature matrix and both classifiers' fit/predict_proba.
+#
+# Bounds must be exact.  A loose prefix match could bind the region to a comment
+# or to a similarly-indented line in another function, silently hashing the
+# wrong text; so the markers are matched exactly, the search is scoped to
+# ``run()``, and anything unexpected is a rejection rather than a best guess.
 RUNNER_PATH = os.path.join(HERE, "runner.py")
-# Bounded by the fold loop and the start of the inner-fit payload build.  This
-# is the part of run() that decides the model: fold derivation, the estimators,
-# the honest inner cross-fit and verify_stacking.  The manifest bookkeeping that
-# follows is provenance recording, not model behaviour, so it is excluded -
-# otherwise fixing the writer could never be distinguished from changing the
-# model.
 _MODEL_START = "    for f in fold_ids:"
-_MODEL_END = "        CW = wd.class_weight_vector()"
+_MODEL_END = "    return _finalise("
+_RUN_FN = "def run("
+
+
+def _model_region_lines(lines, path=RUNNER_PATH):
+    """Locate the model-determining region, or raise.  Never guesses.
+
+    Markers are matched as an exact line OR as an exact prefix of a single line
+    (the end marker is the first call's opening text).  The search is scoped to
+    the body of ``run()`` so the marker constants defined at module level can
+    never be mistaken for the real code.
+    """
+    def find(marker, after):
+        m = marker.strip()
+        for k in range(after + 1, len(lines)):
+            s = lines[k].strip()
+            if s == m or s.startswith(m):
+                return k
+        return None
+
+    try:
+        fn = next(k for k, l in enumerate(lines) if l.startswith(_RUN_FN))
+    except StopIteration:
+        raise ArtifactRejected("no %r in %s - cannot locate run() to verify"
+                               % (_RUN_FN, path))
+    i = find(_MODEL_START, fn)
+    if i is None:
+        raise ArtifactRejected(
+            "model-region start %r not found after run() in %s - refusing to "
+            "treat an unhashed runner as verified" % (_MODEL_START, path))
+    j = find(_MODEL_END, i)
+    if j is None:
+        raise ArtifactRejected(
+            "model-region end %r not found after %r in %s - refusing to treat "
+            "an unhashed runner as verified" % (_MODEL_END, _MODEL_START, path))
+    if j <= i:
+        raise ArtifactRejected("model-region bounds are inverted in %s" % path)
+    # the end marker is the hand-off line itself, not part of the region
+    return lines[i:j]
 
 
 def runner_model_path_sha256(path=RUNNER_PATH):
     """SHA-256 of the model-determining region of ``runner.run()``."""
     with open(path, "r", encoding="utf-8") as fh:
         lines = fh.readlines()
-    try:
-        i = next(k for k, l in enumerate(lines) if l.startswith(_MODEL_START))
-        j = next(k for k, l in enumerate(lines) if l.startswith(_MODEL_END))
-    except StopIteration:
-        raise ArtifactRejected(
-            "cannot locate the model-path region of %s (markers %r / %r "
-            "missing) - refusing to treat an unhashed runner as verified"
-            % (path, _MODEL_START.strip(), _MODEL_END.strip()))
-    region = "".join(lines[i:j + 1])
+    region = "".join(_model_region_lines(lines, path))
     if not region.strip():
         raise ArtifactRejected("model-path region of %s is empty" % path)
     return hashlib.sha256(region.encode("utf-8")).hexdigest()
@@ -150,8 +197,11 @@ def _check_manifest_fields(man, path):
     return problems
 
 
-def _check_provenance(man, system, d, yi, train_run_ids, allow_unverified):
-    """Return a list of problems.  Empty list means every check passed."""
+def _check_provenance(man, system, d, yi, train_run_ids):
+    """Return a list of problems.  Empty list means every check passed.
+
+    ``yi`` and ``train_run_ids`` are already validated as non-None by ``load()``.
+    """
     problems = []
 
     # ---- manifest identity -------------------------------------------------
@@ -178,9 +228,6 @@ def _check_provenance(man, system, d, yi, train_run_ids, allow_unverified):
     if man.get("mode") != MD.CV:
         problems.append("artifacts are from mode %r, expected %r"
                         % (man.get("mode"), MD.CV))
-    if allow_unverified:
-        problems.append("allow_unverified=True: artifact is NOT provenance-"
-                        "verified and must not be used for any reported number")
 
     # ---- data hash ---------------------------------------------------------
     cur_data = ca.data_sha256()
@@ -189,19 +236,41 @@ def _check_provenance(man, system, d, yi, train_run_ids, allow_unverified):
                         % (_short(man.get("data_sha256")),
                            _short(cur_data)))
 
-    # ---- code hash ---------------------------------------------------------
+    # ---- code hash: aggregate + every individual file --------------------
     cur_code = ca.code_sha256()
     if man.get("code_sha256") != cur_code:
-        changed = []
-        for rel, want in (man.get("code_files_sha256") or {}).items():
-            got = ca.sha256_file(os.path.join(ROOT, rel.replace("/", os.sep)))
-            if want != got:
-                changed.append(rel)
-        detail = ("; changed: %s" % ", ".join(changed)) if changed else ""
         problems.append("Exp07 feature/model code sha256 mismatch: manifest "
-                        "%s, current %s%s"
-                        % (_short(man.get("code_sha256")),
-                           _short(cur_code), detail))
+                        "%s, current %s"
+                        % (_short(man.get("code_sha256")), _short(cur_code)))
+
+    # The per-file map is checked INDEPENDENTLY of the combined hash.  Doing it
+    # only inside the combined-mismatch branch would mean that tampering with a
+    # single entry of code_files_sha256 - while leaving code_sha256 alone - is
+    # never noticed, and it is exactly that map that names the changed file.
+    stored_files = man.get("code_files_sha256") or {}
+    if not isinstance(stored_files, dict) or not stored_files:
+        problems.append("manifest has no usable code_files_sha256 map - "
+                        "cannot attribute a code change to a file")
+    else:
+        changed = []
+        for rel, want in sorted(stored_files.items()):
+            got = ca.sha256_file(os.path.join(ROOT, rel.replace("/", os.sep)))
+            if got is None:
+                problems.append("code file %s recorded in the manifest no "
+                                "longer exists" % rel)
+            elif got != want:
+                changed.append(rel)
+        # and the reverse direction: a file now covered but absent from the
+        # manifest means the provenance set itself grew after the run
+        cur_files = ca.code_files_sha256()
+        for rel in sorted(cur_files):
+            if rel not in stored_files:
+                problems.append("code file %s is now part of the model-"
+                                "determining set but is absent from the "
+                                "manifest" % rel)
+        if changed:
+            problems.append("Exp07 model-determining source(s) changed since "
+                            "the run: %s" % ", ".join(changed))
 
     # ---- runner model path -------------------------------------------------
     try:
@@ -222,22 +291,21 @@ def _check_provenance(man, system, d, yi, train_run_ids, allow_unverified):
         problems.append("missing oof_runid.json - cannot verify run order")
     else:
         stored_ids = json.load(open(rid_path, "r", encoding="utf-8"))
-        if len(stored_ids) != man.get("n_runs"):
-            problems.append("oof_runid.json has %d rows, manifest says %r"
-                            % (len(stored_ids), man.get("n_runs")))
+        if len(stored_ids) != EXPECTED_ROWS:
+            problems.append("oof_runid.json has %d rows, expected %d"
+                            % (len(stored_ids), EXPECTED_ROWS))
         if ca.sha256_run_ids(stored_ids) != man.get("run_id_sha256"):
             problems.append("oof_runid.json sha256 != manifest run_id_sha256 "
                             "- run order was modified after the run")
-        if train_run_ids is not None:
-            if len(train_run_ids) != len(stored_ids):
-                problems.append("train has %d runs, artifacts have %d"
-                                % (len(train_run_ids), len(stored_ids)))
-            elif [str(x) for x in train_run_ids] != [str(x) for x in stored_ids]:
-                n_bad = sum(1 for a, b in zip(train_run_ids, stored_ids)
-                            if str(a) != str(b))
-                problems.append("run_id ORDER differs from current train.csv "
-                                "at %d position(s) - probabilities would be "
-                                "attached to the wrong rows" % n_bad)
+        if len(train_run_ids) != len(stored_ids):
+            problems.append("current train has %d runs, artifacts have %d"
+                            % (len(train_run_ids), len(stored_ids)))
+        elif train_run_ids != stored_ids:
+            n_bad = sum(1 for a, b in zip(train_run_ids, stored_ids)
+                        if a != b)
+            problems.append("run_id ORDER differs from current train.csv at "
+                            "%d position(s) - probabilities would be attached "
+                            "to the wrong rows" % n_bad)
 
     # ---- fold assignment: exact indices, not sizes ------------------------
     want_folds = man.get("fold_val_sha256")
@@ -249,33 +317,29 @@ def _check_provenance(man, system, d, yi, train_run_ids, allow_unverified):
         problems.append("manifest records %d folds, expected %d"
                         % (len(man_folds), N_OUTER))
 
-    if yi is not None:
-        cur = fold_assignments(yi)
-        if isinstance(want_folds, list) and len(want_folds) == N_OUTER:
-            got = [ca.sha256_indices(v) for v in cur]
-            if got != list(want_folds):
-                bad = [i for i, (a, b) in enumerate(zip(got, list(want_folds)))
-                       if a != b]
-                problems.append("outer fold %s validation INDICES differ from "
-                                "the current StratifiedKFold(3, seed=0) - "
-                                "predictions do not belong to these folds"
-                                % bad)
-        # every row held out exactly once -> true OOF, no unscored rows
-        cover = np.zeros(len(yi), dtype=int)
-        for v in cur:
-            cover[v] += 1
-        if cover.min() != 1 or cover.max() != 1:
-            problems.append("fold coverage min=%d max=%d, expected exactly 1 - "
-                            "some rows are never validated"
-                            % (cover.min(), cover.max()))
-    else:
-        # no yi -> still prove internal consistency from the recorded sizes
-        tot = 0
-        for f in man_folds:
-            tot += int(f.get("n_val", 0))
-        if tot != man.get("n_runs"):
-            problems.append("recorded fold validation sizes sum to %d, "
-                            "manifest n_runs is %r" % (tot, man.get("n_runs")))
+    # yi is mandatory (validated in load()), so folds are ALWAYS re-derived and
+    # compared index-by-index.  There is deliberately no size-only fallback.
+    cur = fold_assignments(yi)
+    if isinstance(want_folds, list) and len(want_folds) == N_OUTER:
+        got = [ca.sha256_indices(v) for v in cur]
+        if got != list(want_folds):
+            bad = [i for i, (a, b) in enumerate(zip(got, list(want_folds)))
+                   if a != b]
+            problems.append("outer fold %s validation INDICES differ from "
+                            "the current StratifiedKFold(3, seed=0) - "
+                            "predictions do not belong to these folds" % bad)
+    # every row held out exactly once -> true OOF, no unscored rows
+    cover = np.zeros(len(yi), dtype=int)
+    for v in cur:
+        cover[v] += 1
+    if cover.min() != 1 or cover.max() != 1:
+        problems.append("fold coverage min=%d max=%d, expected exactly 1 - "
+                        "some rows are never validated"
+                        % (cover.min(), cover.max()))
+    tot = sum(int(f.get("n_val", 0)) for f in man_folds)
+    if tot != EXPECTED_ROWS:
+        problems.append("recorded fold validation sizes sum to %d, expected %d"
+                        % (tot, EXPECTED_ROWS))
 
     # ---- artifact presence -------------------------------------------------
     for fn in ("oof_proba_%s.npy" % system, "oof_%s.npy" % system):
@@ -290,36 +354,72 @@ def _short(h):
 
 
 def load(system="B_plus_window", mode=MD.CV, yi=None, train_run_ids=None,
-         proba=True, allow_unverified=False, artifact_dir=None):
-    """Return the honest OOF arrays for ``system``.
+         proba=True, artifact_dir=None):
+    """Return the honest OOF arrays for ``system``.  STRICT, fail closed.
 
     Parameters
     ----------
     system         : str   'A_foundation' or 'B_plus_window'
     mode           : str   which mode run to read from (must be a full CV run)
-    yi             : array integer labels of the CURRENT train; when given, the
-                     outer folds are re-derived and compared to the manifest
-    train_run_ids  : sequence of run ids of the CURRENT train; when given, the
-                     stored run order is compared position by position
+    yi             : array  integer labels of the CURRENT train.  MANDATORY.
+                     This is what makes fold verification real: the outer folds
+                     are re-derived from it and compared index-by-index to the
+                     manifest.  Passing None used to silently downgrade the check
+                     to "fold sizes sum to n", which cannot detect a fold that
+                     was reshuffled but kept its sizes - so it is now a
+                     rejection, not a fallback.
+    train_run_ids  : sequence of run ids of the CURRENT train.  MANDATORY, for
+                     the same reason: without it the stored run ORDER cannot be
+                     compared against the rows the probabilities will be attached
+                     to, and a permuted artifact would be silently accepted.
     proba          : bool  return the (n, 7) probability matrix
-    allow_unverified: bool EXPLORATORY ONLY.  Adds a loud problem string and
-                     skips nothing; never suppresses a failed check.
     artifact_dir   : str   read this directory instead of ``runs/<mode>``.
                      Used by the provenance tests to exercise tampered copies;
                      it does not weaken any check.
 
-    Raises ``ArtifactRejected`` on any failure.
+    Raises ``ArtifactRejected`` on any failure.  There is no lenient mode here;
+    for interactive poking use ``load_unverified()``, which is named to make
+    the loss of provenance obvious at the call site.
     """
     if system not in SYSTEMS:
         raise ArtifactRejected("unknown system %r, expected one of %s"
                                % (system, SYSTEMS))
+    # ---- mandatory caller context --------------------------------------
+    if yi is None:
+        raise ArtifactRejected(
+            "yi is REQUIRED: without the current integer labels the outer "
+            "folds cannot be re-derived, so fold verification would degrade to "
+            "size-only. Pass yi=np.array([L2I[l] for l in train['label']]).")
+    yi = np.asarray(yi)
+    if train_run_ids is None:
+        raise ArtifactRejected(
+            "train_run_ids is REQUIRED: without the current run order the "
+            "stored oof_runid.json cannot be compared position-by-position, so "
+            "a permuted artifact would be accepted silently. Pass "
+            "train_run_ids=[str(x) for x in train['run_id']].")
+    train_run_ids = [str(x) for x in train_run_ids]
+
+    # ---- expected dataset ------------------------------------------------
+    if yi.ndim != 1:
+        raise ArtifactRejected("yi must be 1-D, got shape %r" % (yi.shape,))
+    if len(yi) != EXPECTED_ROWS:
+        raise ArtifactRejected("len(yi) is %d, expected %d - this is not the "
+                               "dataset these artifacts were produced from"
+                               % (len(yi), EXPECTED_ROWS))
+    if len(train_run_ids) != EXPECTED_ROWS:
+        raise ArtifactRejected("len(train_run_ids) is %d, expected %d"
+                               % (len(train_run_ids), EXPECTED_ROWS))
+
     d = artifact_dir or MD.outdir(mode)
     mpath = os.path.join(d, "honest_manifest.json")
     man = _read_manifest(mpath)
 
     problems = _check_manifest_fields(man, mpath)
-    problems += _check_provenance(man, system, d, yi, train_run_ids,
-                                  allow_unverified)
+    problems += _check_provenance(man, system, d, yi, train_run_ids)
+
+    if man.get("n_runs") != EXPECTED_ROWS:
+        problems.append("manifest n_runs is %r, expected %d"
+                        % (man.get("n_runs"), EXPECTED_ROWS))
 
     ppath = os.path.join(d, "oof_proba_%s.npy" % system)
     lpath = os.path.join(d, "oof_%s.npy" % system)
@@ -333,17 +433,15 @@ def load(system="B_plus_window", mode=MD.CV, yi=None, train_run_ids=None,
                             "after the run" % system)
 
         # shape / finiteness are mandatory, not advisory
-        if P.ndim != 2 or P.shape[1] != N_CLASSES:
-            problems.append("proba shape %r, expected (n, %d)"
-                            % (P.shape, N_CLASSES))
-        if P.shape[0] != man.get("n_runs"):
-            problems.append("proba has %d rows, manifest says %r"
-                            % (P.shape[0], man.get("n_runs")))
+        if P.shape != (EXPECTED_ROWS, N_CLASSES):
+            problems.append("proba shape %r, expected exactly (%d, %d)"
+                            % (P.shape, EXPECTED_ROWS, N_CLASSES))
         if P.dtype != np.float32:
             problems.append("proba dtype is %r, expected float32" % P.dtype)
         if not np.isfinite(P).all():
             problems.append("proba contains non-finite values")
-        if not np.allclose(P.sum(axis=1), 1.0, atol=1e-3):
+        if P.ndim == 2 and P.shape[1] > 0 and not np.allclose(P.sum(axis=1),
+                                                              1.0, atol=1e-3):
             problems.append("proba rows do not sum to 1")
     else:
         P = None
@@ -356,11 +454,16 @@ def load(system="B_plus_window", mode=MD.CV, yi=None, train_run_ids=None,
             problems.append("manifest has no label_sha256 for %r" % system)
         elif _sha(labels) != want:
             problems.append("hard-label sha256 mismatch for %r" % system)
-        if labels.shape != (man.get("n_runs"),):
-            problems.append("labels shape %r != (n_runs,)" % (labels.shape,))
+        if labels.shape != (EXPECTED_ROWS,):
+            problems.append("labels shape %r != (%d,)"
+                            % (labels.shape, EXPECTED_ROWS))
         if labels.min() < 0 or labels.max() >= N_CLASSES:
             problems.append("labels out of range [0, %d)" % N_CLASSES)
-        if P is not None and P.shape == labels.shape + (N_CLASSES,):
+        # only compare when BOTH sides have the right shape: a mis-shaped array
+        # is already a rejection, and broadcasting it against argmax would raise
+        # ValueError instead of reporting a clean, actionable rejection.
+        if (P is not None and P.shape == (EXPECTED_ROWS, N_CLASSES)
+                and labels.shape == (EXPECTED_ROWS,)):
             # cross-check: the stored labels must be the argmax of the stored
             # probabilities.  A mismatch means one of the two is not from this
             # run.
@@ -382,7 +485,8 @@ def load(system="B_plus_window", mode=MD.CV, yi=None, train_run_ids=None,
             "manifest": man,
             "verified_checks": ["verified", "schema", "seed", "n_outer",
                                 "n_inner", "n_classes", "full_coverage",
-                                "mode", "data_sha256", "code_sha256",
+                                "mode", "expected_rows", "n_runs",
+                                "data_sha256", "code_sha256",
                                 "runner_model_path_sha256", "run_id_sha256",
                                 "fold_val_sha256", "row_coverage",
                                 "proba_sha256", "label_sha256",
@@ -393,3 +497,40 @@ def load(system="B_plus_window", mode=MD.CV, yi=None, train_run_ids=None,
 def load_all(mode=MD.CV, **kw):
     """Both systems at once, still fully verified."""
     return {k: load(system=k, mode=mode, **kw) for k in SYSTEMS}
+
+
+def load_unverified(system="B_plus_window", mode=MD.CV, artifact_dir=None,
+                    **why):
+    """EXPLORATORY ONLY - reads artifacts with NO provenance checking.
+
+    This deliberately performs no verification at all: no manifest hashes, no
+    fold re-derivation, no run-order comparison, no data/code checks.  It exists
+    so that a developer staring at an array can do so without pretending the
+    array is trustworthy.
+
+    The returned dict is stamped ``ok=False`` and ``provenance=None`` and prints
+    a warning, so it cannot be mistaken for a verified result downstream.  Any
+    number that reaches a report, a submission or a comparison MUST come from
+    ``load()``.  If you find yourself calling this in an experiment script, you
+    want ``load()`` and you are missing an argument.
+    """
+    import warnings
+    d = artifact_dir or MD.outdir(mode)
+    mpath = os.path.join(d, "honest_manifest.json")
+    msg = ("load_unverified(): reading %s/%s with NO provenance checks. "
+           "Results are NOT trustworthy." % (system, d))
+    warnings.warn(msg, RuntimeWarning, stacklevel=2)
+    print("  [WARNING] %s%s" % (msg, (" (%s)" % why) if why else ""),
+          file=sys.stderr)
+    ppath = os.path.join(d, "oof_proba_%s.npy" % system)
+    lpath = os.path.join(d, "oof_%s.npy" % system)
+    rid = os.path.join(d, "oof_runid.json")
+    return {"ok": False, "provenance": None, "system": system, "mode": mode,
+            "dir": d, "warning": msg,
+            "proba": np.load(ppath) if os.path.exists(ppath) else None,
+            "labels": (np.load(lpath).astype(np.int64)
+                       if os.path.exists(lpath) else None),
+            "run_ids": json.load(open(rid, "r", encoding="utf-8"))
+            if os.path.exists(rid) else None,
+            "manifest": json.load(open(mpath, "r", encoding="utf-8"))
+            if os.path.exists(mpath) else None}

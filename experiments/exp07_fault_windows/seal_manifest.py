@@ -137,11 +137,13 @@ def main(mode=MD.CV, systems=("A_foundation", "B_plus_window"),
 
     def model_region(text):
         L = text.splitlines(keepends=True)
-        i = next(k for k, l in enumerate(L)
-                 if l.startswith(reuse._MODEL_START))
-        j = next(k for k, l in enumerate(L)
-                 if l.startswith(reuse._MODEL_END))
-        return "".join(L[i:j + 1])
+        return "".join(reuse._model_region_lines(L, "<committed runner>"))
+
+    def bounds(text):
+        L = text.splitlines(keepends=True)
+        r = reuse._model_region_lines(L, "<text>")
+        i = L.index(r[0])
+        return i, i + len(r)
 
     old_region, new_region = model_region(old), model_region(new)
     if old_region != new_region:
@@ -156,15 +158,6 @@ def main(mode=MD.CV, systems=("A_foundation", "B_plus_window"),
 
     model_sha = reuse.runner_model_path_sha256()
     outside = []
-
-    # mark the line ranges covered by the model region in each file
-    def bounds(t):
-        L = t.splitlines(True)
-        i = next(k for k, l in enumerate(L)
-                 if l.startswith(reuse._MODEL_START))
-        j = next(k for k, l in enumerate(L)
-                 if l.startswith(reuse._MODEL_END))
-        return i, j
 
     oi0, oj0 = bounds(old)
     ni0, nj0 = bounds(new)

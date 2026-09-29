@@ -15,18 +15,25 @@
     2
   ],
   "data_sha256": "8e8feb4ee284d2acd918b533921631fa905d47adf8d34881f89359964a1bcfbc",
-  "code_sha256": "27c35ec724bf49e19f48425f1db222403b4cc2b46683cf4624e3553ff5a7898d",
+  "code_sha256": "163400c1c305f206068cff054e292158ed89dc48111b695ec179dd2484ae34af",
   "code_files_sha256": {
     "baseline/features.py": "72b1373b8c0318236e044dccc5ee8bd30ba0bf30d6b96694e5f34c2c8f43052c",
+    "baseline/localize.py": "b9831906f7833810004da1628e5c565e6ba6662154b21ca469ccc43e47585b90",
+    "evaluation/metrics.py": "f67139642300cf66af3213a62216911ae30da4c81d68e36a41c2895e834e202d",
     "experiments/exp03_length_normalization/new_features.py": "c79aad124d3e89b3f3355b0397805fd69f94c69b1bf64b1b7703634057ad403f",
     "experiments/exp05_handoff_lifecycle/lifecycle.py": "974df58bab21122b016995088cda662d40fac440603a47b774addefabbc01196",
     "experiments/exp06_temporal_dynamics/features.py": "30a37b5d6997bcad768d868bd3c0b1463bd3b7591fa5365c4eac242f66790646",
     "experiments/exp07_fault_windows/window_features.py": "06787d2ad07a900ee573152bee8a9a04646fa1ed991403eb8eb461d9dc8fceba",
-    "experiments/exp07_fault_windows/window_dataset.py": "cd4c341ecfe8815b82bb765e0e070633ded57df4c01146aebbc6e48584dc64d0"
+    "experiments/exp07_fault_windows/window_dataset.py": "cd4c341ecfe8815b82bb765e0e070633ded57df4c01146aebbc6e48584dc64d0",
+    "experiments/exp07_fault_windows/aggregate.py": "24ee78a33db0c092ee75fc0ceb0df5dc9bad63aa7c846545a181af433f6c3b00",
+    "experiments/exp07_fault_windows/grouping.py": "96514185b469a5760d1cb5e7346acb909dc7754fb45336c8aa5c384fcec9680a",
+    "experiments/exp07_fault_windows/parallel.py": "667d2d0d635b1612fc46ce3b7d8c9f9c03bd211cc3328c975dc7b5f4ba20eb7e",
+    "experiments/exp07_fault_windows/common.py": "2b2fc97b2acc0b9313a46119e290ee043bdec40df8c6f5864465995f846976bf",
+    "experiments/exp07_fault_windows/modes.py": "b15f4de3c57f7bbe52fe936673935dd7bfad7d35f428798fa90e45a916b24a7b"
   },
   "run_id_sha256": "840470f9a5e1a4b387f6072e8cae12733bd6045fe3b6fb5376318b6113eb4761",
   "y_true_sha256": "e14d6f2a12d2f4ca8c93c729569a12b8833e6de1892d3ba9c9db6ba5c6749aa4",
-  "runner_model_path_sha256": "d36d2b67f6c449d8af20c84062dafa1b844dbd5d14cabdae9c2dd6dfb052b27d",
+  "runner_model_path_sha256": "66e18e7f778a629bc648cc5ea0c5f311e510fdbc40c6b020a93a555e6d80796a",
   "proba_sha256": {
     "A_foundation": "c2dbce5136e5a94bd18c5173c1b0a871468a4170936c7d05bde34372139b3482",
     "B_plus_window": "edbaf8d766f97f28bce12e72fbf9fee67533124d78ab8dc17fdfdb31211297e8"
@@ -67,17 +74,17 @@
   "provenance": {
     "kind": "sealed upgrade of an existing CV run",
     "retrained": false,
-    "sealed_from_commit": "527ace955f6503ff39ec8f6f9312398147a50c0f",
+    "sealed_from_commit": "078a95755d2ed7a065985355c7ab511c729d3577",
     "evidence": [
       "oof_*.csv byte-identical to the committed parity reference",
-      "runs/ byte-identical to git 527ace95",
+      "runs/ byte-identical to git 078a9575",
       "argmax(oof_proba_*.npy) == oof_*.csv y_pred on all rows",
       "oof_runid.json == current train.csv run order",
       "per-fold macro F1 on seed-0 re-derived folds == results.json to 1e-9",
       "every row held out by exactly one outer validation fold",
-      "runner.py model-determining region byte-identical to 527ace95; all edits since are in the artifact-writer block"
+      "runner.py model-determining region byte-identical to 078a9575; all edits since are in the artifact-writer block"
     ],
     "parity": "check_parity.py cv -> PASS"
   },
-  "written_at": "2026-09-29T15:09:59"
+  "written_at": "2026-09-29T15:29:09"
 }
