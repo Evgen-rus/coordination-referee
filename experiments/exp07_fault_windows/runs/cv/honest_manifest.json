@@ -1,0 +1,40 @@
+{
+  "mode": "cv",
+  "seed": 0,
+  "n_outer": 3,
+  "n_inner": 3,
+  "folds": [
+    {
+      "fold": 0,
+      "n_train": 6666,
+      "n_val": 3334,
+      "inner_holdout_sizes": [
+        2222,
+        2222,
+        2222
+      ]
+    },
+    {
+      "fold": 1,
+      "n_train": 6667,
+      "n_val": 3333,
+      "inner_holdout_sizes": [
+        2223,
+        2222,
+        2222
+      ]
+    },
+    {
+      "fold": 2,
+      "n_train": 6667,
+      "n_val": 3333,
+      "inner_holdout_sizes": [
+        2223,
+        2222,
+        2222
+      ]
+    }
+  ],
+  "verified": true,
+  "statement": "every outer-train run received its window aggregates from a window model fitted without it"
+}

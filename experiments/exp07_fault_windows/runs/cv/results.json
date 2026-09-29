@@ -1,0 +1,121 @@
+{
+  "n_runs": 10000,
+  "mode": "cv",
+  "n_outer_folds": 3,
+  "n_inner_folds": 3,
+  "seed": 0,
+  "success_f1": 0.8643757406010988,
+  "n_foundation": 249,
+  "n_window_feats": 83,
+  "n_agg_feats": 51,
+  "pos_radius": 2,
+  "folds_evaluated": [
+    0,
+    1,
+    2
+  ],
+  "early_stopped": false,
+  "partial": false,
+  "systems": {
+    "A_foundation": {
+      "n_features": 249,
+      "macro_f1": 0.782691894495785,
+      "robustness_f1": 0.7278770829690566,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.42583333333333334,
+      "composite": 0.7455549124136548,
+      "per_class": {
+        "clean": 0.857912457912458,
+        "dropped_handoff": 0.6105979581915411,
+        "duplicated_work": 0.8273809523809523,
+        "deadlock": 0.7049469964664311,
+        "conflict": 0.9043342444357673,
+        "goal_drift": 0.8431771894093686,
+        "runaway_loop": 0.7304934626739772
+      },
+      "fold_macro_f1": [
+        0.7730682399873714,
+        0.789783944650049,
+        0.7848339982361703
+      ],
+      "slices": {
+        "long(>p66)": 0.7132913839127759,
+        "no_intent": 0.677948835157869,
+        "topo_mesh": 0.7841628696247464,
+        "topo_blackboard": 0.8017666865851159,
+        "hard/robustness": 0.7278770829690566
+      },
+      "confusion_pairs": {
+        "dropped_handoff->clean": 203,
+        "dropped_handoff->deadlock": 99,
+        "deadlock->dropped_handoff": 59,
+        "duplicated_work->clean": 89,
+        "runaway_loop->clean": 114,
+        "goal_drift->clean": 40,
+        "_n": {
+          "dropped_handoff": 1200,
+          "deadlock": 1200,
+          "duplicated_work": 1200,
+          "runaway_loop": 1200,
+          "goal_drift": 1200,
+          "conflict": 1200
+        }
+      },
+      "d_macro": 0.0,
+      "d_rob": 0.0,
+      "d_comp": 0.0,
+      "d_hit2": 0.0,
+      "d_dh": 0.0
+    },
+    "B_plus_window": {
+      "n_features": 300,
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.43083333333333335,
+      "composite": 0.7516676139361507,
+      "per_class": {
+        "clean": 0.8650034176349966,
+        "dropped_handoff": 0.6356370474847203,
+        "duplicated_work": 0.8296422487223168,
+        "deadlock": 0.7217391304347827,
+        "conflict": 0.9031752254018032,
+        "goal_drift": 0.846897663174859,
+        "runaway_loop": 0.7239316239316239
+      },
+      "fold_macro_f1": [
+        0.7796121741506896,
+        0.7976376982124211,
+        0.7908991386998077
+      ],
+      "slices": {
+        "long(>p66)": 0.7175882785837716,
+        "no_intent": 0.679181103381873,
+        "topo_mesh": 0.8012993591215051,
+        "topo_blackboard": 0.7966729249920688,
+        "hard/robustness": 0.7368470046834376
+      },
+      "confusion_pairs": {
+        "dropped_handoff->clean": 171,
+        "dropped_handoff->deadlock": 92,
+        "deadlock->dropped_handoff": 59,
+        "duplicated_work->clean": 76,
+        "runaway_loop->clean": 110,
+        "goal_drift->clean": 41,
+        "_n": {
+          "dropped_handoff": 1200,
+          "deadlock": 1200,
+          "duplicated_work": 1200,
+          "runaway_loop": 1200,
+          "goal_drift": 1200,
+          "conflict": 1200
+        }
+      },
+      "d_macro": 0.006740442187801121,
+      "d_rob": 0.008969921714380935,
+      "d_comp": 0.006112701522495878,
+      "d_hit2": 0.0050000000000000044,
+      "d_dh": 0.025039089293179106
+    }
+  }
+}

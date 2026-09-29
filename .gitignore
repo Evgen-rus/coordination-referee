@@ -9,3 +9,6 @@ metrics_*/
 data/*.csv
 !data/sample_submission.csv
 .DS_Store
+.perf/
+.cache/
+*.pkl
