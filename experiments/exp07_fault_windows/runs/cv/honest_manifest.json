@@ -1,40 +1,83 @@
 {
+  "schema": 2,
+  "verified": true,
   "mode": "cv",
   "seed": 0,
   "n_outer": 3,
   "n_inner": 3,
+  "n_runs": 10000,
+  "n_classes": 7,
+  "full_coverage": true,
+  "early_stopped": false,
+  "folds_evaluated": [
+    0,
+    1,
+    2
+  ],
+  "data_sha256": "8e8feb4ee284d2acd918b533921631fa905d47adf8d34881f89359964a1bcfbc",
+  "code_sha256": "27c35ec724bf49e19f48425f1db222403b4cc2b46683cf4624e3553ff5a7898d",
+  "code_files_sha256": {
+    "baseline/features.py": "72b1373b8c0318236e044dccc5ee8bd30ba0bf30d6b96694e5f34c2c8f43052c",
+    "experiments/exp03_length_normalization/new_features.py": "c79aad124d3e89b3f3355b0397805fd69f94c69b1bf64b1b7703634057ad403f",
+    "experiments/exp05_handoff_lifecycle/lifecycle.py": "974df58bab21122b016995088cda662d40fac440603a47b774addefabbc01196",
+    "experiments/exp06_temporal_dynamics/features.py": "30a37b5d6997bcad768d868bd3c0b1463bd3b7591fa5365c4eac242f66790646",
+    "experiments/exp07_fault_windows/window_features.py": "06787d2ad07a900ee573152bee8a9a04646fa1ed991403eb8eb461d9dc8fceba",
+    "experiments/exp07_fault_windows/window_dataset.py": "cd4c341ecfe8815b82bb765e0e070633ded57df4c01146aebbc6e48584dc64d0"
+  },
+  "run_id_sha256": "840470f9a5e1a4b387f6072e8cae12733bd6045fe3b6fb5376318b6113eb4761",
+  "y_true_sha256": "e14d6f2a12d2f4ca8c93c729569a12b8833e6de1892d3ba9c9db6ba5c6749aa4",
+  "runner_model_path_sha256": "d36d2b67f6c449d8af20c84062dafa1b844dbd5d14cabdae9c2dd6dfb052b27d",
+  "proba_sha256": {
+    "A_foundation": "c2dbce5136e5a94bd18c5173c1b0a871468a4170936c7d05bde34372139b3482",
+    "B_plus_window": "edbaf8d766f97f28bce12e72fbf9fee67533124d78ab8dc17fdfdb31211297e8"
+  },
+  "label_sha256": {
+    "A_foundation": "69841804018c457403099b198ccc53354fca668da026970ccc7dee565e14d35e",
+    "B_plus_window": "ef3ae524a109a2a9f92905a61236ff997b7d46521465f1ecfc5a6a5fb3f9a169"
+  },
+  "fold_val_sha256": [
+    "c495670bda7b098c948dfe0be629eafa5b0f748178366e4a7e33536b0883cc33",
+    "9a53592a894e96c349adb9f6a9373fb9e53a1d09317cb40d5a1e5a3c1d891eca",
+    "759885f517d7126394f0156bc02ac6185f252e21fb8fb24b2fec1fcc11dc22f9"
+  ],
   "folds": [
     {
       "fold": 0,
-      "n_train": 6666,
       "n_val": 3334,
-      "inner_holdout_sizes": [
-        2222,
-        2222,
-        2222
-      ]
+      "n_train": 6666,
+      "val_sha256": "c495670bda7b098c948dfe0be629eafa5b0f748178366e4a7e33536b0883cc33",
+      "train_sha256": "5a79cfc0611dc07f14e9e6f9d1806fd2f88436e268b7b2821fc973776efbfff8"
     },
     {
       "fold": 1,
-      "n_train": 6667,
       "n_val": 3333,
-      "inner_holdout_sizes": [
-        2223,
-        2222,
-        2222
-      ]
+      "n_train": 6667,
+      "val_sha256": "9a53592a894e96c349adb9f6a9373fb9e53a1d09317cb40d5a1e5a3c1d891eca",
+      "train_sha256": "f746e6ede0c26fc775c032b1d8d3750619198fd1dfee96ba88d6c8232dcb63d3"
     },
     {
       "fold": 2,
-      "n_train": 6667,
       "n_val": 3333,
-      "inner_holdout_sizes": [
-        2223,
-        2222,
-        2222
-      ]
+      "n_train": 6667,
+      "val_sha256": "759885f517d7126394f0156bc02ac6185f252e21fb8fb24b2fec1fcc11dc22f9",
+      "train_sha256": "d428f127460dd7cc1d053f109bcc3c2ff170ad20729c8fae4d5a11d76ab1b67d"
     }
   ],
-  "verified": true,
-  "statement": "every outer-train run received its window aggregates from a window model fitted without it"
+  "statement": "every outer-train run received its window aggregates from a window model fitted without it",
+  "provenance": {
+    "kind": "sealed upgrade of an existing CV run",
+    "retrained": false,
+    "sealed_from_commit": "527ace955f6503ff39ec8f6f9312398147a50c0f",
+    "evidence": [
+      "oof_*.csv byte-identical to the committed parity reference",
+      "runs/ byte-identical to git 527ace95",
+      "argmax(oof_proba_*.npy) == oof_*.csv y_pred on all rows",
+      "oof_runid.json == current train.csv run order",
+      "per-fold macro F1 on seed-0 re-derived folds == results.json to 1e-9",
+      "every row held out by exactly one outer validation fold",
+      "runner.py model-determining region byte-identical to 527ace95; all edits since are in the artifact-writer block"
+    ],
+    "parity": "check_parity.py cv -> PASS"
+  },
+  "written_at": "2026-09-29T15:09:59"
 }

@@ -9,6 +9,7 @@ import gc
 import json
 import os
 import sys
+import time
 
 import numpy as np
 import pandas as pd
@@ -37,6 +38,30 @@ WINDOW_PARAMS = dict(objective="multiclass", num_class=wd.N_WINDOW_CLASSES,
                      min_child_samples=50, subsample=0.9, subsample_freq=1,
                      colsample_bytree=0.8, reg_lambda=1.0, random_state=42,
                      verbose=-1)
+
+# The model-determining region of ``run()``: the outer fold loop up to the start
+# of the inner-fit payload build.  Hashing this region is what lets a consumer
+# prove that a change to the artifact WRITER (provenance recording) did not
+# also change the MODEL.  The body of the loop is kept byte-identical to the
+# version that produced the committed CV artifacts, so any edit inside it is a
+# real model change and must invalidate every reusable artifact.
+# Keep these markers in sync with ``reuse.py``.
+_MODEL_START = "    for f in fold_ids:"
+_MODEL_END = "        CW = wd.class_weight_vector()"
+
+
+def _model_path_sha():
+    """SHA-256 of the model-determining region of this file's ``run()``."""
+    import hashlib
+    p = os.path.abspath(__file__)
+    with open(p, "r", encoding="utf-8") as fh:
+        lines = fh.readlines()
+    i = next(k for k, l in enumerate(lines) if l.startswith(_MODEL_START))
+    j = next(k for k, l in enumerate(lines) if l.startswith(_MODEL_END))
+    return hashlib.sha256("".join(lines[i:j + 1]).encode("utf-8")).hexdigest()
+
+
+_MODEL_PATH_SHA = _model_path_sha()
 
 
 def _assert_params_match_original():
@@ -130,12 +155,23 @@ def run(mode="cv", use_cache=True, threads=par.DEFAULT_THREADS, workers=1,
     peak_pos = np.full((n, wd.N_WINDOW_CLASSES), -1, dtype=np.int32)
     peak_prob = np.zeros((n, wd.N_WINDOW_CLASSES))
     win_oof_y, win_oof_pred, win_oof_run = [], [], []
-    honest = {"mode": mode, "seed": SEED, "n_outer": N_OUTER,
+    honest = {"schema": 2,
+              "mode": mode, "seed": SEED, "n_outer": N_OUTER,
               "n_inner": N_INNER, "folds": [], "verified": True,
+              "n_runs": int(n),
+              "data_sha256": ca.data_sha256(),
+              "code_sha256": ca.code_sha256(),
+              "code_files_sha256": ca.code_files_sha256(),
+              "run_id_sha256": ca.sha256_run_ids(c["train"]["run_id"]),
               "statement": "every outer-train run received its window "
                            "aggregates from a window model fitted without it"}
     stopped_early = False
-    fold_sizes = {f: splits[f][1] for f in fold_ids}
+    # Exact outer-validation index vectors, hashed.  A size-only record cannot
+    # distinguish "same counts" from "same rows", and only the latter is evidence
+    # that these predictions belong to these folds.  Derived from ``splits``
+    # here so it cannot drift from what the loop actually iterates over.
+    fold_val_idx = {f: np.asarray(splits[f][1], dtype=np.int64) for f in fold_ids}
+    fold_val_sha = {f: ca.sha256_indices(fold_val_idx[f]) for f in fold_ids}
 
     for f in fold_ids:
         tr, va = splits[f]
@@ -231,7 +267,7 @@ def run(mode="cv", use_cache=True, threads=par.DEFAULT_THREADS, workers=1,
     return _finalise(c, mode, outdir, n, runs, ys, found, SL, oof, oof_proba,
                      fold_m, fold_ids, peak_pos, peak_prob, win_oof_y,
                      win_oof_pred, win_oof_run, honest, stopped_early,
-                     fold_sizes)
+                     fold_val_sha)
 
 
 def _fold_macro(ys_va, pred_va, labels):
@@ -260,7 +296,7 @@ def _partial(ys, oof_int, SL, runs, c, va):
 
 def _finalise(c, mode, outdir, n, runs, ys, found, SL, oof, oof_proba, fold_m,
               fold_ids, peak_pos, peak_prob, win_oof_y, win_oof_pred,
-              win_oof_run, honest, stopped_early):
+              win_oof_run, honest, stopped_early, fold_val_sha):
     # a row is scored only if it appeared in a validation split
     names = {k: [LABELS[i] for i in oof[k]] for k in oof}
     objs = {k: np.array(v, dtype=object) for k, v in names.items()}
@@ -307,6 +343,7 @@ def _finalise(c, mode, outdir, n, runs, ys, found, SL, oof, oof_proba, fold_m,
                          - prf(ys, objs[A_KEY], DH)["f1"])
 
     # ---------------- artifacts ----------------
+    run_ids = [str(x) for x in c["train"]["run_id"]]
     for k in oof:
         pd.DataFrame({"run_id": c["train"]["run_id"], "y_true": ys,
                       "y_pred": names[k], "fault_turn": c["fturn"],
@@ -314,15 +351,36 @@ def _finalise(c, mode, outdir, n, runs, ys, found, SL, oof, oof_proba, fold_m,
             os.path.join(outdir, "oof_%s.csv" % k), index=False)
         np.save(os.path.join(outdir, "oof_proba_%s.npy" % k),
                 oof_proba[k].astype(np.float32))
+        # hard labels are stored as well as being derivable, so the consumer
+        # can cross-check argmax(proba) == labels rather than trust one of them
+        np.save(os.path.join(outdir, "oof_%s.npy" % k), oof[k].astype(np.int64))
     with open(os.path.join(outdir, "oof_runid.json"), "w") as fh:
-        json.dump([str(x) for x in c["train"]["run_id"]], fh)
-    # record what the artifacts ARE, so a consumer can verify rather than
-    # trust them (see reuse.py)
+        json.dump(run_ids, fh)
+    # Record what the artifacts ARE, so a consumer can verify rather than trust
+    # them (see reuse.py).  Everything here is required, not best-effort.
     honest["proba_sha256"] = {k: ca.sha256_array(oof_proba[k].astype(np.float32))
                               for k in oof}
-    honest["label_sha256"] = {k: ca.sha256_array(oof[k]) for k in oof}
-    honest["outer_val_sizes"] = [int(len(fold_sizes[f])) for f in _folds_run]
-    honest["written_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
+    honest["label_sha256"] = {k: ca.sha256_array(oof[k].astype(np.int64))
+                              for k in oof}
+    honest["y_true_sha256"] = ca.sha256_run_ids(ys)
+    honest["run_id_sha256"] = ca.sha256_run_ids(run_ids)
+    # attach the exact per-fold validation hashes recorded during the loop,
+    # ordered by fold id so the list is comparable across runs
+    for meta in honest["folds"]:
+        meta["val_sha256"] = fold_val_sha[meta["fold"]]
+    honest["fold_val_sha256"] = [fold_val_sha[f] for f in sorted(fold_val_sha)]
+    honest["n_classes"] = len(LABELS)
+    honest["runner_model_path_sha256"] = _MODEL_PATH_SHA()
+    honest["written_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+    # A FAST run that stopped early leaves rows unscored.  Saying so here is
+    # what lets the consumer refuse to read a partial matrix as if it were a
+    # complete OOF result.
+    honest["partial"] = bool(stopped_early)
+    honest["early_stopped"] = bool(stopped_early)
+    honest["folds_evaluated"] = [int(f) for f in fold_ids]
+    honest["full_coverage"] = (not stopped_early
+                               and len(honest["folds"]) == N_OUTER
+                               and mode != MD.FAST)
     if win_oof_y:
         np.save(os.path.join(outdir, "window_oof_y.npy"),
                 np.concatenate(win_oof_y))
@@ -339,7 +397,6 @@ def _finalise(c, mode, outdir, n, runs, ys, found, SL, oof, oof_proba, fold_m,
     log("wrote %s" % outdir)
     return res
 
-
 def XN():
     import window_features as _wf
     return _wf.N_FEATURES
@@ -350,7 +407,6 @@ DH = "dropped_handoff"
 
 def main(argv=None):
     import argparse
-    import time
     ap = argparse.ArgumentParser(description="Exp07 runner (FAST/CV/FINAL)")
     ap.add_argument("--mode", default="cv", choices=list(MD.MODES))
     ap.add_argument("--no-cache", action="store_true",
