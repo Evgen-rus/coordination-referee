@@ -1,0 +1,201 @@
+==============================================================================
+Exp11 - FIXED 3-seed probability ensemble of the final label head
+==============================================================================
+  seeds (frozen): [42, 137, 2026]   equal weights, plain average
+  gate (pre-declared): {'composite_delta_min': 0.002, 'folds_won_min': 2, 'robustness_drop_max': 0.003, 'class_f1_drop_max': 0.02}
+  weak/inconclusive band: [0.001, 0.002) -> STOP
+
+==============================================================================
+[1] STRICT VERIFIED INPUTS (fail closed) + parameter discipline
+==============================================================================
+  ok    32 provenance checks passed in 0.15s; fold index hashes match the sealed manifest
+  ok    sealed P_B (10000, 7) float32   peak_pos (10000, 7) int32
+  ok    argmax(verified P_B) == verified B labels on all 10000 rows
+  robustness mask: cache hit (robustness_mask.8f9fa8ad20cd8a4a.npy)
+  ok    robustness mask: 1290 rows (a property of the data, identical for every seed)
+  ok    the 3 label parameter dicts are identical except random_state: [42, 137, 2026]
+  ok    locked: objective='multiclass' num_class=7 n_estimators=600 lr=0.05 num_leaves=63 mcs=20 subsample=0.9/1 colsample=0.8 reg_lambda=1.0
+
+==============================================================================
+[2] REPRODUCTION GATE - Exp08 baseline, official metrics, before any fit
+==============================================================================
+  ok    the Exp10 scoring path at alpha=1 reproduces the verified B labels exactly on all 10000 rows
+  ok    baseline labels == the committed Exp07 OOF CSV on all 10000 rows
+  ok    BASELINE macro_f1         0.7894323366835861  (exact)
+  ok    BASELINE robustness_f1    0.7368470046834376  (exact)
+  ok    BASELINE success_f1       0.8643757406010988  (exact)
+  ok    BASELINE fault_turn_hit2  0.6086111111111111  (exact)
+  ok    BASELINE composite        0.7694453917139285  (exact)
+  ok    composite() matches a hand expansion of the official weights
+  ok    L1 fault_turn == a direct re-read of the sealed peaks; every clean prediction -> -1, every fault prediction gets a real turn
+  NOTE public Exp08 leaderboard 0.7696 recorded as a REFERENCE ONLY; nothing here reads it.
+
+  REPRODUCTION GATE PASSED - exact on all 5 numbers, before any fit.
+
+==============================================================================
+[3] HONEST OOF: 3 outer folds x 3 seeds, fitted on outer-train only
+==============================================================================
+[cache] HIT  build_all
+[cache] HIT  windows
+  foundation (10000, 249)   windows (457203, 83)   (Exp07's own content-addressed cache)
+[   3.8s]   [fold 0] stacking verified: 6666 outer-train runs, each cross-fitted from a model excluding it (3 inner folds, no overlap)
+    fold 0: n_tr=6666 n_val=3334  label seed=42  144.2s
+[ 148.7s]   [fold 1] stacking verified: 6667 outer-train runs, each cross-fitted from a model excluding it (3 inner folds, no overlap)
+    fold 1: n_tr=6667 n_val=3333  label seed=42  154.5s
+[ 304.1s]   [fold 2] stacking verified: 6667 outer-train runs, each cross-fitted from a model excluding it (3 inner folds, no overlap)
+    fold 2: n_tr=6667 n_val=3333  label seed=42  162.3s
+  ok    seed 42 reproduces the sealed Exp07 OOF probabilities BIT for BIT (sha256 edbaf8d766f97f28) - the rebuilt 300-feature matrix is bit-exactly the matrix current best was fitted on
+      seed 42 done in 463.3s
+[ 467.1s]   [fold 0] stacking verified: 6666 outer-train runs, each cross-fitted from a model excluding it (3 inner folds, no overlap)
+    fold 0: n_tr=6666 n_val=3334  label seed=137  157.3s
+[ 625.1s]   [fold 1] stacking verified: 6667 outer-train runs, each cross-fitted from a model excluding it (3 inner folds, no overlap)
+    fold 1: n_tr=6667 n_val=3333  label seed=137  142.7s
+[ 768.5s]   [fold 2] stacking verified: 6667 outer-train runs, each cross-fitted from a model excluding it (3 inner folds, no overlap)
+    fold 2: n_tr=6667 n_val=3333  label seed=137  158.0s
+  ok    seed 137: 328/10000 labels differ from seed 42, max|dP| = 4.775e-01 - the seeds really are different models
+      seed 137 done in 460.1s
+[ 927.2s]   [fold 0] stacking verified: 6666 outer-train runs, each cross-fitted from a model excluding it (3 inner folds, no overlap)
+    fold 0: n_tr=6666 n_val=3334  label seed=2026  151.0s
+[1079.2s]   [fold 1] stacking verified: 6667 outer-train runs, each cross-fitted from a model excluding it (3 inner folds, no overlap)
+    fold 1: n_tr=6667 n_val=3333  label seed=2026  153.5s
+[1233.4s]   [fold 2] stacking verified: 6667 outer-train runs, each cross-fitted from a model excluding it (3 inner folds, no overlap)
+    fold 2: n_tr=6667 n_val=3333  label seed=2026  149.8s
+  ok    seed 2026: 359/10000 labels differ from seed 42, max|dP| = 4.585e-01 - the seeds really are different models
+      seed 2026 done in 456.7s
+
+==============================================================================
+[4] THE FIXED 3-SEED AVERAGE, assembled over all 10000 rows
+==============================================================================
+  P_ensemble = (P_42 + P_137 + P_2026) / 3, float64 mean of the float32 casts
+  ok    argmax(P_ensemble) differs from the baseline on 201/10000 rows (2.01%); max|dP| vs baseline 3.010e-01
+  ok    the ensemble is an average of exactly 3 models with equal weights and no per-row selection
+
+==============================================================================
+[5] FAST PATH must equal the official metrics, on real candidates
+==============================================================================
+  ok    fast objective == official evaluation.metrics on 4 real candidates (baseline, ensemble, and both extra seeds), max abs diff 0.00e+00
+
+==============================================================================
+[6] HEADLINE - current best (seed 42) vs the fixed 3-seed average
+==============================================================================
+  baseline (seed 42)       macro 0.7894323366835861  robustness 0.7368470046834376  success 0.8643757406010988  hit@2 0.6086111111111111
+                           composite 0.7694453917139285
+  ensemble (42/137/2026)   macro 0.7894887896087738  robustness 0.7369722712178854  success 0.8643757406010988  hit@2 0.6095833333333334
+                           composite 0.7696021570323565
+  delta  macro +0.0000564529251876  robustness +0.0001252665344479  success +0.0000000000000000  hit@2 +0.0009722222222223
+  delta  composite +0.0001567653184280
+  accuracy (diagnostic only) 0.806100 -> 0.806500 (+0.000400)
+  OOF labels changed: 201 / 10000 (2.01%)
+  fault_turn values changed as a consequence: 196 / 10000
+  ok    every ensemble clean prediction has fault_turn == -1 (3045 rows)
+
+  per-class F1 (official f1_per_class):
+    class                baseline   ensemble      delta
+    clean                0.865003   0.867408  +0.002405
+    dropped_handoff      0.635637   0.633255  -0.002382
+    duplicated_work      0.829642   0.830221  +0.000578
+    deadlock             0.721739   0.720246  -0.001493
+    conflict             0.903175   0.902238  -0.000937
+    goal_drift           0.846898   0.845627  -0.001271
+    runaway_loop         0.723932   0.727427  +0.003495
+
+  baseline confusion (rows = true, cols = pred):
+      true \ pred           0     1     2     3     4     5     6
+      clean              2531    93    40    54     0    13    69
+      dropped_handoff     171   676    54    92    56    57    94
+      duplicated_work      76    30   974    23    36    29    32
+      deadlock            123    59    39   830    40    47    62
+      conflict              0     3     3     6  1152    22    14
+      goal_drift           41    21    15    31    19  1051    22
+      runaway_loop        110    45    23    64    48    63   847
+                        clean dropp dupli deadl confl goal_ runaw
+
+  ensemble confusion (rows = true, cols = pred):
+      true \ pred           0     1     2     3     4     5     6
+      clean              2535    96    40    50     0    11    68
+      dropped_handoff     170   676    55    87    56    57    99
+      duplicated_work      74    30   978    22    35    29    32
+      deadlock            122    67    41   820    40    50    60
+      conflict              0     2     4     6  1149    23    16
+      goal_drift           41    21    13    31    19  1049    26
+      runaway_loop        103    43    25    61    48    62   858
+                        clean dropp dupli deadl confl goal_ runaw
+
+  confusion transitions (baseline -> ensemble), changed rows only:
+    dropped_handoff->clean                      14
+    clean->dropped_handoff                      14
+    deadlock->clean                             13
+    clean->runaway_loop                         13
+    deadlock->dropped_handoff                   13
+    clean->duplicated_work                      11
+    clean->deadlock                             11
+    deadlock->runaway_loop                       9
+    goal_drift->runaway_loop                     8
+    deadlock->goal_drift                         8
+    duplicated_work->clean                       7
+    runaway_loop->clean                          7
+    dropped_handoff->runaway_loop                5
+    goal_drift->dropped_handoff                  5
+    dropped_handoff->duplicated_work             5
+    deadlock->duplicated_work                    4
+    runaway_loop->deadlock                       4
+    duplicated_work->dropped_handoff             4
+    dropped_handoff->deadlock                    4
+    goal_drift->clean                            4
+    goal_drift->deadlock                         3
+    clean->goal_drift                            3
+    runaway_loop->duplicated_work                3
+    runaway_loop->dropped_handoff                3
+    conflict->duplicated_work                    3
+    duplicated_work->runaway_loop                3
+    dropped_handoff->goal_drift                  3
+    duplicated_work->goal_drift                  3
+    runaway_loop->goal_drift                     3
+    conflict->goal_drift                         2
+    goal_drift->duplicated_work                  2
+    conflict->runaway_loop                       2
+    duplicated_work->deadlock                    2
+    goal_drift->conflict                         1
+    duplicated_work->conflict                    1
+    runaway_loop->conflict                       1
+  of the 201 changed labels: 86 became correct, 82 became wrong (net +4)
+
+==============================================================================
+[7] INDIVIDUAL SEED SCORES - DIAGNOSTIC ONLY, NOT A SELECTION
+==============================================================================
+  These are reported to show the spread.  No best seed is chosen,
+  the headline is and remains the fixed average.
+  seed 42    macro 0.789432  rob 0.736847  hit@2 0.608611  composite 0.7694453917139285   (diff vs baseline +0.0000000000000000; 201 labels differ from the ensemble)
+  seed 137   macro 0.788454  rob 0.733015  hit@2 0.608611  composite 0.7679980257218403   (diff vs baseline -0.0014473659920882; 196 labels differ from the ensemble)
+  seed 2026  macro 0.789181  rob 0.735529  hit@2 0.610139  composite 0.7691431612496809   (diff vs baseline -0.0003022304642476; 200 labels differ from the ensemble)
+
+==============================================================================
+[8] FOLD-BY-FOLD - the same 3 outer folds, held-out rows only
+==============================================================================
+  fold 0 (n_val= 3334, 61 labels changed): composite 0.7661703746771656 -> 0.7704013658437987  (+0.0042309911666331)  WIN
+           macro +0.002534  robustness +0.010690  hit@2 +0.002917
+  fold 1 (n_val= 3333, 75 labels changed): composite 0.7747447944604717 -> 0.7718215166692592  (-0.0029232777912125)  LOSS
+           macro -0.002500  robustness -0.006694  hit@2 +0.000000
+  fold 2 (n_val= 3333, 65 labels changed): composite 0.7664411915804130 -> 0.7651781528735124  (-0.0012630387069006)  LOSS
+           macro +0.000166  robustness -0.005385  hit@2 +0.000000
+
+  ensemble wins on 1/3 outer folds
+  NOTE this is a CONSISTENCY check over 3 folds, not significance:
+  the seed set is fixed a priori, so nothing was selected per fold,
+  but n=3 and the folds share one dataset.
+
+==============================================================================
+[9] PROMOTION GATE (pre-declared before the first fit)
+==============================================================================
+  [FAIL] composite delta >= +0.002                      +0.000157
+  [FAIL] wins >= 2/3 folds                              +1.000000
+  [PASS] robustness drop <= 0.003                       -0.000125
+  [PASS] worst class F1 drop <= 0.02 (dropped_handoff)  +0.002382
+
+  PROMOTION GATE: FAIL
+
+  GATE FAILED - no production ensemble is fitted, no submission
+  is built, no other seed set is tried, and Exp12 is not started.
+
+wrote D:\My_dev_project\coordination-referee\experiments\exp11_label_seed_ensemble\results.json
+total research runtime 1383.9s (23.07 min)
