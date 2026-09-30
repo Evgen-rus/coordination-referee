@@ -1,0 +1,186 @@
+==============================================================================
+Exp10 - probability blend of Exp07 A (249 feats) and B (300 feats)
+==============================================================================
+
+[1] verified Exp07 OOF for BOTH systems + sealed window peaks
+    (strict, fail closed - ArtifactRejected is fatal)
+  ok    32 provenance checks passed, load 1.58s
+  ok    P_A (10000, 7)  P_B (10000, 7)  peak_pos (10000, 7)
+  ok    the 3 outer folds re-derived from seed 0 match the sealed manifest exactly (index-vector hashes)
+  ok    argmax(P_A) == verified A labels and argmax(P_B) == verified B labels on all 10000 rows
+  ok    A and B are genuinely different models: 668 of 10000 labels differ
+  robustness mask: cache hit (robustness_mask.8f9fa8ad20cd8a4a.npy)
+  ok    corpus precomputed: P_A (10000, 7)  P_B (10000, 7)  candidate L1 turn matrix (10000, 7)  robustness rows 1290
+
+==============================================================================
+[2] REPRODUCTION GATE - Exp08 baseline at alpha = 1, official metrics
+==============================================================================
+  ok    alpha=1 reproduces the verified B labels exactly on all 10000 rows
+  ok    alpha=1 reproduces the committed Exp07 OOF labels exactly on all 10000 rows
+  ok    alpha=1 emits 6948 non-negative turns; 3052 clean predictions all -> -1
+  ok    BASELINE macro_f1         0.7894323366835861  (exact)
+  ok    BASELINE robustness_f1    0.7368470046834376  (exact)
+  ok    BASELINE success_f1       0.8643757406010988  (exact)
+  ok    BASELINE fault_turn_hit2  0.6086111111111111  (exact)
+  ok    BASELINE composite        0.7694453917139285  (exact)
+  ok    composite() called directly from evaluation.metrics
+  NOTE public Exp08 leaderboard 0.7696 recorded as a REFERENCE ONLY; no search reads it.
+
+  REPRODUCTION GATE PASSED - Exp08 baseline exact on all 5 numbers.
+
+==============================================================================
+[3] FAST OBJECTIVE must equal the official metrics, always
+==============================================================================
+  ok    fast objective == official metrics on 9 probe alphas spanning the declared grid, max abs diff 0.00e+00
+
+==============================================================================
+[4] Blend curve over all 10000 rows - DIAGNOSTIC ONLY
+    A single alpha chosen here and reported here would be in-sample.
+    It is printed so the report can show the shape of the surface.
+==============================================================================
+    alpha   composite            macro        robust       hit@2        labels vs B
+    0.00    0.7626799124136548   0.782692     0.727877     0.597083        668
+    0.05    0.7628225814834720   0.783410     0.726622     0.598056        644
+    0.10    0.7644045770328702   0.785135     0.728891     0.599583        607
+    0.15    0.7649888088099291   0.785485     0.730304     0.600139        585
+    0.20    0.7655555377105103   0.785400     0.732685     0.600278        554
+    0.25    0.7659353212126742   0.785795     0.733192     0.600833        527
+    0.30    0.7656287670544495   0.786150     0.731089     0.601250        493
+    0.35    0.7662045352481707   0.786597     0.731999     0.602500        451
+    0.40    0.7661149299404607   0.786908     0.730907     0.602778        413
+    0.45    0.7659050517898373   0.787242     0.728956     0.603889        370
+    0.50    0.7670393982632524   0.788808     0.729750     0.605417        332
+    0.55    0.7674011979784073   0.789702     0.728964     0.606528        300
+    0.60    0.7681179914229207   0.789892     0.731063     0.607500        251
+    0.65    0.7694816822723175   0.790903     0.734217     0.608194        211
+    0.70    0.7685568644979792   0.789732     0.733193     0.607361        165
+    0.75    0.7682328805439821   0.789535     0.732348     0.607222        137
+    0.80    0.7692174158318308   0.789960     0.734991     0.608333        111
+    0.85    0.7686212030508479   0.788924     0.734956     0.607639         76
+    0.90    0.7687026520109462   0.788972     0.735074     0.607917         56
+    0.95    0.7698215044273767   0.789524     0.738335     0.608194         27  <- argmax of the full-OOF curve (IN-SAMPLE)
+    1.00    0.7694453917139285   0.789432     0.736847     0.608611          0
+  full-OOF argmax is alpha=0.95 at composite 0.7698215044273767
+  Exp08 (alpha=1.00) sits at 0.7694453917139285.
+
+==============================================================================
+[5] OOF meta-CV - alpha chosen on 2 folds, scored on the third
+==============================================================================
+  For each fold f: the OTHER two folds are the alpha-selection train,
+  alpha is frozen, then applied to fold f.  Nothing about fold f is
+  used to pick its own alpha.
+  NOTE: OOF meta-CV is not a fully nested retrain of Exp07; the
+  public leaderboard remains the external validation.
+
+  --- fold 0: alpha-train n=6666, held-out n=3334 ---
+    alpha selected on the 2 training folds: 1.00  (train composite 0.7710339116666942)
+    training-curve top alphas: 1.00
+    held-out fold 0: 0/3334 labels changed; composite 0.7661703746771656 -> 0.7661703746771656 (+0.0000000000000000) LOSS
+
+  --- fold 1: alpha-train n=6667, held-out n=3333 ---
+    alpha selected on the 2 training folds: 0.65  (train composite 0.7678700354137142)
+    training-curve top alphas: 0.65
+    held-out fold 1: 68/3333 labels changed; composite 0.7747447944604717 -> 0.7731012724003588 (-0.0016435220601130) LOSS
+
+  --- fold 2: alpha-train n=6667, held-out n=3333 ---
+    alpha selected on the 2 training folds: 0.95  (train composite 0.7712354910822170)
+    training-curve top alphas: 0.95
+    held-out fold 2: 9/3333 labels changed; composite 0.7664411915804130 -> 0.7655120226314769 (-0.0009291689489361) LOSS
+  ok    cross-fitted prediction vector assembled for all 10000 rows
+
+==============================================================================
+[6] HEADLINE - A (Exp08, alpha=1) vs B (cross-fitted), all 10000 rows
+==============================================================================
+  ok    every cross-fitted clean prediction has fault_turn == -1 (3060 rows)
+  A  macro 0.7894323366835861  robustness 0.7368470046834376  success 0.8643757406010988  hit@2 0.6086111111111111
+     composite 0.7694453917139285
+  B  macro 0.7889459789785602  robustness 0.7346640733932716  success 0.8643757406010988  hit@2 0.6075000000000000
+     composite 0.7685453689277627
+  delta  macro -0.0004863577050259  robustness -0.0021829312901660  hit@2 -0.0011111111111111  composite -0.0009000227861657
+  accuracy (diagnostic only) 0.806100 -> 0.806000 (-0.000100)
+  OOF labels changed by the cross-fitted blend: 77 / 10000 (0.77%)
+  fault_turn values changed as a consequence: 77 / 10000
+
+  per-class F1 (official f1_per_class):
+    class                       A          B      delta
+    clean                0.865003   0.865870  +0.000867
+    dropped_handoff      0.635637   0.632276  -0.003361
+    duplicated_work      0.829642   0.830350  +0.000707
+    deadlock             0.721739   0.719443  -0.002296
+    conflict             0.903175   0.903529  +0.000354
+    goal_drift           0.846898   0.846898  +0.000000
+    runaway_loop         0.723932   0.724255  +0.000324
+
+  A confusion (rows = true, cols = pred):
+      true \ pred           0     1     2     3     4     5     6
+      clean              2531    93    40    54     0    13    69
+      dropped_handoff     171   676    54    92    56    57    94
+      duplicated_work      76    30   974    23    36    29    32
+      deadlock            123    59    39   830    40    47    62
+      conflict              0     3     3     6  1152    22    14
+      goal_drift           41    21    15    31    19  1051    22
+      runaway_loop        110    45    23    64    48    63   847
+                        clean dropp dupli deadl confl goal_ runaw
+
+  B confusion (rows = true, cols = pred):
+      true \ pred           0     1     2     3     4     5     6
+      clean              2537    91    37    53     0    12    70
+      dropped_handoff     174   668    54    93    56    58    97
+      duplicated_work      76    31   974    23    34    29    33
+      deadlock            124    61    40   827    40    47    61
+      conflict              0     3     3     6  1152    22    14
+      goal_drift           40    19    15    32    19  1051    24
+      runaway_loop        109    40    23    65    49    63   851
+                        clean dropp dupli deadl confl goal_ runaw
+
+  confusion transitions (A label -> B label), changed rows only:
+    dropped_handoff->clean                      11
+    dropped_handoff->runaway_loop                8
+    clean->dropped_handoff                       7
+    deadlock->clean                              6
+    duplicated_work->clean                       6
+    clean->runaway_loop                          5
+    clean->deadlock                              4
+    dropped_handoff->goal_drift                  4
+    runaway_loop->clean                          4
+    clean->goal_drift                            2
+    goal_drift->deadlock                         2
+    conflict->duplicated_work                    2
+    dropped_handoff->deadlock                    2
+    goal_drift->runaway_loop                     2
+    duplicated_work->runaway_loop                2
+    clean->duplicated_work                       2
+    deadlock->dropped_handoff                    2
+    runaway_loop->dropped_handoff                1
+    deadlock->duplicated_work                    1
+    runaway_loop->duplicated_work                1
+    runaway_loop->conflict                       1
+    goal_drift->dropped_handoff                  1
+    goal_drift->clean                            1
+  of the 77 changed labels: 35 became correct, 36 became wrong (net -1)
+
+==============================================================================
+[7] ALPHA STABILITY across the three selection fits
+==============================================================================
+    fold 0 alpha = 1.00
+    fold 1 alpha = 0.65
+    fold 2 alpha = 0.95
+    spread = 0.35, 3 distinct value(s) of 3
+    verdict: NOTABLE INSTABILITY (spread > 0.30)
+    NOTE: at alpha=1.00 the blend is the EXP08 baseline itself; folds that choose 1.0 are choosing NOT TO BLEND.
+
+==============================================================================
+[8] PROMOTION GATE (pre-declared)
+==============================================================================
+  [FAIL] composite delta >= +0.002                      -0.000900
+  [FAIL] wins >= 2/3 folds                              +0.000000
+  [PASS] robustness drop <= 0.003                       +0.002183
+  [PASS] worst class F1 drop <= 0.02 (dropped_handoff)  +0.003361
+
+  PROMOTION GATE: FAIL
+
+  GATE FAILED - no production alpha is fitted, no submission is
+  built, and no other blend is tried.  The experiment stops here.
+
+wrote D:\My_dev_project\coordination-referee\experiments\exp10_ab_probability_blend\results.json
+total research runtime 2.9s (0.05 min)

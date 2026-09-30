@@ -1,0 +1,1052 @@
+{
+  "experiment": "exp10_ab_probability_blend",
+  "n_runs": 10000,
+  "systems": {
+    "A": "A_foundation",
+    "B": "B_plus_window"
+  },
+  "search_space": {
+    "form": "P_blend = (1 - alpha) * P_A + alpha * P_B; pred = argmax(P_blend)",
+    "grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ],
+    "n_grid": 21,
+    "step": 0.05,
+    "single_scalar": true,
+    "forbidden": [
+      "class-specific alpha",
+      "offsets",
+      "temperature",
+      "geometric/log blend",
+      "thresholds",
+      "stacking model",
+      "second grid",
+      "finer grid"
+    ],
+    "tie_break": "1) higher official composite; 2) if gap <= 1e-12, alpha closer to 1.0; 3) still tied, larger alpha",
+    "objective": "official evaluation.metrics.composite()"
+  },
+  "baseline_expected": {
+    "macro_f1": 0.7894323366835861,
+    "robustness_f1": 0.7368470046834376,
+    "success_f1": 0.8643757406010988,
+    "fault_turn_hit2": 0.6086111111111111,
+    "composite": 0.7694453917139285
+  },
+  "public_exp08_reference_only": 0.7696,
+  "gate": {
+    "composite_delta_min": 0.002,
+    "folds_won_min": 2,
+    "robustness_drop_max": 0.003,
+    "class_f1_drop_max": 0.02
+  },
+  "baseline": {
+    "macro_f1": 0.7894323366835861,
+    "robustness_f1": 0.7368470046834376,
+    "success_f1": 0.8643757406010988,
+    "fault_turn_hit2": 0.6086111111111111,
+    "composite": 0.7694453917139285
+  },
+  "reproduction_gate": {
+    "passed": true,
+    "expected": {
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6086111111111111,
+      "composite": 0.7694453917139285
+    },
+    "got": {
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6086111111111111,
+      "composite": 0.7694453917139285
+    },
+    "tolerance": 1e-12,
+    "alpha": 1.0,
+    "exp08_l1_hit2_from_results_json": 0.6086111111111111
+  },
+  "fast_objective_check": {
+    "n_probes": 9,
+    "max_abs_diff": 0.0,
+    "passed": true
+  },
+  "full_oof_curve_diagnostic": {
+    "note": "in-sample, NOT a validation result; the headline is the cross-fitted number in section 6",
+    "best_alpha": 0.95,
+    "table": [
+      {
+        "alpha": 0.0,
+        "composite": 0.7626799124136548,
+        "macro_f1": 0.782691894495785,
+        "robustness_f1": 0.7278770829690566,
+        "fault_turn_hit2": 0.5970833333333333
+      },
+      {
+        "alpha": 0.05,
+        "composite": 0.762822581483472,
+        "macro_f1": 0.7834101439650522,
+        "robustness_f1": 0.7266223714209027,
+        "fault_turn_hit2": 0.5980555555555556
+      },
+      {
+        "alpha": 0.1,
+        "composite": 0.7644045770328702,
+        "macro_f1": 0.7851345053893063,
+        "robustness_f1": 0.7288905196588756,
+        "fault_turn_hit2": 0.5995833333333334
+      },
+      {
+        "alpha": 0.15,
+        "composite": 0.7649888088099291,
+        "macro_f1": 0.7854849015439773,
+        "robustness_f1": 0.7303044322355469,
+        "fault_turn_hit2": 0.6001388888888889
+      },
+      {
+        "alpha": 0.2,
+        "composite": 0.7655555377105103,
+        "macro_f1": 0.785400167373903,
+        "robustness_f1": 0.7326852606224648,
+        "fault_turn_hit2": 0.6002777777777778
+      },
+      {
+        "alpha": 0.25,
+        "composite": 0.7659353212126742,
+        "macro_f1": 0.7857952892739556,
+        "robustness_f1": 0.7331919286087926,
+        "fault_turn_hit2": 0.6008333333333333
+      },
+      {
+        "alpha": 0.3,
+        "composite": 0.7656287670544495,
+        "macro_f1": 0.7861502378060574,
+        "robustness_f1": 0.7310891482450241,
+        "fault_turn_hit2": 0.60125
+      },
+      {
+        "alpha": 0.35,
+        "composite": 0.7662045352481707,
+        "macro_f1": 0.786596831858261,
+        "robustness_f1": 0.7319990329155013,
+        "fault_turn_hit2": 0.6025
+      },
+      {
+        "alpha": 0.4,
+        "composite": 0.7661149299404607,
+        "macro_f1": 0.7869081636196421,
+        "robustness_f1": 0.7309068370507878,
+        "fault_turn_hit2": 0.6027777777777777
+      },
+      {
+        "alpha": 0.45,
+        "composite": 0.7659050517898373,
+        "macro_f1": 0.7872415445924118,
+        "robustness_f1": 0.7289561180583107,
+        "fault_turn_hit2": 0.6038888888888889
+      },
+      {
+        "alpha": 0.5,
+        "composite": 0.7670393982632524,
+        "macro_f1": 0.7888078342075296,
+        "robustness_f1": 0.7297498136106243,
+        "fault_turn_hit2": 0.6054166666666667
+      },
+      {
+        "alpha": 0.55,
+        "composite": 0.7674011979784073,
+        "macro_f1": 0.789702103557361,
+        "robustness_f1": 0.728964029327137,
+        "fault_turn_hit2": 0.6065277777777778
+      },
+      {
+        "alpha": 0.6,
+        "composite": 0.7681179914229207,
+        "macro_f1": 0.7898917011638596,
+        "robustness_f1": 0.7310631190033047,
+        "fault_turn_hit2": 0.6075
+      },
+      {
+        "alpha": 0.65,
+        "composite": 0.7694816822723175,
+        "macro_f1": 0.7909032034318468,
+        "robustness_f1": 0.7342171000871394,
+        "fault_turn_hit2": 0.6081944444444445
+      },
+      {
+        "alpha": 0.7,
+        "composite": 0.7685568644979792,
+        "macro_f1": 0.7897323605331392,
+        "robustness_f1": 0.7331928481205345,
+        "fault_turn_hit2": 0.6073611111111111
+      },
+      {
+        "alpha": 0.75,
+        "composite": 0.7682328805439821,
+        "macro_f1": 0.7895346041410641,
+        "robustness_f1": 0.7323479806442517,
+        "fault_turn_hit2": 0.6072222222222222
+      },
+      {
+        "alpha": 0.8,
+        "composite": 0.7692174158318308,
+        "macro_f1": 0.7899597056297266,
+        "robustness_f1": 0.7349914743738778,
+        "fault_turn_hit2": 0.6083333333333333
+      },
+      {
+        "alpha": 0.85,
+        "composite": 0.7686212030508479,
+        "macro_f1": 0.7889239843928293,
+        "robustness_f1": 0.7349558435015187,
+        "fault_turn_hit2": 0.6076388888888888
+      },
+      {
+        "alpha": 0.9,
+        "composite": 0.7687026520109462,
+        "macro_f1": 0.7889724138392619,
+        "robustness_f1": 0.7350736693379349,
+        "fault_turn_hit2": 0.6079166666666667
+      },
+      {
+        "alpha": 0.95,
+        "composite": 0.7698215044273767,
+        "macro_f1": 0.7895240817230115,
+        "robustness_f1": 0.7383346321250469,
+        "fault_turn_hit2": 0.6081944444444445
+      },
+      {
+        "alpha": 1.0,
+        "composite": 0.7694453917139285,
+        "macro_f1": 0.7894323366835861,
+        "robustness_f1": 0.7368470046834376,
+        "fault_turn_hit2": 0.6086111111111111
+      }
+    ]
+  },
+  "folds": [
+    {
+      "fold": 0,
+      "n_train": 6666,
+      "n_val": 3334,
+      "val_sha256": "c495670bda7b098c948dfe0be629eafa5b0f748178366e4a7e33536b0883cc33",
+      "alpha_selected": 1.0,
+      "train_curve_argmax": [
+        {
+          "alpha": 0.0,
+          "composite": 0.7637016289619363,
+          "macro_f1": 0.7875141368814506,
+          "robustness_f1": 0.7199027977241848,
+          "fault_turn_hit2": 0.603125
+        },
+        {
+          "alpha": 0.05,
+          "composite": 0.7635779980063397,
+          "macro_f1": 0.7880473438080061,
+          "robustness_f1": 0.7182585267153538,
+          "fault_turn_hit2": 0.6033333333333334
+        },
+        {
+          "alpha": 0.1,
+          "composite": 0.7637294335069346,
+          "macro_f1": 0.7889008679339696,
+          "robustness_f1": 0.7167405537991398,
+          "fault_turn_hit2": 0.604375
+        },
+        {
+          "alpha": 0.15,
+          "composite": 0.7644156831294724,
+          "macro_f1": 0.7891309273395859,
+          "robustness_f1": 0.7188587668113923,
+          "fault_turn_hit2": 0.6047916666666666
+        },
+        {
+          "alpha": 0.2,
+          "composite": 0.7648569993882186,
+          "macro_f1": 0.7886123745779999,
+          "robustness_f1": 0.7216611373695484,
+          "fault_turn_hit2": 0.6047916666666666
+        },
+        {
+          "alpha": 0.25,
+          "composite": 0.7653186554718022,
+          "macro_f1": 0.789327353411834,
+          "robustness_f1": 0.7216611373695484,
+          "fault_turn_hit2": 0.6058333333333333
+        },
+        {
+          "alpha": 0.3,
+          "composite": 0.7651257076363253,
+          "macro_f1": 0.7893528206730128,
+          "robustness_f1": 0.7208384115052832,
+          "fault_turn_hit2": 0.6058333333333333
+        },
+        {
+          "alpha": 0.35,
+          "composite": 0.7652563480915775,
+          "macro_f1": 0.789322169730333,
+          "robustness_f1": 0.7211722752116515,
+          "fault_turn_hit2": 0.6064583333333333
+        },
+        {
+          "alpha": 0.4,
+          "composite": 0.7651248833562623,
+          "macro_f1": 0.7900788710275614,
+          "robustness_f1": 0.7188830136759335,
+          "fault_turn_hit2": 0.6070833333333333
+        },
+        {
+          "alpha": 0.45,
+          "composite": 0.7653843619361891,
+          "macro_f1": 0.7905341645616651,
+          "robustness_f1": 0.7185103409274337,
+          "fault_turn_hit2": 0.6083333333333333
+        },
+        {
+          "alpha": 0.5,
+          "composite": 0.7661637145469813,
+          "macro_f1": 0.792225134601335,
+          "robustness_f1": 0.7175791446245956,
+          "fault_turn_hit2": 0.61
+        },
+        {
+          "alpha": 0.55,
+          "composite": 0.7668939036955736,
+          "macro_f1": 0.7936856702867872,
+          "robustness_f1": 0.7169954965147279,
+          "fault_turn_hit2": 0.6114583333333333
+        },
+        {
+          "alpha": 0.6,
+          "composite": 0.7679292583815504,
+          "macro_f1": 0.7938492574945049,
+          "robustness_f1": 0.7202264075098662,
+          "fault_turn_hit2": 0.6129166666666667
+        },
+        {
+          "alpha": 0.65,
+          "composite": 0.769632213594995,
+          "macro_f1": 0.794799839323858,
+          "robustness_f1": 0.7248870647049382,
+          "fault_turn_hit2": 0.6135416666666667
+        },
+        {
+          "alpha": 0.7,
+          "composite": 0.7697274232960652,
+          "macro_f1": 0.7945493617295832,
+          "robustness_f1": 0.7257688586977687,
+          "fault_turn_hit2": 0.6135416666666667
+        },
+        {
+          "alpha": 0.75,
+          "composite": 0.7695388975037759,
+          "macro_f1": 0.7942556434783379,
+          "robustness_f1": 0.7257688586977687,
+          "fault_turn_hit2": 0.613125
+        },
+        {
+          "alpha": 0.8,
+          "composite": 0.7706316535887802,
+          "macro_f1": 0.7943632450705792,
+          "robustness_f1": 0.7297580131866364,
+          "fault_turn_hit2": 0.6135416666666667
+        },
+        {
+          "alpha": 0.85,
+          "composite": 0.7700013251868904,
+          "macro_f1": 0.7932747452186681,
+          "robustness_f1": 0.7296636992828996,
+          "fault_turn_hit2": 0.6129166666666667
+        },
+        {
+          "alpha": 0.9,
+          "composite": 0.7702696127913834,
+          "macro_f1": 0.7936863204276541,
+          "robustness_f1": 0.7296636992828996,
+          "fault_turn_hit2": 0.6135416666666667
+        },
+        {
+          "alpha": 0.95,
+          "composite": 0.7708419473934777,
+          "macro_f1": 0.7938314574018218,
+          "robustness_f1": 0.731662763742941,
+          "fault_turn_hit2": 0.6135416666666667
+        },
+        {
+          "alpha": 1.0,
+          "composite": 0.7710339116666942,
+          "macro_f1": 0.7943042705608071,
+          "robustness_f1": 0.7311516611845036,
+          "fault_turn_hit2": 0.614375
+        }
+      ],
+      "heldout": {
+        "A_alpha1": {
+          "macro_f1": 0.7796121741506896,
+          "robustness_f1": 0.7479983727132903,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.5970833333333333,
+          "composite": 0.7661703746771656
+        },
+        "B_alpha_selected": {
+          "macro_f1": 0.7796121741506896,
+          "robustness_f1": 0.7479983727132903,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.5970833333333333,
+          "composite": 0.7661703746771656
+        },
+        "delta_composite": 0.0,
+        "n_labels_changed": 0,
+        "wins": false
+      }
+    },
+    {
+      "fold": 1,
+      "n_train": 6667,
+      "n_val": 3333,
+      "val_sha256": "9a53592a894e96c349adb9f6a9373fb9e53a1d09317cb40d5a1e5a3c1d891eca",
+      "alpha_selected": 0.65,
+      "train_curve_argmax": [
+        {
+          "alpha": 0.0,
+          "composite": 0.7607708302578631,
+          "macro_f1": 0.7789741682469612,
+          "robustness_f1": 0.728926206843537,
+          "fault_turn_hit2": 0.5939583333333334
+        },
+        {
+          "alpha": 0.05,
+          "composite": 0.760972319910869,
+          "macro_f1": 0.7800361713404241,
+          "robustness_f1": 0.7270248259353016,
+          "fault_turn_hit2": 0.5954166666666667
+        },
+        {
+          "alpha": 0.1,
+          "composite": 0.7636885102876105,
+          "macro_f1": 0.7825822511272549,
+          "robustness_f1": 0.7319640945352729,
+          "fault_turn_hit2": 0.5975
+        },
+        {
+          "alpha": 0.15,
+          "composite": 0.763985008399034,
+          "macro_f1": 0.7826799252758629,
+          "robustness_f1": 0.7328714053504181,
+          "fault_turn_hit2": 0.5977083333333333
+        },
+        {
+          "alpha": 0.2,
+          "composite": 0.764188638359071,
+          "macro_f1": 0.7829660968667598,
+          "robustness_f1": 0.7329469153421052,
+          "fault_turn_hit2": 0.598125
+        },
+        {
+          "alpha": 0.25,
+          "composite": 0.7645688568701233,
+          "macro_f1": 0.7832683410852924,
+          "robustness_f1": 0.7336966342825827,
+          "fault_turn_hit2": 0.5985416666666666
+        },
+        {
+          "alpha": 0.3,
+          "composite": 0.7642175952970548,
+          "macro_f1": 0.7837047178577002,
+          "robustness_f1": 0.7312521677788261,
+          "fault_turn_hit2": 0.5989583333333334
+        },
+        {
+          "alpha": 0.35,
+          "composite": 0.7647797055129648,
+          "macro_f1": 0.7842197138743653,
+          "robustness_f1": 0.7320539499424694,
+          "fault_turn_hit2": 0.6
+        },
+        {
+          "alpha": 0.4,
+          "composite": 0.7650424791609616,
+          "macro_f1": 0.7842823569782968,
+          "robustness_f1": 0.7329797583265927,
+          "fault_turn_hit2": 0.6
+        },
+        {
+          "alpha": 0.45,
+          "composite": 0.7640900915067794,
+          "macro_f1": 0.7845421460564574,
+          "robustness_f1": 0.7281506295535433,
+          "fault_turn_hit2": 0.60125
+        },
+        {
+          "alpha": 0.5,
+          "composite": 0.7658533731463227,
+          "macro_f1": 0.7863206784369838,
+          "robustness_f1": 0.7311466913506638,
+          "fault_turn_hit2": 0.6025
+        },
+        {
+          "alpha": 0.55,
+          "composite": 0.7660943456690874,
+          "macro_f1": 0.786960317315114,
+          "robustness_f1": 0.7304979703521289,
+          "fault_turn_hit2": 0.6033333333333334
+        },
+        {
+          "alpha": 0.6,
+          "composite": 0.7664272925170063,
+          "macro_f1": 0.7869441501685163,
+          "robustness_f1": 0.7315287587036664,
+          "fault_turn_hit2": 0.6041666666666666
+        },
+        {
+          "alpha": 0.65,
+          "composite": 0.7678700354137142,
+          "macro_f1": 0.7876631184567086,
+          "robustness_f1": 0.7356951270474472,
+          "fault_turn_hit2": 0.6045833333333334
+        },
+        {
+          "alpha": 0.7,
+          "composite": 0.7666624505178743,
+          "macro_f1": 0.786004879180055,
+          "robustness_f1": 0.7347645993507277,
+          "fault_turn_hit2": 0.603125
+        },
+        {
+          "alpha": 0.75,
+          "composite": 0.7660133772117377,
+          "macro_f1": 0.785389024187234,
+          "robustness_f1": 0.7334833494451567,
+          "fault_turn_hit2": 0.6029166666666667
+        },
+        {
+          "alpha": 0.8,
+          "composite": 0.7661388694641523,
+          "macro_f1": 0.7856499737972441,
+          "robustness_f1": 0.7329634192347948,
+          "fault_turn_hit2": 0.6041666666666666
+        },
+        {
+          "alpha": 0.85,
+          "composite": 0.7657575612284766,
+          "macro_f1": 0.7846676572884107,
+          "robustness_f1": 0.7337361526430922,
+          "fault_turn_hit2": 0.6033333333333334
+        },
+        {
+          "alpha": 0.9,
+          "composite": 0.7659479701319961,
+          "macro_f1": 0.7848784643720561,
+          "robustness_f1": 0.7339095074232134,
+          "fault_turn_hit2": 0.60375
+        },
+        {
+          "alpha": 0.95,
+          "composite": 0.7672106779500819,
+          "macro_f1": 0.7853093086331615,
+          "robustness_f1": 0.7380986501733451,
+          "fault_turn_hit2": 0.60375
+        },
+        {
+          "alpha": 1.0,
+          "composite": 0.7668612888197289,
+          "macro_f1": 0.7853472135381793,
+          "robustness_f1": 0.7365419505085645,
+          "fault_turn_hit2": 0.6039583333333334
+        }
+      ],
+      "heldout": {
+        "A_alpha1": {
+          "macro_f1": 0.7976376982124211,
+          "robustness_f1": 0.7379116703897185,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.6179166666666667,
+          "composite": 0.7747447944604717
+        },
+        "B_alpha_selected": {
+          "macro_f1": 0.7973915904488453,
+          "robustness_f1": 0.732829797676419,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.6154166666666666,
+          "composite": 0.7731012724003588
+        },
+        "delta_composite": -0.0016435220601129785,
+        "n_labels_changed": 68,
+        "wins": false
+      }
+    },
+    {
+      "fold": 2,
+      "n_train": 6667,
+      "n_val": 3333,
+      "val_sha256": "759885f517d7126394f0156bc02ac6185f252e21fb8fb24b2fec1fcc11dc22f9",
+      "alpha_selected": 0.95,
+      "train_curve_argmax": [
+        {
+          "alpha": 0.0,
+          "composite": 0.7632694397231885,
+          "macro_f1": 0.7814875752552836,
+          "robustness_f1": 0.7338104973548613,
+          "fault_turn_hit2": 0.5941666666666666
+        },
+        {
+          "alpha": 0.05,
+          "composite": 0.7636077732959651,
+          "macro_f1": 0.7820417089378198,
+          "robustness_f1": 0.7335555642808945,
+          "fault_turn_hit2": 0.5954166666666667
+        },
+        {
+          "alpha": 0.1,
+          "composite": 0.7654510606945656,
+          "macro_f1": 0.7838419482414213,
+          "robustness_f1": 0.7367449019347608,
+          "fault_turn_hit2": 0.596875
+        },
+        {
+          "alpha": 0.15,
+          "composite": 0.7662228079970101,
+          "macro_f1": 0.784573482732292,
+          "robustness_f1": 0.7379521554961306,
+          "fault_turn_hit2": 0.5979166666666667
+        },
+        {
+          "alpha": 0.2,
+          "composite": 0.767270704856323,
+          "macro_f1": 0.7845675185978083,
+          "robustness_f1": 0.7421556712023497,
+          "fault_turn_hit2": 0.5979166666666667
+        },
+        {
+          "alpha": 0.25,
+          "composite": 0.7675612176978874,
+          "macro_f1": 0.7847343901114181,
+          "robustness_f1": 0.7429006462080536,
+          "fault_turn_hit2": 0.598125
+        },
+        {
+          "alpha": 0.3,
+          "composite": 0.7672181981712914,
+          "macro_f1": 0.7853616937670003,
+          "robustness_f1": 0.739940627457172,
+          "fault_turn_hit2": 0.5989583333333334
+        },
+        {
+          "alpha": 0.35,
+          "composite": 0.7682449232209858,
+          "macro_f1": 0.7861982593792946,
+          "robustness_f1": 0.7415410630980285,
+          "fault_turn_hit2": 0.6010416666666667
+        },
+        {
+          "alpha": 0.4,
+          "composite": 0.7678570828137765,
+          "macro_f1": 0.7863162071872237,
+          "robustness_f1": 0.7396704725199991,
+          "fault_turn_hit2": 0.60125
+        },
+        {
+          "alpha": 0.45,
+          "composite": 0.7679655875109769,
+          "macro_f1": 0.7866015945806761,
+          "robustness_f1": 0.7392003831885627,
+          "fault_turn_hit2": 0.6020833333333333
+        },
+        {
+          "alpha": 0.5,
+          "composite": 0.7688281860251148,
+          "macro_f1": 0.7878355282973238,
+          "robustness_f1": 0.7395162431451527,
+          "fault_turn_hit2": 0.60375
+        },
+        {
+          "alpha": 0.55,
+          "composite": 0.7689540146921237,
+          "macro_f1": 0.7884407458706585,
+          "robustness_f1": 0.738392455999852,
+          "fault_turn_hit2": 0.6047916666666666
+        },
+        {
+          "alpha": 0.6,
+          "composite": 0.7697092110349932,
+          "macro_f1": 0.7888672732483517,
+          "robustness_f1": 0.7403101866159434,
+          "fault_turn_hit2": 0.6054166666666667
+        },
+        {
+          "alpha": 0.65,
+          "composite": 0.770783457033787,
+          "macro_f1": 0.79023236003402,
+          "robustness_f1": 0.7414603303731161,
+          "fault_turn_hit2": 0.6064583333333333
+        },
+        {
+          "alpha": 0.7,
+          "composite": 0.7691171773671606,
+          "macro_f1": 0.788612898635443,
+          "robustness_f1": 0.7384508011704302,
+          "fault_turn_hit2": 0.6054166666666667
+        },
+        {
+          "alpha": 0.75,
+          "composite": 0.7689931483205531,
+          "macro_f1": 0.7889294973643655,
+          "robustness_f1": 0.7372381541928222,
+          "fault_turn_hit2": 0.605625
+        },
+        {
+          "alpha": 0.8,
+          "composite": 0.770690131046899,
+          "macro_f1": 0.7898450969862184,
+          "robustness_f1": 0.7415282191878326,
+          "fault_turn_hit2": 0.6072916666666667
+        },
+        {
+          "alpha": 0.85,
+          "composite": 0.7699194512256553,
+          "macro_f1": 0.7888086319096116,
+          "robustness_f1": 0.7407684300560721,
+          "fault_turn_hit2": 0.6066666666666667
+        },
+        {
+          "alpha": 0.9,
+          "composite": 0.769699460006753,
+          "macro_f1": 0.788323632871433,
+          "robustness_f1": 0.7409417965901539,
+          "fault_turn_hit2": 0.6064583333333333
+        },
+        {
+          "alpha": 0.95,
+          "composite": 0.771235491082217,
+          "macro_f1": 0.7893968538378555,
+          "robustness_f1": 0.7446061456258304,
+          "fault_turn_hit2": 0.6072916666666667
+        },
+        {
+          "alpha": 1.0,
+          "composite": 0.770274514063691,
+          "macro_f1": 0.7886094938919641,
+          "robustness_f1": 0.7422536241101765,
+          "fault_turn_hit2": 0.6075
+        }
+      ],
+      "heldout": {
+        "A_alpha1": {
+          "macro_f1": 0.7908991386998077,
+          "robustness_f1": 0.7210077112280441,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.6108333333333333,
+          "composite": 0.766441191580413
+        },
+        "B_alpha_selected": {
+          "macro_f1": 0.7896050839101044,
+          "robustness_f1": 0.7202124783450394,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.61,
+          "composite": 0.7655120226314769
+        },
+        "delta_composite": -0.0009291689489361321,
+        "n_labels_changed": 9,
+        "wins": false
+      }
+    }
+  ],
+  "comparison": {
+    "A_exp08_alpha1": {
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6086111111111111,
+      "composite": 0.7694453917139285
+    },
+    "B_cross_fitted": {
+      "macro_f1": 0.7889459789785602,
+      "robustness_f1": 0.7346640733932716,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6075,
+      "composite": 0.7685453689277627
+    },
+    "delta": {
+      "macro_f1": -0.00048635770502591935,
+      "robustness_f1": -0.0021829312901660014,
+      "success_f1": 0.0,
+      "fault_turn_hit2": -0.0011111111111110628,
+      "composite": -0.0009000227861657439
+    },
+    "accuracy": {
+      "A": 0.8061,
+      "B": 0.806,
+      "delta": -9.999999999998899e-05,
+      "note": "diagnostic only, accuracy is NOT the objective"
+    },
+    "per_class_f1": {
+      "A": {
+        "clean": 0.8650034176349966,
+        "dropped_handoff": 0.6356370474847203,
+        "duplicated_work": 0.8296422487223168,
+        "deadlock": 0.7217391304347827,
+        "conflict": 0.9031752254018032,
+        "goal_drift": 0.846897663174859,
+        "runaway_loop": 0.7239316239316239
+      },
+      "B": {
+        "clean": 0.8658703071672355,
+        "dropped_handoff": 0.6322763842877426,
+        "duplicated_work": 0.8303495311167945,
+        "deadlock": 0.7194432361896477,
+        "conflict": 0.9035294117647059,
+        "goal_drift": 0.846897663174859,
+        "runaway_loop": 0.7242553191489361
+      },
+      "delta": {
+        "clean": 0.0008668895322389014,
+        "dropped_handoff": -0.003360663196977698,
+        "duplicated_work": 0.000707282394477704,
+        "deadlock": -0.0022958942451349884,
+        "conflict": 0.00035418636290274197,
+        "goal_drift": 0.0,
+        "runaway_loop": 0.0003236952173122365
+      }
+    },
+    "confusion_A": [
+      [
+        2531,
+        93,
+        40,
+        54,
+        0,
+        13,
+        69
+      ],
+      [
+        171,
+        676,
+        54,
+        92,
+        56,
+        57,
+        94
+      ],
+      [
+        76,
+        30,
+        974,
+        23,
+        36,
+        29,
+        32
+      ],
+      [
+        123,
+        59,
+        39,
+        830,
+        40,
+        47,
+        62
+      ],
+      [
+        0,
+        3,
+        3,
+        6,
+        1152,
+        22,
+        14
+      ],
+      [
+        41,
+        21,
+        15,
+        31,
+        19,
+        1051,
+        22
+      ],
+      [
+        110,
+        45,
+        23,
+        64,
+        48,
+        63,
+        847
+      ]
+    ],
+    "confusion_B": [
+      [
+        2537,
+        91,
+        37,
+        53,
+        0,
+        12,
+        70
+      ],
+      [
+        174,
+        668,
+        54,
+        93,
+        56,
+        58,
+        97
+      ],
+      [
+        76,
+        31,
+        974,
+        23,
+        34,
+        29,
+        33
+      ],
+      [
+        124,
+        61,
+        40,
+        827,
+        40,
+        47,
+        61
+      ],
+      [
+        0,
+        3,
+        3,
+        6,
+        1152,
+        22,
+        14
+      ],
+      [
+        40,
+        19,
+        15,
+        32,
+        19,
+        1051,
+        24
+      ],
+      [
+        109,
+        40,
+        23,
+        65,
+        49,
+        63,
+        851
+      ]
+    ],
+    "confusion_transitions": {
+      "clean->goal_drift": 2,
+      "deadlock->clean": 6,
+      "goal_drift->deadlock": 2,
+      "clean->dropped_handoff": 7,
+      "runaway_loop->dropped_handoff": 1,
+      "conflict->duplicated_work": 2,
+      "dropped_handoff->clean": 11,
+      "dropped_handoff->runaway_loop": 8,
+      "clean->deadlock": 4,
+      "dropped_handoff->deadlock": 2,
+      "goal_drift->runaway_loop": 2,
+      "deadlock->duplicated_work": 1,
+      "dropped_handoff->goal_drift": 4,
+      "duplicated_work->runaway_loop": 2,
+      "clean->runaway_loop": 5,
+      "duplicated_work->clean": 6,
+      "runaway_loop->clean": 4,
+      "clean->duplicated_work": 2,
+      "runaway_loop->duplicated_work": 1,
+      "runaway_loop->conflict": 1,
+      "goal_drift->dropped_handoff": 1,
+      "goal_drift->clean": 1,
+      "deadlock->dropped_handoff": 2
+    },
+    "changed_label_stats": {
+      "A->B fixes": 35,
+      "A->B breaks": 36,
+      "A->B changed": 77,
+      "A->B correct_on_B_side": 0,
+      "A->B correct_on_A_side": 0
+    },
+    "n_labels_changed": 77,
+    "n_fault_turn_changed": 77,
+    "note": "hit@2 uses the peak of the BLENDED PREDICTED class, so it moves with the label; it is not held fixed"
+  },
+  "alpha_stability": {
+    "alpha_per_fold": [
+      1.0,
+      0.65,
+      0.95
+    ],
+    "spread": 0.35,
+    "n_distinct": 3,
+    "verdict": "NOTABLE INSTABILITY (spread > 0.30)",
+    "extreme_instability": false
+  },
+  "promotion_gate": {
+    "passed": false,
+    "criteria": [
+      {
+        "name": "composite delta >= +0.002",
+        "value": -0.0009000227861657439,
+        "threshold": 0.002,
+        "passed": false
+      },
+      {
+        "name": "wins >= 2/3 folds",
+        "value": 0,
+        "threshold": 3,
+        "passed": false
+      },
+      {
+        "name": "robustness drop <= 0.003",
+        "value": 0.0021829312901660014,
+        "threshold": 0.003,
+        "passed": true
+      },
+      {
+        "name": "worst class F1 drop <= 0.02 (dropped_handoff)",
+        "value": 0.003360663196977698,
+        "threshold": 0.02,
+        "passed": true
+      }
+    ],
+    "folds_won": 0,
+    "worst_class_f1_drop": {
+      "class": "dropped_handoff",
+      "drop": 0.003360663196977698
+    },
+    "alpha_stability_extreme": false
+  },
+  "final_alpha": {
+    "fitted": false,
+    "reason": "promotion gate failed"
+  },
+  "promoted": false,
+  "runtime_sec": 2.92,
+  "failed_checks": [],
+  "caveat": "OOF meta-CV is not a fully nested retrain of Exp07; the public leaderboard remains the external validation."
+}
