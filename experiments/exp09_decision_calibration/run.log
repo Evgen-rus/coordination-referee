@@ -1,0 +1,206 @@
+==============================================================================
+Exp09 - decision-layer calibration (6 additive class offsets)
+==============================================================================
+
+[1] verified Exp07 OOF + sealed window peaks (strict, fail closed)
+  ok    32 provenance checks passed, load 1.30s
+  ok    the 3 outer folds re-derived from seed 0 match the sealed manifest exactly (index-vector hashes)
+  ok    argmax(verified proba) == verified labels on all 10000 rows
+  robustness mask: cache hit (robustness_mask.8f9fa8ad20cd8a4a.npy)
+  ok    corpus precomputed: logP (10000, 7), candidate L1 turn matrix (10000, 7), robustness rows 1290
+
+==============================================================================
+[2] REPRODUCTION GATE - Exp08 baseline, zero offsets, official metrics
+==============================================================================
+  ok    zero offsets reproduce the committed Exp07 OOF labels exactly on all 10000 rows
+  ok    log(P) + 0 reproduces argmax(P) exactly on all 10000 rows
+  ok    BASELINE macro_f1         0.7894323366835861  (exact)
+  ok    BASELINE robustness_f1    0.7368470046834376  (exact)
+  ok    BASELINE success_f1       0.8643757406010988  (exact)
+  ok    BASELINE fault_turn_hit2  0.6086111111111111  (exact)
+  ok    BASELINE composite        0.7694453917139285  (exact)
+  ok    composite() called directly from evaluation.metrics
+
+  REPRODUCTION GATE PASSED - Exp08 baseline exact on all 5 numbers.
+
+==============================================================================
+[3] FAST OBJECTIVE must equal the official metrics, always
+==============================================================================
+  ok    fast objective == official metrics on 9 probe candidates, max abs diff 0.00e+00
+
+==============================================================================
+[4] OOF meta-CV - 6 additive offsets, cross-fitted over the 3 folds
+==============================================================================
+  For each fold f: fit offsets on the OTHER two folds only, freeze,
+  apply to fold f.  Nothing about fold f is used to pick its offsets.
+  NOTE: OOF meta-CV is not a fully nested retrain of Exp07; the
+  public leaderboard remains the external validation.
+
+  --- fold 0: calibration-train n=6666, held-out n=3334 ---
+    step 0.2000: move #1 -> composite 0.7722171590344192  units [0, 0, -16, 0, 0, 0, 0]
+    step 0.2000: move #2 -> composite 0.7726611812300063  units [0, 16, -16, 0, 0, 0, 0]
+    step 0.2000: move #3 -> composite 0.7731593003052603  units [0, 32, -16, 0, 0, 0, 0]
+    step 0.2000: move #4 -> composite 0.7733061599179405  units [0, 32, -16, 0, 0, 16, 0]
+    step 0.2000: no legal move improves the training composite (0.7733061599179405) - halve the step
+    step 0.1000: move #1 -> composite 0.7734925419522601  units [0, 32, -16, 0, 0, 16, 8]
+    step 0.1000: move #2 -> composite 0.7736683261168752  units [0, 32, -16, 0, 0, 8, 8]
+    step 0.1000: no legal move improves the training composite (0.7736683261168752) - halve the step
+    step 0.0500: move #1 -> composite 0.7743148333133885  units [0, 32, -12, 0, 0, 8, 8]
+    step 0.0500: move #2 -> composite 0.7746267904624128  units [0, 32, -12, -4, 0, 8, 8]
+    step 0.0500: move #3 -> composite 0.7748351809617479  units [0, 32, -12, -4, 0, 8, 4]
+    step 0.0500: no legal move improves the training composite (0.7748351809617479) - halve the step
+    step 0.0250: no legal move improves the training composite (0.7748351809617479) - halve the step
+    step 0.0125: no legal move improves the training composite (0.7748351809617479) - halve the step
+    offsets found on calibration-train:
+      clean              +0.0000   (PINNED)
+      dropped_handoff    +0.4000
+      duplicated_work    -0.1500
+      deadlock           -0.0500
+      conflict           +0.0000
+      goal_drift         +0.1000
+      runaway_loop       +0.0500
+    157 candidates in 0.1s; train composite 0.7710339116666942 -> 0.7748351809617479
+    held-out fold 0: labels changed 58/3334; composite 0.7661703746771656 -> 0.7667784846058672 (+0.0006081099287015) WIN
+
+  --- fold 1: calibration-train n=6667, held-out n=3333 ---
+    step 0.2000: move #1 -> composite 0.7682500288606531  units [0, 16, 0, 0, 0, 0, 0]
+    step 0.2000: move #2 -> composite 0.7688763505383434  units [0, 32, 0, 0, 0, 0, 0]
+    step 0.2000: move #3 -> composite 0.7689852412497039  units [0, 32, -16, 0, 0, 0, 0]
+    step 0.2000: move #4 -> composite 0.7694050976948005  units [0, 32, -32, 0, 0, 0, 0]
+    step 0.2000: move #5 -> composite 0.7694275465998613  units [0, 32, -32, 0, 0, -16, 0]
+    step 0.2000: move #6 -> composite 0.7695248052190981  units [0, 32, -32, 0, 16, -16, 0]
+    step 0.2000: move #7 -> composite 0.7696035270208443  units [0, 32, -32, 0, 32, -16, 0]
+    step 0.2000: move #8 -> composite 0.7696689978226035  units [0, 32, -32, 0, 32, 0, 0]
+    step 0.2000: move #9 -> composite 0.7702789687730226  units [0, 32, -32, 0, 32, 16, 0]
+    step 0.2000: no legal move improves the training composite (0.7702789687730226) - halve the step
+    step 0.1000: move #1 -> composite 0.7704200468940856  units [0, 32, -32, 0, 32, 16, -8]
+    step 0.1000: no legal move improves the training composite (0.7704200468940856) - halve the step
+    step 0.0500: move #1 -> composite 0.7707533370903389  units [0, 32, -32, 0, 32, 12, -8]
+    step 0.0500: no legal move improves the training composite (0.7707533370903389) - halve the step
+    step 0.0250: move #1 -> composite 0.7707723529478846  units [0, 32, -30, 0, 32, 12, -8]
+    step 0.0250: no legal move improves the training composite (0.7707723529478846) - halve the step
+    step 0.0125: no legal move improves the training composite (0.7707723529478846) - halve the step
+    offsets found on calibration-train:
+      clean              +0.0000   (PINNED)
+      dropped_handoff    +0.4000
+      duplicated_work    -0.3750
+      deadlock           +0.0000
+      conflict           +0.4000
+      goal_drift         +0.1500
+      runaway_loop       -0.1000
+    168 candidates in 0.1s; train composite 0.7668612888197289 -> 0.7707723529478846
+    held-out fold 1: labels changed 63/3333; composite 0.7747447944604717 -> 0.7745900966534188 (-0.0001546978070529) LOSS
+
+  --- fold 2: calibration-train n=6667, held-out n=3333 ---
+    step 0.2000: move #1 -> composite 0.7714264785589499  units [0, 0, 0, 0, 0, 0, -16]
+    step 0.2000: move #2 -> composite 0.7720559343003731  units [0, 0, 0, -16, 0, 0, -16]
+    step 0.2000: move #3 -> composite 0.7727274796153990  units [0, 0, 16, -16, 0, 0, -16]
+    step 0.2000: move #4 -> composite 0.7731557831025528  units [0, 0, 32, -16, 0, 0, -16]
+    step 0.2000: move #5 -> composite 0.7733441341621939  units [0, 16, 32, -16, 0, 0, -16]
+    step 0.2000: move #6 -> composite 0.7741009202247685  units [0, 32, 32, -16, 0, 0, -16]
+    step 0.2000: move #7 -> composite 0.7751745276812668  units [0, 32, 32, -32, 0, 0, -16]
+    step 0.2000: move #8 -> composite 0.7752015705650853  units [0, 32, 32, -32, 0, -16, -16]
+    step 0.2000: move #9 -> composite 0.7752039465200850  units [0, 32, 32, -32, -16, -16, -16]
+    step 0.2000: no legal move improves the training composite (0.7752039465200850) - halve the step
+    step 0.1000: move #1 -> composite 0.7755040587618827  units [0, 32, 32, -32, -16, -16, -24]
+    step 0.1000: move #2 -> composite 0.7755180971138573  units [0, 32, 32, -32, -8, -16, -24]
+    step 0.1000: move #3 -> composite 0.7757713046468453  units [0, 32, 32, -32, -8, -8, -24]
+    step 0.1000: no legal move improves the training composite (0.7757713046468453) - halve the step
+    step 0.0500: move #1 -> composite 0.7758723573526469  units [0, 32, 32, -28, -8, -8, -24]
+    step 0.0500: no legal move improves the training composite (0.7758723573526469) - halve the step
+    step 0.0250: move #1 -> composite 0.7759309112827444  units [0, 32, 30, -28, -8, -8, -24]
+    step 0.0250: no legal move improves the training composite (0.7759309112827444) - halve the step
+    step 0.0125: move #1 -> composite 0.7762154479534384  units [0, 32, 30, -29, -8, -8, -24]
+    step 0.0125: move #2 -> composite 0.7762215933747301  units [0, 32, 30, -29, -8, -9, -24]
+    step 0.0125: no legal move improves the training composite (0.7762215933747301) - halve the step
+    offsets found on calibration-train:
+      clean              +0.0000   (PINNED)
+      dropped_handoff    +0.4000
+      duplicated_work    +0.3750
+      deadlock           -0.3625
+      conflict           -0.1000
+      goal_drift         -0.1125
+      runaway_loop       -0.3000
+    216 candidates in 0.1s; train composite 0.7702745140636910 -> 0.7762215933747301
+    held-out fold 2: labels changed 90/3333; composite 0.7664411915804130 -> 0.7650349841187931 (-0.0014062074616199) LOSS
+  ok    cross-fitted prediction vector assembled for all 10000 rows
+
+==============================================================================
+[5] A (Exp08, no offsets) vs B (cross-fitted offsets), all 10000 rows
+==============================================================================
+  ok    every cross-fitted clean prediction has fault_turn == -1 (3013 rows)
+  A  macro 0.7894323366835861  robustness 0.7368470046834376  success 0.8643757406010988  hit@2 0.6086111111111111
+     composite 0.7694453917139285
+  B  macro 0.7883748956510434  robustness 0.7376937133573590  success 0.8643757406010988  hit@2 0.6097222222222223
+     composite 0.7692394594772485
+  delta  macro -0.0010574410325428  robustness +0.0008467086739214  hit@2 +0.0011111111111112  composite -0.0002059322366800
+  accuracy (diagnostic only) 0.806100 -> 0.804600 (-0.001500)
+  OOF labels changed by the cross-fitted offsets: 211 / 10000 (2.11%)
+
+  per-class F1 (official f1_per_class):
+    class                       A          B      delta
+    clean                0.865003   0.865990  +0.000987
+    dropped_handoff      0.635637   0.643556  +0.007919
+    duplicated_work      0.829642   0.824584  -0.005058
+    deadlock             0.721739   0.719643  -0.002096
+    conflict             0.903175   0.899492  -0.003684
+    goal_drift           0.846898   0.846123  -0.000775
+    runaway_loop         0.723932   0.719237  -0.004694
+
+  A confusion (rows = true, cols = pred):
+      true \ pred           0     1     2     3     4     5     6
+      clean              2531    93    40    54     0    13    69
+      dropped_handoff     171   676    54    92    56    57    94
+      duplicated_work      76    30   974    23    36    29    32
+      deadlock            123    59    39   830    40    47    62
+      conflict              0     3     3     6  1152    22    14
+      goal_drift           41    21    15    31    19  1051    22
+      runaway_loop        110    45    23    64    48    63   847
+                        clean dropp dupli deadl confl goal_ runaw
+
+  B confusion (rows = true, cols = pred):
+      true \ pred           0     1     2     3     4     5     6
+      clean              2517   115    42    44     0    15    67
+      dropped_handoff     152   724    49    84    56    55    80
+      duplicated_work      73    42   966    21    38    27    33
+      deadlock            120    79    42   806    41    51    61
+      conflict              0     4     3     5  1150    24    14
+      goal_drift           39    27    15    23    20  1053    23
+      runaway_loop        112    59    26    57    52    64   830
+                        clean dropp dupli deadl confl goal_ runaw
+
+==============================================================================
+[6] OFFSET STABILITY across the three calibration-train fits
+==============================================================================
+    dropped_handoff    units [32, 32, 32]       offsets +0.4000 +0.4000 +0.4000  spread 0  consistent
+    duplicated_work    units [-12, -30, 30]     offsets -0.1500 -0.3750 +0.3750  spread 60  SIGN/VALUE DISAGREEMENT
+    deadlock           units [-4, 0, -29]       offsets -0.0500 +0.0000 -0.3625  spread 29  SIGN/VALUE DISAGREEMENT
+    conflict           units [0, 32, -8]        offsets +0.0000 +0.4000 -0.1000  spread 40  SIGN/VALUE DISAGREEMENT
+    goal_drift         units [8, 12, -9]        offsets +0.1000 +0.1500 -0.1125  spread 21  SIGN/VALUE DISAGREEMENT
+    runaway_loop       units [4, -8, -24]       offsets +0.0500 -0.1000 -0.3000  spread 28  SIGN/VALUE DISAGREEMENT
+
+  identical direction on all six classes in all three fits: False
+  ** INSTABILITY: 5 of 6 fault offsets are not consistent in sign across folds. A single vector is a choice, not a measurement; treat the cross-fitted number as the estimate and the shipped offsets as a compromise.
+
+==============================================================================
+[7] PROMOTION GATE (pre-declared)
+==============================================================================
+  [FAIL] composite delta >= +0.003                      -0.000206
+  [FAIL] wins >= 2/3 folds                              +1.000000
+  [PASS] robustness drop <= 0.003                       -0.000847
+  [PASS] worst class F1 drop <= 0.02 (duplicated_work)  +0.005058
+
+  PROMOTION GATE: FAIL
+
+==============================================================================
+[8] FINAL production offsets - same search, same frozen space,
+    fitted on ALL 10000 OOF rows.  DEPLOYMENT ONLY.
+    The score of this fit is NOT a validation score and is reported
+    separately from the cross-fitted evaluation above.
+==============================================================================
+
+  GATE FAILED - no production offsets are fitted and no second
+  calibration method is tried.  The experiment stops here.
+
+wrote D:\My_dev_project\coordination-referee\experiments\exp09_decision_calibration\results.json
+total research runtime 2.4s (0.04 min)

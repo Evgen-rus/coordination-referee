@@ -1,0 +1,543 @@
+{
+  "experiment": "exp09_decision_calibration",
+  "system": "B_plus_window",
+  "n_runs": 10000,
+  "search_space": {
+    "form": "pred = argmax_c (log(max(P_c, 1e-15)) + delta_c)",
+    "start_units": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "clean_offset": "pinned to 0",
+    "bound": 0.4,
+    "grid_unit": 0.0125,
+    "step_schedule": [
+      0.2,
+      0.1,
+      0.05,
+      0.025,
+      0.0125
+    ],
+    "rule": "deterministic coordinate descent, best single move by TRAINING composite, tie-break composite > sum(delta^2) > fixed class order",
+    "objective": "official evaluation.metrics.composite()"
+  },
+  "baseline_expected": {
+    "macro_f1": 0.7894323366835861,
+    "robustness_f1": 0.7368470046834376,
+    "success_f1": 0.8643757406010988,
+    "fault_turn_hit2": 0.6086111111111111,
+    "composite": 0.7694453917139285
+  },
+  "gate": {
+    "composite_delta_min": 0.003,
+    "folds_won_min": 2,
+    "robustness_drop_max": 0.003,
+    "class_f1_drop_max": 0.02
+  },
+  "baseline": {
+    "macro_f1": 0.7894323366835861,
+    "robustness_f1": 0.7368470046834376,
+    "success_f1": 0.8643757406010988,
+    "fault_turn_hit2": 0.6086111111111111,
+    "composite": 0.7694453917139285
+  },
+  "reproduction_gate": {
+    "passed": true,
+    "expected": {
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6086111111111111,
+      "composite": 0.7694453917139285
+    },
+    "got": {
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6086111111111111,
+      "composite": 0.7694453917139285
+    },
+    "tolerance": 1e-12
+  },
+  "fast_objective_check": {
+    "n_probes": 9,
+    "max_abs_diff": 0.0,
+    "passed": true
+  },
+  "folds": [
+    {
+      "fold": 0,
+      "n_train": 6666,
+      "n_val": 3334,
+      "val_sha256": "c495670bda7b098c948dfe0be629eafa5b0f748178366e4a7e33536b0883cc33",
+      "offsets_train_units": [
+        0,
+        32,
+        -12,
+        -4,
+        0,
+        8,
+        4
+      ],
+      "offsets_train": [
+        0.0,
+        0.4,
+        -0.15000000000000002,
+        -0.05,
+        0.0,
+        0.1,
+        0.05
+      ],
+      "search": {
+        "n_candidates": 157,
+        "start_composite": 0.7710339116666942,
+        "train_composite": 0.7748351809617479,
+        "moves_per_step": [
+          4,
+          2,
+          3,
+          0,
+          0
+        ],
+        "search_sec": 0.05
+      },
+      "heldout": {
+        "n_labels_changed": 58,
+        "A_zero_offsets": {
+          "macro_f1": 0.7796121741506896,
+          "robustness_f1": 0.7479983727132903,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.5970833333333333,
+          "composite": 0.7661703746771656
+        },
+        "B_calibrated": {
+          "macro_f1": 0.7821991613819764,
+          "robustness_f1": 0.7434235046321901,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.6016666666666667,
+          "composite": 0.7667784846058672
+        },
+        "delta_composite": 0.0006081099287015279,
+        "wins": true
+      }
+    },
+    {
+      "fold": 1,
+      "n_train": 6667,
+      "n_val": 3333,
+      "val_sha256": "9a53592a894e96c349adb9f6a9373fb9e53a1d09317cb40d5a1e5a3c1d891eca",
+      "offsets_train_units": [
+        0,
+        32,
+        -30,
+        0,
+        32,
+        12,
+        -8
+      ],
+      "offsets_train": [
+        0.0,
+        0.4,
+        -0.375,
+        0.0,
+        0.4,
+        0.15000000000000002,
+        -0.1
+      ],
+      "search": {
+        "n_candidates": 168,
+        "start_composite": 0.7668612888197289,
+        "train_composite": 0.7707723529478846,
+        "moves_per_step": [
+          9,
+          1,
+          1,
+          1,
+          0
+        ],
+        "search_sec": 0.06
+      },
+      "heldout": {
+        "n_labels_changed": 63,
+        "A_zero_offsets": {
+          "macro_f1": 0.7976376982124211,
+          "robustness_f1": 0.7379116703897185,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.6179166666666667,
+          "composite": 0.7747447944604717
+        },
+        "B_calibrated": {
+          "macro_f1": 0.7938133255592428,
+          "robustness_f1": 0.7461082911345306,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.615,
+          "composite": 0.7745900966534188
+        },
+        "delta_composite": -0.00015469780705290592,
+        "wins": false
+      }
+    },
+    {
+      "fold": 2,
+      "n_train": 6667,
+      "n_val": 3333,
+      "val_sha256": "759885f517d7126394f0156bc02ac6185f252e21fb8fb24b2fec1fcc11dc22f9",
+      "offsets_train_units": [
+        0,
+        32,
+        30,
+        -29,
+        -8,
+        -9,
+        -24
+      ],
+      "offsets_train": [
+        0.0,
+        0.4,
+        0.375,
+        -0.36250000000000004,
+        -0.1,
+        -0.1125,
+        -0.30000000000000004
+      ],
+      "search": {
+        "n_candidates": 216,
+        "start_composite": 0.770274514063691,
+        "train_composite": 0.7762215933747301,
+        "moves_per_step": [
+          9,
+          3,
+          1,
+          1,
+          2
+        ],
+        "search_sec": 0.07
+      },
+      "heldout": {
+        "n_labels_changed": 90,
+        "A_zero_offsets": {
+          "macro_f1": 0.7908991386998077,
+          "robustness_f1": 0.7210077112280441,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.6108333333333333,
+          "composite": 0.766441191580413
+        },
+        "B_calibrated": {
+          "macro_f1": 0.7890360665236498,
+          "robustness_f1": 0.7184423590672135,
+          "success_f1": 0.8643757406010988,
+          "fault_turn_hit2": 0.6125,
+          "composite": 0.7650349841187931
+        },
+        "delta_composite": -0.0014062074616199016,
+        "wins": false
+      }
+    }
+  ],
+  "comparison": {
+    "A_exp08_no_offsets": {
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6086111111111111,
+      "composite": 0.7694453917139285
+    },
+    "B_cross_fitted": {
+      "macro_f1": 0.7883748956510434,
+      "robustness_f1": 0.737693713357359,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6097222222222223,
+      "composite": 0.7692394594772485
+    },
+    "delta": {
+      "macro_f1": -0.001057441032542794,
+      "robustness_f1": 0.000846708673921448,
+      "success_f1": 0.0,
+      "fault_turn_hit2": 0.0011111111111111738,
+      "composite": -0.00020593223667997318
+    },
+    "accuracy": {
+      "A": 0.8061,
+      "B": 0.8046,
+      "delta": -0.0015000000000000568,
+      "note": "diagnostic only, accuracy is NOT the objective"
+    },
+    "per_class_f1": {
+      "A": {
+        "clean": 0.8650034176349966,
+        "dropped_handoff": 0.6356370474847203,
+        "duplicated_work": 0.8296422487223168,
+        "deadlock": 0.7217391304347827,
+        "conflict": 0.9031752254018032,
+        "goal_drift": 0.846897663174859,
+        "runaway_loop": 0.7239316239316239
+      },
+      "B": {
+        "clean": 0.8659900223636676,
+        "dropped_handoff": 0.6435555555555555,
+        "duplicated_work": 0.8245838668373879,
+        "deadlock": 0.7196428571428571,
+        "conflict": 0.899491591709034,
+        "goal_drift": 0.8461229409401366,
+        "runaway_loop": 0.7192374350086655
+      },
+      "delta": {
+        "clean": 0.00098660472867107,
+        "dropped_handoff": 0.007918508070835273,
+        "duplicated_work": -0.005058381884928909,
+        "deadlock": -0.002096273291925521,
+        "conflict": -0.0036836336927691393,
+        "goal_drift": -0.0007747222347224136,
+        "runaway_loop": -0.004694188922958364
+      }
+    },
+    "confusion_A": [
+      [
+        2531,
+        93,
+        40,
+        54,
+        0,
+        13,
+        69
+      ],
+      [
+        171,
+        676,
+        54,
+        92,
+        56,
+        57,
+        94
+      ],
+      [
+        76,
+        30,
+        974,
+        23,
+        36,
+        29,
+        32
+      ],
+      [
+        123,
+        59,
+        39,
+        830,
+        40,
+        47,
+        62
+      ],
+      [
+        0,
+        3,
+        3,
+        6,
+        1152,
+        22,
+        14
+      ],
+      [
+        41,
+        21,
+        15,
+        31,
+        19,
+        1051,
+        22
+      ],
+      [
+        110,
+        45,
+        23,
+        64,
+        48,
+        63,
+        847
+      ]
+    ],
+    "confusion_B": [
+      [
+        2517,
+        115,
+        42,
+        44,
+        0,
+        15,
+        67
+      ],
+      [
+        152,
+        724,
+        49,
+        84,
+        56,
+        55,
+        80
+      ],
+      [
+        73,
+        42,
+        966,
+        21,
+        38,
+        27,
+        33
+      ],
+      [
+        120,
+        79,
+        42,
+        806,
+        41,
+        51,
+        61
+      ],
+      [
+        0,
+        4,
+        3,
+        5,
+        1150,
+        24,
+        14
+      ],
+      [
+        39,
+        27,
+        15,
+        23,
+        20,
+        1053,
+        23
+      ],
+      [
+        112,
+        59,
+        26,
+        57,
+        52,
+        64,
+        830
+      ]
+    ],
+    "n_labels_changed": 211,
+    "n_fault_turn_changed": 208,
+    "note": "hit@2 uses the peak of the PREDICTED class, so it moves with the label; it is not held fixed"
+  },
+  "offset_stability": {
+    "units_per_fold": [
+      [
+        0,
+        32,
+        -12,
+        -4,
+        0,
+        8,
+        4
+      ],
+      [
+        0,
+        32,
+        -30,
+        0,
+        32,
+        12,
+        -8
+      ],
+      [
+        0,
+        32,
+        30,
+        -29,
+        -8,
+        -9,
+        -24
+      ]
+    ],
+    "offsets_per_fold": {
+      "0": [
+        0.0,
+        0.4,
+        -0.15000000000000002,
+        -0.05,
+        0.0,
+        0.1,
+        0.05
+      ],
+      "1": [
+        0.0,
+        0.4,
+        -0.375,
+        0.0,
+        0.4,
+        0.15000000000000002,
+        -0.1
+      ],
+      "2": [
+        0.0,
+        0.4,
+        0.375,
+        -0.36250000000000004,
+        -0.1,
+        -0.1125,
+        -0.30000000000000004
+      ]
+    },
+    "inconsistent_classes": [
+      "conflict",
+      "deadlock",
+      "duplicated_work",
+      "goal_drift",
+      "runaway_loop"
+    ],
+    "all_six_same_direction": false
+  },
+  "promotion_gate": {
+    "passed": false,
+    "criteria": [
+      {
+        "name": "composite delta >= +0.003",
+        "value": -0.00020593223667997318,
+        "threshold": 0.003,
+        "passed": false
+      },
+      {
+        "name": "wins >= 2/3 folds",
+        "value": 1,
+        "threshold": 3,
+        "passed": false
+      },
+      {
+        "name": "robustness drop <= 0.003",
+        "value": -0.000846708673921448,
+        "threshold": 0.003,
+        "passed": true
+      },
+      {
+        "name": "worst class F1 drop <= 0.02 (duplicated_work)",
+        "value": 0.005058381884928909,
+        "threshold": 0.02,
+        "passed": true
+      }
+    ],
+    "folds_won": 1,
+    "worst_class_f1_drop": {
+      "class": "duplicated_work",
+      "drop": 0.005058381884928909
+    }
+  },
+  "final_offsets": {
+    "fitted": false,
+    "reason": "promotion gate failed"
+  },
+  "promoted": false,
+  "runtime_sec": 2.45,
+  "failed_checks": [],
+  "caveat": "OOF meta-CV is not a fully nested retrain of Exp07; the public leaderboard remains the external validation."
+}
