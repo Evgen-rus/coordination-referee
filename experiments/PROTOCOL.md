@@ -53,9 +53,10 @@ STOP     →  ничего не создаётся
 
 1. **Один Exp = одна основная гипотеза.** Побочные находки описываются в
    `RESULTS.md`, но не превращаются в отдельные эксперименты в том же прогоне.
-2. **Baseline/current best воспроизводится до запуска поиска.** Числа
-   Exp08 (`macro 0.7894323366835861`, `composite 0.7694453917139285`) — это
-   reproduction targets, а не ручки настройки. Не сошлось → STOP, ничего не искать.
+2. **Baseline/current best воспроизводится до запуска поиска.** Reproduction
+   targets берутся у current best, который сообщает guard (его
+   `results.json`); это цели, а не ручки настройки. Не сошлось → STOP, ничего
+   не искать.
 3. **Параметры, search space и gate фиксируются до просмотра результата.**
    Сетка не расширяется и не уточняется после того, как стало видно число.
 4. **Изменение внутри шума или без переносимого эффекта = STOP.** Если дельта
@@ -88,36 +89,38 @@ Root-cause review — это файл `experiments/ROOT_CAUSE_REVIEW.md`, кот
 | `noise` | какие направления уже выглядят noise-dominated |
 | `warrant` | есть ли вообще основание для следующего Exp |
 
-Плюс шапка `status: complete` и `covers: [exp09, exp10, exp11]` — список
-экспериментов, которые review разбирает. **Просроченный review не подходит:**
-если следующий STOP меняет хвост, старый review больше не закрывает новый
-stall, и guard его отвергнет.
+Плюс шапка `status: complete` и `covers:` — список экспериментов, которые
+review разбирает. Это должен быть **ровно тот хвост, который сообщает guard**,
+он печатает требуемую шапку готовой. **Просроченный review не подходит:** если
+следующий STOP меняет хвост, старый review больше не закрывает новый stall, и
+guard его отвергнет.
 
 Это guard для агента, а не исследовательская система: он ничего не генерирует,
 не выбирает гипотезу и не планирует эксперимент. Он только отказывает.
 
-### Текущее состояние
+### Правило, а не значение
 
-| | |
-|---|---|
-| current best | **exp08** (production build `sub08`) |
-| подряд STOP | **2** — exp09, exp10 |
-| до блокировки | **1** STOP |
-| вердикт | Exp11 **можно** провести как третий эксперимент цикла |
+`STALL_THRESHOLD` и условие блокировки заданы в `protocol_guard.py`
+(`STALL_THRESHOLD = 3`). **Конкретный current best и конкретный stalled tail
+определяет guard в момент запуска, а не этот документ.** Всё, что ниже —
+снимок на дату написания, а не постоянное правило.
 
-Если Exp11 тоже STOP, то Exp12 не придумывается — сначала review.
-
-## 5. Как провести Exp11
+## 5. Как провести новый эксперимент
 
 ```bash
-python experiments/protocol_guard.py                 # 1. проверить, что можно
-python experiments/exp11_<name>/run_experiment.py    # 2. reproduction gate первым
-python experiments/exp11_<name>/test_<name>.py        # 3. тесты
+python experiments/protocol_guard.py                    # 1. состояние и можно ли
+python experiments/exp<N+1>_<name>/run_experiment.py    # 2. reproduction gate первым
+python experiments/exp<N+1>_<name>/test_<name>.py       # 3. тесты
 ```
 
 Структура каталога повторяет Exp09/Exp10 (`run_experiment.py`, модуль логики,
 `test_*.py`, `RESULTS.md`, `results.json`, `run.log`) — это уже рабочая схема,
 копировать её, а не изобретать.
+
+Reproduction targets берутся у current best, который сообщил guard: это его
+`results.json` (`baseline_expected` либо записанные метрики промотированного
+эксперимента). Ничего не хардкодится — при смене current best меняются и
+targets, менять код не нужно.
 
 Обязательные STOP-условия, которые останавливают прогон, а не дают число:
 
@@ -135,9 +138,11 @@ python experiments/exp11_<name>/test_<name>.py        # 3. тесты
   необходимости: cross-fitted held-out Exp09/Exp10 остаётся валидацией.
 - Не рефакторить Exp01–Exp10 «ради единства» — они зафиксированы.
 
-## 7. Что этот протокол уже сделал
+## 7. Снимок состояния на 2026-09-30
 
-`protocol_guard.py` в репозитории уже проверен и выдаёт:
+> Это **исторический снимок**, а не правило. Он показывает, на что смотрит
+> guard в момент написания протокола. Актуальное состояние — всегда вывод
+> `python experiments/protocol_guard.py`.
 
 ```
 current best / baseline to reproduce : exp08
@@ -148,5 +153,10 @@ VERDICT: a new experiment MAY be started.
          1 more STOP(s) and the root-cause review becomes mandatory.
 ```
 
-`ROOT_CAUSE_REVIEW.md` намеренно **не** создан: Exp11 ещё не существует, и заполнять
-review до того, как появился третий результат, значило бы выдумать данные.
+На эту дату: current best — exp08 (production build `sub08`), exp09 и exp10 —
+два подряд STOP, Exp11 можно провести как третий эксперимент цикла. Если Exp11
+тоже STOP, Exp12 не придумывается — сначала review.
+
+`ROOT_CAUSE_REVIEW.md` на эту дату намеренно **не** создан: Exp11 ещё не
+существует, и заполнять review до появления третьего результата значило бы
+выдумать данные.

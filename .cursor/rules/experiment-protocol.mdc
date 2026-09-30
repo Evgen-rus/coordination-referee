@@ -4,7 +4,7 @@ globs: experiments/**/*.py
 alwaysApply: false
 ---
 
-# Experiment protocol — mandatory before Exp11+
+# Experiment protocol — mandatory before any new experiment
 
 New experiments follow one fixed pipeline. Full text:
 [`experiments/PROTOCOL.md`](../../experiments/PROTOCOL.md).
@@ -17,10 +17,14 @@ current best -> ONE hypothesis -> exact baseline reproduction -> experiment
 
 ## Before inventing anything
 
-1. Run `python experiments/protocol_guard.py`. It reports the current best
-   (baseline to reproduce), the consecutive-STOP count, and whether a new
-   experiment may start. If it blocks, do not create the experiment.
-2. Reuse the Exp09/Exp10 mechanisms — `load_exp07.py`, `reuse.load`,
+1. Run `python experiments/protocol_guard.py`. It is the single source of truth
+   for the current state: which experiment is the current best, its directory,
+   how many consecutive STOPS there are, which experiments the stalled tail
+   consists of, and whether a new experiment may start. **Read the numbers off
+   the guard's output** — do not assume any of them from memory, from this
+   file, or from an earlier session.
+2. If the guard blocks, do not create the experiment.
+3. Reuse the existing mechanisms — `load_exp07.py`, `reuse.load`,
    `seal_peaks.py`, `evaluation.metrics`. Do not reimplement the reproduction
    gate, cross-fit, or promotion gate; a second implementation can disagree
    with the first.
@@ -28,8 +32,11 @@ current best -> ONE hypothesis -> exact baseline reproduction -> experiment
 ## Hard rules
 
 - One Exp = one primary hypothesis.
-- Reproduce the current best **before** any search. Exp08 targets:
-  macro `0.7894323366835861`, composite `0.7694453917139285`, to 1e-12.
+- Reproduce the current best **before** any search. Take the reproduction
+  targets from the current best the guard reports — its `results.json`
+  (`baseline_expected`, or the promoted experiment's recorded metrics). They
+  are reproduction targets, never tuning knobs, and they change whenever the
+  current best changes.
 - Freeze parameters, search space and gate **before** viewing a result. Never
   widen or refine a grid after seeing a number.
 - A change inside noise, or without a transferable held-out effect = STOP.
@@ -38,22 +45,16 @@ current best -> ONE hypothesis -> exact baseline reproduction -> experiment
 - Never tune parameters against the public leaderboard — record it as a
   reference only.
 - Log the experiment in `experiments/results.csv`; that file is the history.
-- Do not modify Exp01–Exp10, `baseline/`, `evaluation/`, `data/`, the existing
-  folds, or the official metrics. Validation is the existing cross-fitted
-  held-out approach — do not add a hidden dataset or split the data without
-  proven need.
+- Do not modify the existing experiments, `baseline/`, `evaluation/`, `data/`,
+  the existing folds, or the official metrics. Validation is the existing
+  cross-fitted held-out approach — do not add a hidden dataset or split the
+  data without proven need.
 
 ## Stalled hillclimb
 
-If the last 3 experiments all got STOP / failed gate, **do not invent the next
+If the guard reports 3 or more consecutive STOPS, **do not invent the next
 one**. Write `experiments/ROOT_CAUSE_REVIEW.md` first, answering
-`hypotheses`, `transfer`, `headroom`, `noise`, `warrant` for exactly those
-experiments, with `status: complete` and `covers: [exp09, exp10, exp11]`.
+`hypotheses`, `transfer`, `headroom`, `noise`, `warrant` for exactly the
+experiments the guard lists in its stalled tail, with `status: complete` and
+`covers:` naming that same list. The guard prints the exact required header.
 A stale review does not satisfy a new stall.
-
-## State as of this writing
-
-Current best **exp08**; exp09 and exp10 are consecutive STOPS (2 of 3). Exp11
-may be run as the third experiment of this cycle. Do not create Exp11's
-hypothesis on the user's behalf — the protocol forbids inventing the next
-experiment without a warrant.
