@@ -1,0 +1,59 @@
+---
+description: Read experiments/PROTOCOL.md and run experiments/protocol_guard.py before creating any new experiment (Exp11+)
+globs: experiments/**/*.py
+alwaysApply: false
+---
+
+# Experiment protocol — mandatory before Exp11+
+
+New experiments follow one fixed pipeline. Full text:
+[`experiments/PROTOCOL.md`](../../experiments/PROTOCOL.md).
+
+```
+current best -> ONE hypothesis -> exact baseline reproduction -> experiment
+-> honest held-out/cross-fitted validation -> predeclared promotion gate
+-> PROMOTE or STOP
+```
+
+## Before inventing anything
+
+1. Run `python experiments/protocol_guard.py`. It reports the current best
+   (baseline to reproduce), the consecutive-STOP count, and whether a new
+   experiment may start. If it blocks, do not create the experiment.
+2. Reuse the Exp09/Exp10 mechanisms — `load_exp07.py`, `reuse.load`,
+   `seal_peaks.py`, `evaluation.metrics`. Do not reimplement the reproduction
+   gate, cross-fit, or promotion gate; a second implementation can disagree
+   with the first.
+
+## Hard rules
+
+- One Exp = one primary hypothesis.
+- Reproduce the current best **before** any search. Exp08 targets:
+  macro `0.7894323366835861`, composite `0.7694453917139285`, to 1e-12.
+- Freeze parameters, search space and gate **before** viewing a result. Never
+  widen or refine a grid after seeing a number.
+- A change inside noise, or without a transferable held-out effect = STOP.
+- A failed experiment never becomes the baseline and never produces a
+  production build, ZIP, or submission.
+- Never tune parameters against the public leaderboard — record it as a
+  reference only.
+- Log the experiment in `experiments/results.csv`; that file is the history.
+- Do not modify Exp01–Exp10, `baseline/`, `evaluation/`, `data/`, the existing
+  folds, or the official metrics. Validation is the existing cross-fitted
+  held-out approach — do not add a hidden dataset or split the data without
+  proven need.
+
+## Stalled hillclimb
+
+If the last 3 experiments all got STOP / failed gate, **do not invent the next
+one**. Write `experiments/ROOT_CAUSE_REVIEW.md` first, answering
+`hypotheses`, `transfer`, `headroom`, `noise`, `warrant` for exactly those
+experiments, with `status: complete` and `covers: [exp09, exp10, exp11]`.
+A stale review does not satisfy a new stall.
+
+## State as of this writing
+
+Current best **exp08**; exp09 and exp10 are consecutive STOPS (2 of 3). Exp11
+may be run as the third experiment of this cycle. Do not create Exp11's
+hypothesis on the user's behalf — the protocol forbids inventing the next
+experiment without a warrant.
