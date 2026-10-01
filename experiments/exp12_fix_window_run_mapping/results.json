@@ -1,0 +1,494 @@
+{
+  "experiment": "exp12_fix_window_run_mapping",
+  "hypothesis": "fixing the global/local run-index mapping in Exp07's honest inner cross-fit removes the train/inference mismatch and improves the official composite",
+  "search_space": {
+    "free_parameters": 0,
+    "change": "global run ids -> local outer-train positions for the inner cross-fit grouping",
+    "forbidden": [
+      "tuning",
+      "second mapping fix",
+      "extra hypotheses",
+      "Exp13",
+      "public leaderboard use"
+    ]
+  },
+  "public_exp08_reference_only": 0.7696,
+  "gate": {
+    "composite_delta_min": 0.002,
+    "folds_won_min": 2,
+    "robustness_drop_max": 0.003,
+    "class_f1_drop_max": 0.02
+  },
+  "weak_band": [
+    0.001,
+    0.002
+  ],
+  "production_check": {
+    "checked": [
+      "production.aggregate_runs adversarial probe (high ids)",
+      "production.aggregate_runs sparse-id alignment probe"
+    ],
+    "probe_high_ids": {
+      "global_ids": [
+        9997,
+        9998,
+        9999
+      ],
+      "n_runs_in_space": 10000,
+      "n_windows": 142,
+      "rows_nonzero": 3,
+      "rows_lost": 0
+    },
+    "production_loses_high_ids": false,
+    "probe_sparse_ids": {
+      "ids": [
+        1,
+        7,
+        9
+      ],
+      "row_for_id_7_matches_direct_aggregate": true,
+      "row_for_absent_id_1_is_zeros": true,
+      "shape_ok": true
+    },
+    "production_correct": true,
+    "verdict": "PRODUCTION ALREADY CORRECT - Exp08 production builds its window dataset with `run` indexing the runs it was handed and aligns with searchsorted(sr, want) over those same ids, so it does NOT contain the Exp07 global/local defect. Exp12 is therefore an OOF-evaluation and training-consistency repair; the shipped model's production behaviour already corresponds to the corrected mapping."
+  },
+  "reproduction_gate": {
+    "expected": {
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6086111111111111,
+      "composite": 0.7694453917139285
+    },
+    "got": {
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6086111111111111,
+      "composite": 0.7694453917139285
+    },
+    "tolerance": 1e-12,
+    "per_metric_ok": {
+      "macro_f1": true,
+      "robustness_f1": true,
+      "success_f1": true,
+      "fault_turn_hit2": true,
+      "composite": true
+    },
+    "all_metrics_ok": true,
+    "sha256_A": "edbaf8d766f97f28bce12e72fbf9fee67533124d78ab8dc17fdfdb31211297e8",
+    "sha256_B": "b7e92bd4e14fa59c8c340e65c70317d49d7cca6c18a841fd248217617d1fc9d1",
+    "sha256_sealed_artifact": "edbaf8d766f97f28bce12e72fbf9fee67533124d78ab8dc17fdfdb31211297e8",
+    "A_bit_identical_to_sealed": true,
+    "A_and_B_bit_identical": false,
+    "policy": "the reproduction gate applies to CONTROL A; the candidate deliberately differs from exp08",
+    "passed": true
+  },
+  "coverage": {
+    "folds": [
+      {
+        "fold": 0,
+        "n_tr_runs": 6666,
+        "old_lost": 2182,
+        "fixed_lost": 0,
+        "old_per_inner": [
+          {
+            "n_owners": 2222,
+            "n_reached": 1473,
+            "n_lost": 749
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 1502,
+            "n_lost": 720
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 1509,
+            "n_lost": 713
+          }
+        ],
+        "fixed_per_inner": [
+          {
+            "n_owners": 2222,
+            "n_reached": 2222,
+            "n_lost": 0
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 2222,
+            "n_lost": 0
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 2222,
+            "n_lost": 0
+          }
+        ]
+      },
+      {
+        "fold": 1,
+        "n_tr_runs": 6667,
+        "old_lost": 2223,
+        "fixed_lost": 0,
+        "old_per_inner": [
+          {
+            "n_owners": 2223,
+            "n_reached": 1480,
+            "n_lost": 743
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 1465,
+            "n_lost": 757
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 1499,
+            "n_lost": 723
+          }
+        ],
+        "fixed_per_inner": [
+          {
+            "n_owners": 2223,
+            "n_reached": 2223,
+            "n_lost": 0
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 2222,
+            "n_lost": 0
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 2222,
+            "n_lost": 0
+          }
+        ]
+      },
+      {
+        "fold": 2,
+        "n_tr_runs": 6667,
+        "old_lost": 2261,
+        "fixed_lost": 0,
+        "old_per_inner": [
+          {
+            "n_owners": 2223,
+            "n_reached": 1457,
+            "n_lost": 766
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 1447,
+            "n_lost": 775
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 1502,
+            "n_lost": 720
+          }
+        ],
+        "fixed_per_inner": [
+          {
+            "n_owners": 2223,
+            "n_reached": 2223,
+            "n_lost": 0
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 2222,
+            "n_lost": 0
+          },
+          {
+            "n_owners": 2222,
+            "n_reached": 2222,
+            "n_lost": 0
+          }
+        ]
+      }
+    ]
+  },
+  "fold_deltas": [
+    {
+      "fold": 0,
+      "n_val": 3334,
+      "A": {
+        "macro_f1": 0.7796121741506896,
+        "robustness_f1": 0.7479983727132903,
+        "success_f1": 0.8643757406010988,
+        "fault_turn_hit2": 0.5970833333333333,
+        "composite": 0.7661703746771656
+      },
+      "B": {
+        "macro_f1": 0.7756933363097479,
+        "robustness_f1": 0.7538789073182102,
+        "success_f1": 0.8643757406010988,
+        "fault_turn_hit2": 0.5966666666666667,
+        "composite": 0.7656394227412581
+      },
+      "delta_composite": -0.0005309519359075754,
+      "wins": false
+    },
+    {
+      "fold": 1,
+      "n_val": 3333,
+      "A": {
+        "macro_f1": 0.7976376982124211,
+        "robustness_f1": 0.7379116703897185,
+        "success_f1": 0.8643757406010988,
+        "fault_turn_hit2": 0.6179166666666667,
+        "composite": 0.7747447944604717
+      },
+      "B": {
+        "macro_f1": 0.7932533259985867,
+        "robustness_f1": 0.7254630077444156,
+        "success_f1": 0.8643757406010988,
+        "fault_turn_hit2": 0.6158333333333333,
+        "composite": 0.7692321093588954
+      },
+      "delta_composite": -0.00551268510157632,
+      "wins": false
+    },
+    {
+      "fold": 2,
+      "n_val": 3333,
+      "A": {
+        "macro_f1": 0.7908991386998077,
+        "robustness_f1": 0.7210077112280441,
+        "success_f1": 0.8643757406010988,
+        "fault_turn_hit2": 0.6108333333333333,
+        "composite": 0.766441191580413
+      },
+      "B": {
+        "macro_f1": 0.7927822501119748,
+        "robustness_f1": 0.7307348806118609,
+        "success_f1": 0.8643757406010988,
+        "fault_turn_hit2": 0.6154166666666666,
+        "composite": 0.770272872965784
+      },
+      "delta_composite": 0.003831681385370933,
+      "wins": true
+    }
+  ],
+  "comparison": {
+    "A_control_buggy": {
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6086111111111111,
+      "composite": 0.7694453917139285
+    },
+    "B_fixed": {
+      "macro_f1": 0.7873785254579829,
+      "robustness_f1": 0.7368422139406114,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6093055555555555,
+      "composite": 0.7684867328598647
+    },
+    "delta": {
+      "macro_f1": -0.0020538112256032193,
+      "robustness_f1": -4.790742826110694e-06,
+      "success_f1": 0.0,
+      "fault_turn_hit2": 0.000694444444444442,
+      "composite": -0.0009586588540637653
+    }
+  },
+  "per_class_f1": {
+    "A": {
+      "clean": 0.8650034176349966,
+      "dropped_handoff": 0.6356370474847203,
+      "duplicated_work": 0.8296422487223168,
+      "deadlock": 0.7217391304347827,
+      "conflict": 0.9031752254018032,
+      "goal_drift": 0.846897663174859,
+      "runaway_loop": 0.7239316239316239
+    },
+    "B": {
+      "clean": 0.8668847942138798,
+      "dropped_handoff": 0.6293508936970837,
+      "duplicated_work": 0.8363483382414808,
+      "deadlock": 0.7143476376246207,
+      "conflict": 0.9010212097407698,
+      "goal_drift": 0.8408360128617364,
+      "runaway_loop": 0.722860791826309
+    },
+    "delta": {
+      "clean": 0.0018813765788832093,
+      "dropped_handoff": -0.006286153787636528,
+      "duplicated_work": 0.00670608951916396,
+      "deadlock": -0.007391492810161937,
+      "conflict": -0.0021540156610333483,
+      "goal_drift": -0.0060616503131226684,
+      "runaway_loop": -0.0010708321053148895
+    }
+  },
+  "changed_labels": 546,
+  "confusion_A": [
+    [
+      2531,
+      93,
+      40,
+      54,
+      0,
+      13,
+      69
+    ],
+    [
+      171,
+      676,
+      54,
+      92,
+      56,
+      57,
+      94
+    ],
+    [
+      76,
+      30,
+      974,
+      23,
+      36,
+      29,
+      32
+    ],
+    [
+      123,
+      59,
+      39,
+      830,
+      40,
+      47,
+      62
+    ],
+    [
+      0,
+      3,
+      3,
+      6,
+      1152,
+      22,
+      14
+    ],
+    [
+      41,
+      21,
+      15,
+      31,
+      19,
+      1051,
+      22
+    ],
+    [
+      110,
+      45,
+      23,
+      64,
+      48,
+      63,
+      847
+    ]
+  ],
+  "confusion_B": [
+    [
+      2517,
+      95,
+      38,
+      59,
+      0,
+      15,
+      76
+    ],
+    [
+      172,
+      669,
+      63,
+      95,
+      57,
+      57,
+      87
+    ],
+    [
+      68,
+      25,
+      994,
+      19,
+      34,
+      29,
+      31
+    ],
+    [
+      111,
+      71,
+      34,
+      824,
+      39,
+      56,
+      65
+    ],
+    [
+      0,
+      3,
+      4,
+      8,
+      1147,
+      21,
+      17
+    ],
+    [
+      42,
+      20,
+      16,
+      30,
+      22,
+      1046,
+      24
+    ],
+    [
+      97,
+      43,
+      28,
+      72,
+      47,
+      64,
+      849
+    ]
+  ],
+  "promotion_gate": {
+    "passed": false,
+    "criteria": [
+      {
+        "name": "composite delta >= +0.002",
+        "value": -0.0009586588540637653,
+        "passed": false
+      },
+      {
+        "name": "wins >= 2/3 folds",
+        "value": 1.0,
+        "passed": false
+      },
+      {
+        "name": "robustness drop <= 0.003",
+        "value": 4.790742826110694e-06,
+        "passed": true
+      },
+      {
+        "name": "worst class F1 drop <= 0.02",
+        "value": 0.007391492810161937,
+        "passed": true
+      }
+    ],
+    "folds_won": 1,
+    "worst_class": "deadlock",
+    "worst_class_f1_drop": 0.007391492810161937,
+    "weak_inconclusive_band": false
+  },
+  "production_decision": {
+    "case": "CASE A - production Exp08 is already correct",
+    "production_behaviour_changed": false,
+    "zip_needed": false,
+    "reason": "Exp08 production aligns window aggregates in the local index space of the runs it was handed and loses none of them (3/3 high-id runs kept). Exp12 repairs the OOF evaluation / training-consistency measurement only; it does not alter what the shipped model does at inference time, so no new ZIP is warranted."
+  },
+  "promoted": false,
+  "runtime_sec": 618.8
+}

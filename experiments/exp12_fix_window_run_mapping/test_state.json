@@ -1,0 +1,220 @@
+{
+  "folds": [
+    {
+      "fold": 0,
+      "n_train": 6666,
+      "n_val": 3334,
+      "n_tr_runs": 6666,
+      "coverage_old": [
+        {
+          "n_owners": 2222,
+          "n_reached": 1473,
+          "n_lost": 749
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 1502,
+          "n_lost": 720
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 1509,
+          "n_lost": 713
+        }
+      ],
+      "coverage_fixed": [
+        {
+          "n_owners": 2222,
+          "n_reached": 2222,
+          "n_lost": 0
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 2222,
+          "n_lost": 0
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 2222,
+          "n_lost": 0
+        }
+      ],
+      "n_runs_lost_old": 2182,
+      "n_runs_lost_fixed": 0,
+      "n_train_rows_with_diff_aggregates": 2182,
+      "validation_aggregates_identical": true,
+      "foundation_identical": true,
+      "inner_probabilities_shared": true,
+      "label_seed": 42
+    },
+    {
+      "fold": 1,
+      "n_train": 6667,
+      "n_val": 3333,
+      "n_tr_runs": 6667,
+      "coverage_old": [
+        {
+          "n_owners": 2223,
+          "n_reached": 1480,
+          "n_lost": 743
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 1465,
+          "n_lost": 757
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 1499,
+          "n_lost": 723
+        }
+      ],
+      "coverage_fixed": [
+        {
+          "n_owners": 2223,
+          "n_reached": 2223,
+          "n_lost": 0
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 2222,
+          "n_lost": 0
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 2222,
+          "n_lost": 0
+        }
+      ],
+      "n_runs_lost_old": 2223,
+      "n_runs_lost_fixed": 0,
+      "n_train_rows_with_diff_aggregates": 2223,
+      "validation_aggregates_identical": true,
+      "foundation_identical": true,
+      "inner_probabilities_shared": true,
+      "label_seed": 42
+    },
+    {
+      "fold": 2,
+      "n_train": 6667,
+      "n_val": 3333,
+      "n_tr_runs": 6667,
+      "coverage_old": [
+        {
+          "n_owners": 2223,
+          "n_reached": 1457,
+          "n_lost": 766
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 1447,
+          "n_lost": 775
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 1502,
+          "n_lost": 720
+        }
+      ],
+      "coverage_fixed": [
+        {
+          "n_owners": 2223,
+          "n_reached": 2223,
+          "n_lost": 0
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 2222,
+          "n_lost": 0
+        },
+        {
+          "n_owners": 2222,
+          "n_reached": 2222,
+          "n_lost": 0
+        }
+      ],
+      "n_runs_lost_old": 2261,
+      "n_runs_lost_fixed": 0,
+      "n_train_rows_with_diff_aggregates": 2261,
+      "validation_aggregates_identical": true,
+      "foundation_identical": true,
+      "inner_probabilities_shared": true,
+      "label_seed": 42
+    }
+  ],
+  "production": {
+    "checked": [
+      "production.aggregate_runs adversarial probe (high ids)",
+      "production.aggregate_runs sparse-id alignment probe"
+    ],
+    "probe_high_ids": {
+      "global_ids": [
+        9997,
+        9998,
+        9999
+      ],
+      "n_runs_in_space": 10000,
+      "n_windows": 142,
+      "rows_nonzero": 3,
+      "rows_lost": 0
+    },
+    "production_loses_high_ids": false,
+    "probe_sparse_ids": {
+      "ids": [
+        1,
+        7,
+        9
+      ],
+      "row_for_id_7_matches_direct_aggregate": true,
+      "row_for_absent_id_1_is_zeros": true,
+      "shape_ok": true
+    },
+    "production_correct": true,
+    "verdict": "PRODUCTION ALREADY CORRECT - Exp08 production builds its window dataset with `run` indexing the runs it was handed and aligns with searchsorted(sr, want) over those same ids, so it does NOT contain the Exp07 global/local defect. Exp12 is therefore an OOF-evaluation and training-consistency repair; the shipped model's production behaviour already corresponds to the corrected mapping."
+  },
+  "leakage": [
+    true,
+    "all 3 folds: every outer-train run held out exactly once, hold-out disjoint from its own fit, mapping bijective"
+  ],
+  "repro": {
+    "expected": {
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6086111111111111,
+      "composite": 0.7694453917139285
+    },
+    "got": {
+      "macro_f1": 0.7894323366835861,
+      "robustness_f1": 0.7368470046834376,
+      "success_f1": 0.8643757406010988,
+      "fault_turn_hit2": 0.6086111111111111,
+      "composite": 0.7694453917139285
+    },
+    "tolerance": 1e-12,
+    "per_metric_ok": {
+      "macro_f1": true,
+      "robustness_f1": true,
+      "success_f1": true,
+      "fault_turn_hit2": true,
+      "composite": true
+    },
+    "all_metrics_ok": true,
+    "sha256_A": "edbaf8d766f97f28bce12e72fbf9fee67533124d78ab8dc17fdfdb31211297e8",
+    "sha256_B": "b7e92bd4e14fa59c8c340e65c70317d49d7cca6c18a841fd248217617d1fc9d1",
+    "sha256_sealed_artifact": "edbaf8d766f97f28bce12e72fbf9fee67533124d78ab8dc17fdfdb31211297e8",
+    "A_bit_identical_to_sealed": true,
+    "A_and_B_bit_identical": false,
+    "policy": "the reproduction gate applies to CONTROL A; the candidate deliberately differs from exp08",
+    "passed": true
+  },
+  "scoring_is_official": true,
+  "l1_predicted_class": [
+    true,
+    "turn = peak_pos[run, predicted_class] on 1939 disagreeing rows; the predicted column, not the true column, drives it"
+  ],
+  "determinism": [
+    true,
+    "local index mapping re-runs bit-identically over 3 folds (4571158494 window rows); model refit determinism inherited from Exp07/Exp11, not re-checked here"
+  ]
+}
