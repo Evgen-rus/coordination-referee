@@ -1,140 +1,97 @@
 
 ==============================================================================
-EXP13 - WAIT DEPENDENCY GRAPH (one fixed hypothesis)
+EXP13 (CORRECTED) - FOLD-LOCAL PAIRED A/B ON THE WAIT GRAPH
 ==============================================================================
-hypothesis : explicit WHO-waits-for-WHM representation adds the
-             relational information deadlock needs, and improves
-             the official composite
-scope      : label head only; success head / window model / L1 /
-             fault_turn rule / params / folds / seeds untouched
-parser     : 6 frozen template families, unit-tested before this run
+the earlier global-X300 result is INVALID (non-comparable baseline)
+no feature, parser, seed, parameter, threshold or gate has changed
 
--- 1. VERIFIED LOAD (fail-closed, sealed peaks)
-   runs=10000  folds=3  verified_checks=32  load=0.2s
-   foundation matrix: (10000, 249) (+ 51 window aggregates = 300)
+-- 1. VERIFIED INPUTS
+   runs=10000 folds=3 checks=32 sealed_proba=(10000, 7) float32
+   sealed sha256 edbaf8d766f97f28bce12e72fbf9fee6...
+   foundation (10000, 249)  windows (457203, 83)
 
--- 2. REPRODUCTION GATE - CONTROL A vs SEALED Exp08
+-- 2. WAIT-GRAPH BLOCK (fold-independent, computed once)
+   (10000, 12) from 10000 runs: wg_n_wait_edges,wg_n_unique_wait_edges,wg_n_recip_pairs,wg_has_recip_pair,wg_recip_wait_share,wg_n_same_subtask_recip_pairs,wg_has_same_subtask_recip_pair,wg_earliest_recip_pos_rel,wg_max_pair_wait_events,wg_max_pair_repeat_after_onset,wg_max_pair_span_rel,wg_n_agents_in_recip_pairs
+   leakage probe (targets overwritten on 300 runs): identical=True
 
--- 2a. rebuild the incumbent 300-column matrix (249 + 51 aggregates)
-   fold 0: 300-column matrix rebuilt
-   fold 1: 300-column matrix rebuilt
-   fold 2: 300-column matrix rebuilt
-   300-column matrix: (10000, 300)
-   macro_f1           expected 0.7894323366835861  got 0.7894323366835861  diff 0.00e+00  PASS
-   robustness_f1      expected 0.7368470046834376  got 0.7368470046834376  diff 0.00e+00  PASS
-   success_f1         expected 0.8643757406010988  got 0.8643757406010988  diff 0.00e+00  PASS
-   fault_turn_hit2    expected 0.6086111111111111  got 0.6086111111111111  diff 0.00e+00  PASS
-   composite          expected 0.7694453917139285  got 0.7694453917139285  diff 0.00e+00  PASS
-   REPRODUCTION GATE (sealed artifact): PASS
+-- 3. FOLD-LOCAL PAIRED FITS - CONTROL A first, then B, same windows
+   label params from common.lgb_label(), random_state=42
+    fold 0: window fits done, 300-col matrices built  181.0s
+    fold 0: A fitted on 6666 rows
+    fold 0: B fitted on the SAME rows + 12 columns
+    fold 1: window fits done, 300-col matrices built  174.7s
+    fold 1: A fitted on 6667 rows
+    fold 1: B fitted on the SAME rows + 12 columns
+    fold 2: window fits done, 300-col matrices built  187.7s
+    fold 2: A fitted on 6667 rows
+    fold 2: B fitted on the SAME rows + 12 columns
 
--- 2b. CONTROL A refitted on the rebuilt 300 (must match the sealed OOF)
-   params: n_estimators=600 lr=0.05 leaves=63 seed=42
-   refit A vs sealed OOF: bit-identical=False  max|dev|=9.132e-01
-   NOTE: refit differs from the sealed artifact; CONTROL A is the
-         sealed probabilities for scoring, so the comparison to
-         exp08 stays exact.
+-- 4. CONTROL A SEALED PARITY (gate before any candidate scoring)
+   A sha256      : edbaf8d766f97f28bce12e72fbf9fee6...
+   sealed sha256 : edbaf8d766f97f28bce12e72fbf9fee6...
+   bit identical : True
+   argmax labels : 0 / 10000 differ
+   max|dP|       : 0.000e+00
+   macro_f1           expected 0.7894323366835861 got 0.7894323366835861 diff 0.00e+00 PASS
+   robustness_f1      expected 0.7368470046834376 got 0.7368470046834376 diff 0.00e+00 PASS
+   success_f1         expected 0.8643757406010988 got 0.8643757406010988 diff 0.00e+00 PASS
+   fault_turn_hit2    expected 0.6086111111111111 got 0.6086111111111111 diff 0.00e+00 PASS
+   composite          expected 0.7694453917139285 got 0.7694453917139285 diff 0.00e+00 PASS
+   CONTROL A REPRODUCTION: PASS
 
--- 3. WAIT-GRAPH BLOCK (from messages only)
-   block shape (10000, 12)  names=wg_n_wait_edges,wg_n_unique_wait_edges,wg_n_recip_pairs,wg_has_recip_pair,wg_recip_wait_share,wg_n_same_subtask_recip_pairs,wg_has_same_subtask_recip_pair,wg_earliest_recip_pos_rel,wg_max_pair_wait_events,wg_max_pair_repeat_after_onset,wg_max_pair_span_rel,wg_n_agents_in_recip_pairs
-   wg_n_wait_edges                  mean    4.351  uniq    35  nonzero  6328
-   wg_n_unique_wait_edges           mean    2.005  uniq    16  nonzero  6328
-   wg_n_recip_pairs                 mean    0.962  uniq     9  nonzero  5960
-   wg_has_recip_pair                mean    0.596  uniq     2  nonzero  5960
-   wg_recip_wait_share              mean    0.087  uniq   759  nonzero  6328
-   wg_n_same_subtask_recip_pairs    mean    0.823  uniq     9  nonzero  5252
-   wg_has_same_subtask_recip_pair   mean    0.525  uniq     2  nonzero  5252
-   wg_earliest_recip_pos_rel        mean    0.181  uniq  1541  nonzero  5960
-   wg_max_pair_wait_events          mean    2.998  uniq    19  nonzero  5960
-   wg_max_pair_repeat_after_onset   mean    1.788  uniq    20  nonzero  4806
-   wg_max_pair_span_rel             mean    0.249  uniq  1708  nonzero  5960
-   wg_n_agents_in_recip_pairs       mean    1.620  uniq    10  nonzero  5960
-
--- 4. LEAKAGE PROOF (target perturbation)
-   targets replaced on 300 runs -> features identical: True (max|diff| 0.00e+00)
-
--- 5. DUPLICATE / CORRELATION DIAGNOSTIC (before any CV)
-   columns numerically identical to an existing 300-feature: 0
-   wg_n_wait_edges                  max|r| vs 300 = 0.994  (type_status)
-   wg_n_unique_wait_edges           max|r| vs 300 = 0.900  (type_status)
-   wg_n_recip_pairs                 max|r| vs 300 = 0.898  (type_status)
-   wg_has_recip_pair                max|r| vs 300 = 0.733  (share_status)
-   wg_recip_wait_share              max|r| vs 300 = 0.992  (share_status)
-   wg_n_same_subtask_recip_pairs    max|r| vs 300 = 0.838  (type_status)
-   wg_has_same_subtask_recip_pair   max|r| vs 300 = 0.651  (type_status)
-   wg_earliest_recip_pos_rel        max|r| vs 300 = 0.456  (pos_first_status_run)
-   wg_max_pair_wait_events          max|r| vs 300 = 0.865  (type_status)
-   wg_max_pair_repeat_after_onset   max|r| vs 300 = 0.843  (type_status)
-   wg_max_pair_span_rel             max|r| vs 300 = 0.768  (share_status)
-   wg_n_agents_in_recip_pairs       max|r| vs 300 = 0.853  (type_status)
-   (correlation is acceptable; exact duplication would not be)
-
--- 6. SINGLE CV - CONTROL B (300 + wait-graph), same params/seed/rows
-   fold 0: train 6666 / val 3334  done
-   fold 1: train 6667 / val 3333  done
-   fold 2: train 6667 / val 3333  done
-   candidate OOF built over 10000 runs
-
--- 7. OFFICIAL METRICS - A vs B
-   metric                    A (exp08)       B (cand)        delta
-   macro_f1                   0.789432       0.806340    +0.016908
-   robustness_f1              0.736847       0.761958    +0.025111
+-- 5. PAIRED METRICS - A vs B (official evaluation.metrics only)
+   metric               A (sealed exp08)     B (paired)        delta
+   macro_f1                   0.789432       0.815868    +0.026436
+   robustness_f1              0.736847       0.767013    +0.030166
    success_f1                 0.864376       0.864376    +0.000000
-   fault_turn_hit2            0.608611       0.623194    +0.014583
-   composite                  0.769445       0.785635    +0.016190
+   fault_turn_hit2            0.608611       0.632778    +0.024167
+   composite                  0.769445       0.792622    +0.023176
 
--- 8. DEADLOCK MECHANISM TARGET
-                  before    after          d     before      after
-   F1             0.7015   0.8303    +0.1287     0.7423     0.8191
-   precision                                     0.7423     0.8191
-   recall                                        0.6650     0.8417
-   deadlock -> clean                 147 ->     54   (-93)
-   deadlock -> dropped_handoff        68 ->     24   (-44)
-   deadlock -> runaway_loop           64 ->     33   (-31)
-   clean -> deadlock                  57 ->     29   (-28)
-   dropped_handoff -> deadlock        96 ->     66   (-30)
-   runaway_loop -> deadlock           62 ->     58   (-4)
+   per-class F1:
+   clean                0.8650 -> 0.8784  (+0.0134)
+   dropped_handoff      0.6356 -> 0.6648  (+0.0291)
+   duplicated_work      0.8296 -> 0.8416  (+0.0120)
+   deadlock             0.7217 -> 0.8367  (+0.1150)
+   conflict             0.9032 -> 0.9059  (+0.0027)
+   goal_drift           0.8469 -> 0.8482  (+0.0013)
+   runaway_loop         0.7239 -> 0.7355  (+0.0116)
 
--- 9. FOLD STABILITY (same 3 outer folds)
-   fold 0  n=3334  composite +0.033394  macro +0.032098  rob +0.058381  hit2 +0.027500  dl_F1 0.6898->0.8259 (+0.1360)  dl->clean 61->26
-   fold 1  n=3333  composite +0.026777  macro +0.027898  rob +0.041478  hit2 +0.024583  dl_F1 0.7079->0.8309 (+0.1230)  dl->clean 39->13
-   fold 2  n=3333  composite +0.024141  macro +0.030582  rob +0.022735  hit2 +0.031667  dl_F1 0.7067->0.8339 (+0.1273)  dl->clean 47->15
+-- 6. DEADLOCK
+   F1        0.7217 -> 0.8367  (+0.1150)
+   precision 0.7545 -> 0.8262
+   recall    0.6917 -> 0.8475
+   tp 830->1017  fp 270->214  fn 370->183
+   deadlock -> clean : 123 -> 43  (-80)
 
--- 10. DIAGNOSTICS (after the single CV; no second variant follows)
-   wg_* in top-20: 3   in top-50: 4
-   total gain share of the new block: 0.0961
-   wg_* ranking (gain, all folds averaged):
-      wg_max_pair_span_rel             0.03691
-      wg_n_same_subtask_recip_pairs    0.02751
-      wg_n_unique_wait_edges           0.01172
-      wg_n_recip_pairs                 0.00572
-      wg_has_same_subtask_recip_pair   0.00369
-      wg_earliest_recip_pos_rel        0.00334
-      wg_recip_wait_share              0.00308
-      wg_n_wait_edges                  0.00156
-      wg_n_agents_in_recip_pairs       0.00094
-      wg_max_pair_repeat_after_onset   0.00083
-      wg_max_pair_wait_events          0.00076
-      wg_has_recip_pair                0.00001
-   changed OOF labels: 717 / 10000 (7.17%)
-   wrong -> right : 447
-   right -> wrong : 180
-   true deadlock: fixed 237 / broken 25 (of 1200)
-   other classes newly predicted deadlock:
-      true clean              -> deadlock : 16
-      true dropped_handoff    -> deadlock : 8
-      true duplicated_work    -> deadlock : 7
-      true conflict           -> deadlock : 6
-      true goal_drift         -> deadlock : 12
-      true runaway_loop       -> deadlock : 13
+-- 7. FOLD STABILITY
+   fold 0 n=3334 composite +0.024856  macro +0.024072  rob +0.043112  hit2 +0.020417  dl_F1 0.7299->0.8308 (+0.1009)
+   fold 1 n=3333 composite +0.019565  macro +0.024696  rob +0.020700  hit2 +0.020417  dl_F1 0.7282->0.8450 (+0.1168)
+   fold 2 n=3333 composite +0.024141  macro +0.030582  rob +0.022735  hit2 +0.031667  dl_F1 0.7067->0.8339 (+0.1273)
 
--- 11. PRE-DECLARED PROMOTION GATE
-   1_composite_delta>=+0.002          value  +0.01619   PASS
-   2_folds_won>=2                     value  +3.00000   PASS
-   3_deadlock_f1>=+0.015              value  +0.12871   PASS
-   4_deadlock_folds_won>=2            value  +3.00000   PASS
-   5_robustness>=-0.003               value  +0.02511   PASS
-   6_no_class_worse_than_-0.02        value  +0.00000   PASS
-   WORST class drop: None -0.00000
+-- 8. DIAGNOSTICS
+   wg_* gain share: 0.0994
+      wg_max_pair_span_rel             0.03812
+      wg_n_same_subtask_recip_pairs    0.02849
+      wg_n_unique_wait_edges           0.01124
+      wg_n_recip_pairs                 0.00620
+      wg_has_same_subtask_recip_pair   0.00398
+      wg_recip_wait_share              0.00385
+      wg_earliest_recip_pos_rel        0.00342
+      wg_n_wait_edges                  0.00151
+      wg_n_agents_in_recip_pairs       0.00092
+      wg_max_pair_repeat_after_onset   0.00084
+      wg_max_pair_wait_events          0.00080
+      wg_has_recip_pair                0.00003
+   changed labels 708/10000 (7.08%)
+   wrong->right 426   right->wrong 191
+   true deadlock: fixed 212 / broken 25 (of 1200)
+
+-- 9. GATE (unchanged thresholds)
+   composite_delta>=+0.002            +0.02318  PASS
+   folds_won>=2                       +3.00000  PASS
+   deadlock_f1_delta>=+0.015          +0.11495  PASS
+   deadlock_folds_won>=2              +3.00000  PASS
+   robustness>=-0.003                 +0.03017  PASS
+   no_class_worse_than_-0.02          -0.00000  PASS
+   worst class drop: None -0.00000
    VERDICT: PROMOTE
-
-   runtime: 718.4s

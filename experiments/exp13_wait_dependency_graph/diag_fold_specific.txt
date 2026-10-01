@@ -1,0 +1,44 @@
+No label model is fitted and no metric is computed here.  Only the
+train-aggregate path is exercised, exactly as Exp07 builds it.
+runs=10000  folds=3  foundation=(10000, 249)  windows=(457203, 83)
+  fold 0: train-aggregates built for 6666 runs
+  fold 1: train-aggregates built for 6667 runs
+  fold 2: train-aggregates built for 6667 runs
+
+==============================================================================
+RESULT 1 - runs whose train aggregates DIFFER between outer folds
+==============================================================================
+runs in >=2 outer-train folds        : 10000
+  aggregates DIFFER between folds   : 6667  (66.67%)
+  aggregates IDENTICAL              : 3333
+
+  first 10 runs in >=2 train folds, with their per-fold hash:
+  run      train folds                            hashes equal? detail
+  0        f1,f2                                  NO           f1=40e3e4543294 f2=950858ef02c4
+  1        f1,f2                                  NO           f1=697db9e3c9ae f2=a2a3f1975d50
+  2        f0,f1                                  NO           f0=019537f35454 f1=fe3cdd667688
+  3        f0,f1                                  NO           f0=7fd6a3c428b8 f1=29a7ea10ca1b
+  4        f0,f2                                  NO           f0=85f97651272d f2=040cc7087312
+  5        f1,f2                                  NO           f1=7dcae4c72397 f2=0b626c488b25
+  6        f1,f2                                  NO           f1=c5e44fbb4dd2 f2=b1e07dd528e3
+  7        f0,f1                                  NO           f0=3b77fe6611f5 f1=fb58c1d0820f
+  8        f1,f2                                  NO           f1=e27e252af81e f2=f7fe1c20ecc0
+  9        f0,f2                                  NO           f0=68fc2584eea1 f2=859c4dfc9833
+
+  of the differing runs, 0 have an ALL-ZERO 51-vector in one fold
+  and a NON-ZERO one in another (Exp07's global-index quirk bites
+  a different third of the rows in each fold)
+
+==============================================================================
+RESULT 2 - the global X300 I actually built
+==============================================================================
+global matrix stores, per run, only the aggregates of ONE fold.
+runs whose stored fold is NOT the only fold they belong to: 6667
+  -> for a run in train for folds {0,1,2} minus one validation fold,
+     the global matrix silently presents the WRONG honest
+     representation to 1 of the 2 label fits that must see it.
+
+VERDICT: the 51 train-aggregates ARE fold-specific.
+         A single global (10000, 300) matrix CANNOT represent
+         Exp07's training path; the hypothesis is CONFIRMED and
+         Exp13 must use fold-local 300-column matrices.
