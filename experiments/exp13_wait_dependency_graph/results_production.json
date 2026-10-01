@@ -1,0 +1,335 @@
+{
+  "changed_labels": 680,
+  "confusions_C": {
+    "clean": {
+      "clean": 2517,
+      "deadlock": 59,
+      "dropped_handoff": 95,
+      "duplicated_work": 38,
+      "goal_drift": 15,
+      "runaway_loop": 76
+    },
+    "conflict": {
+      "conflict": 1147,
+      "deadlock": 8,
+      "dropped_handoff": 3,
+      "duplicated_work": 4,
+      "goal_drift": 21,
+      "runaway_loop": 17
+    },
+    "deadlock": {
+      "clean": 111,
+      "conflict": 39,
+      "deadlock": 824,
+      "dropped_handoff": 71,
+      "duplicated_work": 34,
+      "goal_drift": 56,
+      "runaway_loop": 65
+    },
+    "dropped_handoff": {
+      "clean": 172,
+      "conflict": 57,
+      "deadlock": 95,
+      "dropped_handoff": 669,
+      "duplicated_work": 63,
+      "goal_drift": 57,
+      "runaway_loop": 87
+    },
+    "duplicated_work": {
+      "clean": 68,
+      "conflict": 34,
+      "deadlock": 19,
+      "dropped_handoff": 25,
+      "duplicated_work": 994,
+      "goal_drift": 29,
+      "runaway_loop": 31
+    },
+    "goal_drift": {
+      "clean": 42,
+      "conflict": 22,
+      "deadlock": 30,
+      "dropped_handoff": 20,
+      "duplicated_work": 16,
+      "goal_drift": 1046,
+      "runaway_loop": 24
+    },
+    "runaway_loop": {
+      "clean": 97,
+      "conflict": 47,
+      "deadlock": 72,
+      "dropped_handoff": 43,
+      "duplicated_work": 28,
+      "goal_drift": 64,
+      "runaway_loop": 849
+    }
+  },
+  "confusions_D": {
+    "clean": {
+      "clean": 2539,
+      "deadlock": 24,
+      "dropped_handoff": 99,
+      "duplicated_work": 40,
+      "goal_drift": 18,
+      "runaway_loop": 80
+    },
+    "conflict": {
+      "conflict": 1140,
+      "deadlock": 11,
+      "dropped_handoff": 4,
+      "duplicated_work": 5,
+      "goal_drift": 22,
+      "runaway_loop": 18
+    },
+    "deadlock": {
+      "clean": 51,
+      "conflict": 24,
+      "deadlock": 1007,
+      "dropped_handoff": 29,
+      "duplicated_work": 20,
+      "goal_drift": 37,
+      "runaway_loop": 32
+    },
+    "dropped_handoff": {
+      "clean": 174,
+      "conflict": 57,
+      "deadlock": 66,
+      "dropped_handoff": 693,
+      "duplicated_work": 65,
+      "goal_drift": 57,
+      "runaway_loop": 88
+    },
+    "duplicated_work": {
+      "clean": 63,
+      "conflict": 34,
+      "deadlock": 21,
+      "dropped_handoff": 27,
+      "duplicated_work": 995,
+      "goal_drift": 30,
+      "runaway_loop": 30
+    },
+    "goal_drift": {
+      "clean": 50,
+      "conflict": 22,
+      "deadlock": 28,
+      "dropped_handoff": 20,
+      "duplicated_work": 14,
+      "goal_drift": 1044,
+      "runaway_loop": 22
+    },
+    "runaway_loop": {
+      "clean": 104,
+      "conflict": 47,
+      "deadlock": 59,
+      "dropped_handoff": 44,
+      "duplicated_work": 27,
+      "goal_drift": 65,
+      "runaway_loop": 854
+    }
+  },
+  "control_c_reproduction": {
+    "passed": true,
+    "rows": [
+      {
+        "abs_diff": 0.0,
+        "expected": 0.7873785254579829,
+        "got": 0.7873785254579829,
+        "metric": "macro_f1",
+        "pass": true
+      },
+      {
+        "abs_diff": 0.0,
+        "expected": 0.7368422139406114,
+        "got": 0.7368422139406114,
+        "metric": "robustness_f1",
+        "pass": true
+      },
+      {
+        "abs_diff": 0.0,
+        "expected": 0.8643757406010988,
+        "got": 0.8643757406010988,
+        "metric": "success_f1",
+        "pass": true
+      },
+      {
+        "abs_diff": 0.0,
+        "expected": 0.6093055555555555,
+        "got": 0.6093055555555555,
+        "metric": "fault_turn_hit2",
+        "pass": true
+      },
+      {
+        "abs_diff": 0.0,
+        "expected": 0.7684867328598647,
+        "got": 0.7684867328598647,
+        "metric": "composite",
+        "pass": true
+      }
+    ],
+    "sha_c": "b7e92bd4e14fa59c8c340e65c70317d49d7cca6c18a841fd248217617d1fc9d1",
+    "sha_exp12_b": "b7e92bd4e14fa59c8c340e65c70317d49d7cca6c18a841fd248217617d1fc9d1",
+    "sha_identical": true
+  },
+  "deadlock_C": {
+    "f1": 0.7143476376246207,
+    "fn": 376,
+    "fp": 283,
+    "precision": 0.7443541102077688,
+    "recall": 0.6866666666666666,
+    "tp": 824
+  },
+  "deadlock_D": {
+    "f1": 0.8336092715231789,
+    "fn": 193,
+    "fp": 209,
+    "precision": 0.828125,
+    "recall": 0.8391666666666666,
+    "tp": 1007
+  },
+  "deadlock_folds_won": 3,
+  "deltas": {
+    "composite": 0.02079577765295826,
+    "fault_turn_hit2": 0.022222222222222254,
+    "macro_f1": 0.025576033215876093,
+    "robustness_f1": 0.0231421552911919,
+    "success_f1": 0.0
+  },
+  "folds": [
+    {
+      "composite_C": 0.7656394227412581,
+      "composite_D": 0.7861985138309171,
+      "composite_delta": 0.020559091089659032,
+      "deadlock_f1_C": 0.722077922077922,
+      "deadlock_f1_D": 0.8318584070796461,
+      "deadlock_f1_delta": 0.1097804850017241,
+      "fold": 0,
+      "hit2_delta": 0.02124999999999999,
+      "macro_delta": 0.025672459084016497,
+      "n_val": 3334,
+      "robustness_delta": 0.022391446190603626
+    },
+    {
+      "composite_C": 0.7692321093588954,
+      "composite_D": 0.7937417768136414,
+      "composite_delta": 0.02450966745474603,
+      "deadlock_f1_C": 0.7185929648241206,
+      "deadlock_f1_D": 0.8394160583941607,
+      "deadlock_f1_delta": 0.12082309357004006,
+      "fold": 1,
+      "hit2_delta": 0.020000000000000018,
+      "macro_delta": 0.02652994941735276,
+      "n_val": 3333,
+      "robustness_delta": 0.03697877098427904
+    },
+    {
+      "composite_C": 0.770272872965784,
+      "composite_D": 0.7864583396220232,
+      "composite_delta": 0.01618546665623921,
+      "deadlock_f1_C": 0.7017543859649122,
+      "deadlock_f1_D": 0.829389788293898,
+      "deadlock_f1_delta": 0.12763540232898574,
+      "fold": 2,
+      "hit2_delta": 0.025416666666666754,
+      "macro_delta": 0.024879699468563166,
+      "n_val": 3333,
+      "robustness_delta": 0.004815801021162858
+    }
+  ],
+  "folds_won": 3,
+  "historical_vs_corrected": {
+    "corrected": {
+      "composite_delta": 0.02079577765295826,
+      "deadlock_f1_delta": 0.11926163389855815
+    },
+    "finding_survives": true,
+    "historical": {
+      "composite_delta": 0.023176,
+      "deadlock_f1_delta": 0.11495
+    }
+  },
+  "metrics_C": {
+    "composite": 0.7684867328598647,
+    "fault_turn_hit2": 0.6093055555555555,
+    "macro_f1": 0.7873785254579829,
+    "robustness_f1": 0.7368422139406114,
+    "success_f1": 0.8643757406010988
+  },
+  "metrics_D": {
+    "composite": 0.7892825105128229,
+    "fault_turn_hit2": 0.6315277777777778,
+    "macro_f1": 0.812954558673859,
+    "robustness_f1": 0.7599843692318033,
+    "success_f1": 0.8643757406010988
+  },
+  "per_class_f1_C": {
+    "clean": 0.8668847942138798,
+    "conflict": 0.9010212097407699,
+    "deadlock": 0.7143476376246207,
+    "dropped_handoff": 0.6293508936970837,
+    "duplicated_work": 0.8363483382414808,
+    "goal_drift": 0.8408360128617364,
+    "runaway_loop": 0.722860791826309
+  },
+  "per_class_f1_D": {
+    "clean": 0.8783947413942225,
+    "conflict": 0.9033280507131538,
+    "deadlock": 0.8336092715231789,
+    "dropped_handoff": 0.6550094517958412,
+    "duplicated_work": 0.8410819949281487,
+    "goal_drift": 0.8443186413263243,
+    "runaway_loop": 0.7349397590361447
+  },
+  "prod_gate": {
+    "composite_delta>0": {
+      "pass": true,
+      "value": 0.02079577765295826
+    },
+    "deadlock_f1_delta>0": {
+      "pass": true,
+      "value": 0.11926163389855815
+    },
+    "deadlock_folds_won>=2": {
+      "pass": true,
+      "value": 3.0
+    },
+    "folds_won>=2": {
+      "pass": true,
+      "value": 3.0
+    },
+    "no_class_drop>0.02": {
+      "pass": true,
+      "value": -0.0
+    }
+  },
+  "prod_gate_pass": true,
+  "right_to_wrong": 183,
+  "runtime_sec": 933.21,
+  "strict_gate": {
+    "composite_delta>=+0.002": {
+      "pass": true,
+      "value": 0.02079577765295826
+    },
+    "deadlock_f1_delta>=+0.015": {
+      "pass": true,
+      "value": 0.11926163389855815
+    },
+    "deadlock_folds_won>=2": {
+      "pass": true,
+      "value": 3.0
+    },
+    "folds_won>=2": {
+      "pass": true,
+      "value": 3.0
+    },
+    "no_class_worse_than_-0.02": {
+      "pass": true,
+      "value": -0.0
+    },
+    "robustness>=-0.003": {
+      "pass": true,
+      "value": 0.0231421552911919
+    }
+  },
+  "strict_gate_pass": true,
+  "wg_gain_share": 0.06622122982860913,
+  "wrong_to_right": 409
+}

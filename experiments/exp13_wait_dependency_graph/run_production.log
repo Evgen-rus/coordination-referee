@@ -1,0 +1,109 @@
+
+==============================================================================
+EXP13 VALIDATION - PRODUCTION SEMANTICS (corrected mapping)
+==============================================================================
+CONTROL C = corrected representation, no wait graph  (= Exp12 arm B)
+CANDIDATE D = the SAME corrected matrices + the frozen 12 wg_* columns
+frozen: features, parser, params, seeds, folds, thresholds, no tuning
+
+-- 1. VERIFIED INPUTS
+   runs=10000 folds=3 checks=32
+   foundation (10000, 249)  windows (457203, 83)
+
+-- 2. WAIT-GRAPH BLOCK (frozen, fold-independent)
+   (10000, 12)  (wg_n_wait_edges,wg_n_unique_wait_edges,wg_n_recip_pairs,wg_has_recip_pair,wg_recip_wait_share,wg_n_same_subtask_recip_pairs,wg_has_same_subtask_recip_pair,wg_earliest_recip_pos_rel,wg_max_pair_wait_events,wg_max_pair_repeat_after_onset,wg_max_pair_span_rel,wg_n_agents_in_recip_pairs)
+
+-- 3. PAIRED C/D ON THE CORRECTED MATRICES (one set of window fits)
+   label params from common.lgb_label(), random_state=42
+    fold 0: corrected 300-col matrices built  336.6s
+    fold 0: C fitted on 6666 rows
+    fold 0: D fitted on the SAME rows + 12 columns
+    fold 1: corrected 300-col matrices built  185.7s
+    fold 1: C fitted on 6667 rows
+    fold 1: D fitted on the SAME rows + 12 columns
+    fold 2: corrected 300-col matrices built  180.8s
+    fold 2: C fitted on 6667 rows
+    fold 2: D fitted on the SAME rows + 12 columns
+
+-- 4. CONTROL C REPRODUCES EXP12's COMMITTED CORRECTED NUMBERS
+   macro_f1           expected 0.7873785254579829 got 0.7873785254579829 diff 0.00e+00 PASS
+   robustness_f1      expected 0.7368422139406114 got 0.7368422139406114 diff 0.00e+00 PASS
+   success_f1         expected 0.8643757406010988 got 0.8643757406010988 diff 0.00e+00 PASS
+   fault_turn_hit2    expected 0.6093055555555555 got 0.6093055555555555 diff 0.00e+00 PASS
+   composite          expected 0.7684867328598647 got 0.7684867328598647 diff 0.00e+00 PASS
+   C sha256      : b7e92bd4e14fa59c8c340e65c70317d4...
+   exp12 sha256 B: b7e92bd4e14fa59c8c340e65c70317d4...
+   sha identical : True
+   CONTROL C REPRODUCTION: PASS
+
+-- 5. C vs D METRICS
+   metric                  C (corrected)          D (+wg)        delta
+   macro_f1                     0.787379         0.812955    +0.025576
+   robustness_f1                0.736842         0.759984    +0.023142
+   success_f1                   0.864376         0.864376    +0.000000
+   fault_turn_hit2              0.609306         0.631528    +0.022222
+   composite                    0.768487         0.789283    +0.020796
+
+   per-class F1:
+   clean                0.8669 -> 0.8784  (+0.0115)
+   dropped_handoff      0.6294 -> 0.6550  (+0.0257)
+   duplicated_work      0.8363 -> 0.8411  (+0.0047)
+   deadlock             0.7143 -> 0.8336  (+0.1193)
+   conflict             0.9010 -> 0.9033  (+0.0023)
+   goal_drift           0.8408 -> 0.8443  (+0.0035)
+   runaway_loop         0.7229 -> 0.7349  (+0.0121)
+
+-- 6. MAIN TARGET: DEADLOCK
+   F1        0.7143 -> 0.8336  (+0.1193)
+   precision 0.7444 -> 0.8281  (+0.0838)
+   recall    0.6867 -> 0.8392  (+0.1525)
+   tp 824->1007  fp 283->209  fn 376->193
+   deadlock -> clean                111 ->    51  (-60)
+   clean -> deadlock                 59 ->    24  (-35)
+   dropped_handoff -> deadlock       95 ->    66  (-29)
+   runaway_loop -> deadlock          72 ->    59  (-13)
+
+-- 7. FOLD STABILITY
+   fold 0 n=3334 composite +0.020559  macro +0.025672  rob +0.022391  hit2 +0.021250  dl_F1 0.7221->0.8319 (+0.1098)
+   fold 1 n=3333 composite +0.024510  macro +0.026530  rob +0.036979  hit2 +0.020000  dl_F1 0.7186->0.8394 (+0.1208)
+   fold 2 n=3333 composite +0.016185  macro +0.024880  rob +0.004816  hit2 +0.025417  dl_F1 0.7018->0.8294 (+0.1276)
+
+-- 8. DIAGNOSTICS
+      wg_n_same_subtask_recip_pairs    0.02312
+      wg_n_unique_wait_edges           0.01425
+      wg_max_pair_span_rel             0.01144
+      wg_earliest_recip_pos_rel        0.00404
+      wg_n_recip_pairs                 0.00400
+      wg_has_same_subtask_recip_pair   0.00341
+      wg_recip_wait_share              0.00167
+      wg_n_wait_edges                  0.00149
+      wg_max_pair_wait_events          0.00111
+      wg_n_agents_in_recip_pairs       0.00087
+      wg_max_pair_repeat_after_onset   0.00080
+      wg_has_recip_pair                0.00001
+   wg_* gain share: 0.0662
+   changed labels 680/10000 (6.80%)
+   wrong->right 409   right->wrong 183
+
+-- 9. PRODUCTION CONFIRMATION GATE
+   composite_delta>0              +0.02080  PASS
+   folds_won>=2                   +3.00000  PASS
+   deadlock_f1_delta>0            +0.11926  PASS
+   deadlock_folds_won>=2          +3.00000  PASS
+   no_class_drop>0.02             -0.00000  PASS
+   worst class drop: None -0.00000
+   PRODUCTION CONFIRMATION: PASS
+
+-- 10. ORIGINAL STRICT Exp13 GATE (reported unchanged, not retuned)
+   composite_delta>=+0.002            +0.02080  PASS
+   folds_won>=2                       +3.00000  PASS
+   deadlock_f1_delta>=+0.015          +0.11926  PASS
+   deadlock_folds_won>=2              +3.00000  PASS
+   robustness>=-0.003                 +0.02314  PASS
+   no_class_worse_than_-0.02          -0.00000  PASS
+   ORIGINAL STRICT Exp13 GATE: PASS
+
+-- 11. HISTORICAL vs CORRECTED SEMANTICS
+   historical Exp08 (defective) -> +wg : composite +0.023176  deadlock +0.11495
+   corrected  Exp12 (fixed)    -> +wg : composite +0.020796  deadlock +0.11926
+   wait-graph finding SURVIVES the mapping fix: True
