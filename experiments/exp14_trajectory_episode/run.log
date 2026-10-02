@@ -1,0 +1,146 @@
+
+==============================================================================
+EXP14 - EXPLICIT BOUNDED EPISODE REPRESENTATION
+==============================================================================
+CONTROL A   = Exp13 corrected 300 + frozen 12 wg_*  (= Exp13 Candidate D)
+CANDIDATE B = the SAME 312 columns + the frozen 16 ep_* columns
+frozen: detector, features, params, seeds, folds, thresholds, gate
+NOT touched: L1/fault_turn, thresholds, class weights, seeds, ensemble,
+             normaliser, success head, wg_* block, window fits
+
+-- 1. VERIFIED INPUTS
+   runs=10000 folds=3 checks=32 robust=1290
+   foundation (10000, 249)  windows (457203, 83)
+
+-- 2. FROZEN BLOCKS
+   wg_* (10000, 12) (frozen in Exp13, untouched)
+   ep_* (10000, 16) (frozen here)
+   episode constants: EP_MIN_LEN=3 EP_GAP_MAX=6 EP_CYCLE_MIN=2
+   runs with >=1 episode: 2398 / 10000 (24.0%)
+
+-- 3. LEAKAGE / DUPLICATION (before any fit)
+   target perturbation: identical=True max|d|=0.0e+00
+   fold-independent existing columns: 261 (249 foundation + 12 wg_*)
+   exact duplicates against existing columns: 0
+
+   max |r| of each ep_* against the 261 existing fold-independent cols
+      ep_n_episodes                      max|r| 0.5853  max|rho| 0.5887  nearest norm_dup_max
+      ep_has_episode                     max|r| 0.5826  max|rho| 0.5853  nearest norm_dup_max
+      ep_longest_len                     max|r| 0.6158  max|rho| 0.5943  nearest norm_dup_max
+      ep_longest_span_rel                max|r| 0.5292  max|rho| 0.5746  nearest nz_norm_dup_max_per_msg
+      ep_repeat_event_share              max|r| 0.5396  max|rho| 0.5770  nearest nz_norm_dup_max_per_msg
+      ep_max_distinct_agents             max|r| 0.5971  max|rho| 0.5894  nearest norm_dup_max
+      ep_has_multi_agent_cycle           max|r| 0.5376  max|rho| 0.5182  nearest norm_dup_max
+      ep_n_cycle_episodes                max|r| 0.5407  max|rho| 0.5203  nearest norm_dup_max
+      ep_n_interleaved_episodes          max|r| 0.5773  max|rho| 0.5797  nearest norm_dup_max
+      ep_interleaved_share               max|r| 0.5732  max|rho| 0.5757  nearest norm_dup_max
+      ep_n_no_progress_episodes          max|r| 0.4159  max|rho| 0.4089  nearest norm_dup_max
+      ep_no_progress_share               max|r| 0.3873  max|rho| 0.4053  nearest norm_dup_max
+      ep_longest_no_progress_span_rel    max|r| 0.3515  max|rho| 0.4055  nearest dup_text_ratio
+      ep_episodes_with_progress_share    max|r| 0.5422  max|rho| 0.5364  nearest norm_dup_max
+      ep_earliest_start_rel              max|r| 0.5619  max|rho| 0.5749  nearest norm_dup_max
+      ep_latest_end_rel                  max|r| 0.5803  max|rho| 0.5805  nearest norm_dup_max
+
+   feature block after the duplicate rule: 16 columns (none dropped)
+
+-- 4. PAIRED CV - one shared corrected matrix per fold
+   phase 1: building all corrected fold matrices (window fits only)
+    fold 0: corrected 300-col matrices built  179.7s
+    fold 1: corrected 300-col matrices built  175.4s
+    fold 2: corrected 300-col matrices built  175.5s
+   phase 1 complete: 3 fold matrices built
+   phase 2: fitting A and B on the stored matrices
+    fold 0: A fitted on 6666 rows / 312 cols; B on the same rows / 328 cols
+    fold 1: A fitted on 6667 rows / 312 cols; B on the same rows / 328 cols
+    fold 2: A fitted on 6667 rows / 312 cols; B on the same rows / 328 cols
+
+-- 5. BASELINE REPRODUCTION GATE (CONTROL A vs committed Exp13)
+   macro_f1           expected 0.8129545586738590 got 0.8129545586738590 diff 0.00e+00 PASS
+   robustness_f1      expected 0.7599843692318033 got 0.7599843692318033 diff 0.00e+00 PASS
+   success_f1         expected 0.8643757406010988 got 0.8643757406010988 diff 0.00e+00 PASS
+   fault_turn_hit2    expected 0.6315277777777778 got 0.6315277777777778 diff 0.00e+00 PASS
+   composite          expected 0.7892825105128229 got 0.7892825105128229 diff 0.00e+00 PASS
+   sha256 A         : f4e70a4280c825613e54cde7a843915323a89643be78138ad5c48f2ced131853
+   sha256 exp13 D   : f4e70a4280c825613e54cde7a843915323a89643be78138ad5c48f2ced131853
+   sha identical    : True
+   BASELINE REPRODUCTION: PASS
+
+-- 6. A vs B METRICS
+   metric                      A (Exp13)    B (+episodes)        delta
+   macro_f1                     0.812955         0.811301    -0.001654
+   robustness_f1                0.759984         0.773299    +0.013314
+   success_f1                   0.864376         0.864376    +0.000000
+   fault_turn_hit2              0.631528         0.629861    -0.001667
+   composite                    0.789283         0.791618    +0.002335
+
+   per-class F1:
+   clean                0.8784 -> 0.8780  (-0.0004)
+   dropped_handoff      0.6550 -> 0.6550  (+0.0000)
+   duplicated_work      0.8411 -> 0.8355  (-0.0056)
+   deadlock             0.8336 -> 0.8345  (+0.0009)
+   conflict             0.9033 -> 0.9024  (-0.0009)
+   goal_drift           0.8443 -> 0.8420  (-0.0023)
+   runaway_loop         0.7349 -> 0.7317  (-0.0033)
+
+-- 7. MAIN TARGET: runaway_loop
+   precision  0.7598 -> 0.7585  (-0.0013)
+   recall     0.7117 -> 0.7067  (-0.0050)
+   f1         0.7349 -> 0.7317  (-0.0033)
+   tp 854->848  fp 270->270  fn 346->352
+
+-- 8. CONFUSIONS
+   runaway_loop -> clean                  104 ->   109  (+5)
+   runaway_loop -> dropped_handoff         44 ->    42  (-2)
+   runaway_loop -> deadlock                59 ->    59  (+0)
+   runaway_loop -> goal_drift              65 ->    65  (+0)
+   clean -> runaway_loop                   80 ->    79  (-1)
+   dropped_handoff -> runaway_loop         88 ->    89  (+1)
+   deadlock -> runaway_loop                32 ->    29  (-3)
+
+-- 9. CHANGED LABELS
+   changed labels 290 / 10000 (2.90%)
+   wrong -> right 113    right -> wrong 127    wrong -> wrong 1615
+   over the 1200 true runaway_loop rows:
+      fixed   20
+      broken  26
+      still wrong 326
+
+-- 10. FEATURE IMPORTANCE
+   episode block gain share: 0.0031
+   episode features in top-20: 0 / 16
+   episode features in top-50: 0 / 16
+      ep_longest_span_rel                0.00063
+      ep_latest_end_rel                  0.00061
+      ep_earliest_start_rel              0.00053
+      ep_repeat_event_share              0.00051
+      ep_longest_no_progress_span_rel    0.00034
+      ep_max_distinct_agents             0.00027
+      ep_no_progress_share               0.00007
+      ep_longest_len                     0.00005
+      ep_episodes_with_progress_share    0.00004
+      ep_has_multi_agent_cycle           0.00004
+      ep_n_episodes                      0.00003
+      ep_n_no_progress_episodes          0.00002
+      ep_n_cycle_episodes                0.00001
+      ep_n_interleaved_episodes          0.00001
+      ep_interleaved_share               0.00000
+      ep_has_episode                     0.00000
+
+-- 11. FOLD STABILITY
+   fold 0 n=3334 composite +0.001366  macro +0.000115  rob +0.006066  hit2 -0.002083  RL_F1 0.6934->0.6962 (+0.0028)
+   fold 1 n=3333 composite +0.000218  macro -0.002879  rob +0.007461  hit2 -0.002083  RL_F1 0.7635->0.7592 (-0.0043)
+   fold 2 n=3333 composite +0.006530  macro -0.002374  rob +0.031199  hit2 -0.000833  RL_F1 0.7477->0.7389 (-0.0088)
+
+-- 12. GATE (declared before the fit, reported unchanged)
+   composite_delta>=+0.002                  +0.00234  PASS
+   composite_folds_won>=2                   +3.00000  PASS
+   runaway_f1_delta>=+0.015                 -0.00327  FAIL
+   runaway_folds_won>=2                     +1.00000  FAIL
+   robustness>=-0.003                       +0.01331  PASS
+   no_other_class_worse_than_-0.02          -0.00555  PASS
+   worst class drop: duplicated_work -0.00555
+   GATE: FAIL (4/6)
+   VERDICT: STOP (gate not passed; no second episode variant, no
+           threshold tweaks, no production build, no Exp15)
+
+   runtime 771.8s
