@@ -1,0 +1,94 @@
+
+==============================================================================
+EXP15 - SUCCESS STACKING FROM THE Exp13 LABEL PROBABILITIES
+==============================================================================
+hypothesis : the 185-feature success head never sees the current
+             Exp13 label probabilities; honest out-of-fold
+             probabilities should improve success prediction
+CONTROL A   : 185 Exp03 features, production success LightGBM
+CANDIDATE B : the SAME 185 + 7 raw label probabilities = 192
+NOT touched : label head, fault_turn/L1, Exp14 ep_*, thresholds,
+             class weights, entropy/margins/max-prob/hard-label
+gate        : success >= +0.010, folds >= 2/3, composite >= +0.0015,
+             no fold < -0.005, Macro/Robustness/hit@2 EXACTLY same
+
+-- 1. VERIFIED INPUTS
+   runs=10000 folds=3 verified_checks=32 robust_rows=1290
+   success matrix (10000, 185) (Exp03 B)   wg_* (10000, 12)   foundation (10000, 249)
+   appended columns: lp_clean,lp_dropped_handoff,lp_duplicated_work,lp_deadlock,lp_conflict,lp_goal_drift,lp_runaway_loop
+   success target: 4606 positives / 5394 negatives (prevalence 0.4606)
+   run_id alignment: 10000 unique ids, order sha256 840470f9a5e1a4b3
+
+-- 2. DECLARED BASELINE (read, never re-derived)
+   Exp03 B success_f1 (from build_all's own derivation) = 0.8643757406010988
+   recomputed from the committed Exp03 B csv            = 0.8643757406010988
+   the two agree exactly: True
+   carried Exp13 macro_f1           = 0.8129545586738590
+   carried Exp13 robustness_f1      = 0.7599843692318033
+   carried Exp13 success_f1         = 0.8643757406010988
+   carried Exp13 fault_turn_hit2    = 0.6315277777777778
+   carried Exp13 composite          = 0.7892825105128229
+   committed Exp13 D OOF sha256 = f4e70a4280c825613e54cde7a843915323a89643be78138ad5c48f2ced131853
+   committed sha recomputes: True
+
+   production success params: {'colsample_bytree': 0.8, 'learning_rate': 0.05, 'n_estimators': 500, 'num_leaves': 63, 'objective': 'binary', 'random_state': 42, 'reg_lambda': 1.0, 'subsample': 0.9, 'subsample_freq': 1}
+   production label params  : n_estimators=600 lr=0.05 leaves=63 seed=42
+
+   outer folds re-derived from StratifiedKFold(3, seed=0) and equal to the sealed manifest indices on all 3 folds
+   Exp03's success splits and the label head's outer splits are the SAME 3 folds -> 'same folds' holds by construction, not by agreement
+   success-matrix target-perturbation probe over 400 runs: identical=True
+
+
+-- 3.1 OUTER FOLD 0   train=6666 val=3334
+   outer label: 3334/3334 validation rows match the committed Exp13 D argmax; max|dP| vs committed = 2.980e-08
+   nested 0: label fit on 5713 rows -> 953 held-out rows
+   nested 1: label fit on 5713 rows -> 953 held-out rows
+   nested 2: label fit on 5714 rows -> 952 held-out rows
+   nested 3: label fit on 5714 rows -> 952 held-out rows
+   nested 4: label fit on 5714 rows -> 952 held-out rows
+   nested 5: label fit on 5714 rows -> 952 held-out rows
+   nested 6: label fit on 5714 rows -> 952 held-out rows
+   exclusion proof: all 6666 outer-train rows are covered exactly once across 7 nested folds, and every one of them was predicted by a model whose fit set excludes it
+   OOF vs in-sample refit on the same rows: max|dP| = 9.977e-01, 1180/6666 argmax differ -> the training probabilities are NOT in-sample
+   success A -> B : F1 0.867056 -> 0.892348 (+0.025293)  P 0.8549->0.8986  R 0.8796->0.8862  FP 227->152  FN 183->173
+   fold 0 done in 1187.1s
+
+
+-- 3.2 OUTER FOLD 1   train=6667 val=3333
+   outer label: 3333/3333 validation rows match the committed Exp13 D argmax; max|dP| vs committed = 2.979e-08
+   nested 0: label fit on 5714 rows -> 953 held-out rows
+   nested 1: label fit on 5714 rows -> 953 held-out rows
+   nested 2: label fit on 5714 rows -> 953 held-out rows
+   nested 3: label fit on 5715 rows -> 952 held-out rows
+   nested 4: label fit on 5715 rows -> 952 held-out rows
+   nested 5: label fit on 5715 rows -> 952 held-out rows
+   nested 6: label fit on 5715 rows -> 952 held-out rows
+   exclusion proof: all 6667 outer-train rows are covered exactly once across 7 nested folds, and every one of them was predicted by a model whose fit set excludes it
+   OOF vs in-sample refit on the same rows: max|dP| = 9.974e-01, 1204/6667 argmax differ -> the training probabilities are NOT in-sample
+   success A -> B : F1 0.864286 -> 0.889902 (+0.025617)  P 0.8593->0.8876  R 0.8694->0.8922  FP 218->173  FN 200->165
+   fold 1 done in 1115.9s
+
+
+-- 3.3 OUTER FOLD 2   train=6667 val=3333
+   outer label: 3333/3333 validation rows match the committed Exp13 D argmax; max|dP| vs committed = 2.980e-08
+   nested 0: label fit on 5714 rows -> 953 held-out rows
+   nested 1: label fit on 5714 rows -> 953 held-out rows
+   nested 2: label fit on 5714 rows -> 953 held-out rows
+   nested 3: label fit on 5715 rows -> 952 held-out rows
+   nested 4: label fit on 5715 rows -> 952 held-out rows
+   nested 5: label fit on 5715 rows -> 952 held-out rows
+   nested 6: label fit on 5715 rows -> 952 held-out rows
+   exclusion proof: all 6667 outer-train rows are covered exactly once across 7 nested folds, and every one of them was predicted by a model whose fit set excludes it
+   OOF vs in-sample refit on the same rows: max|dP| = 9.972e-01, 1160/6667 argmax differ -> the training probabilities are NOT in-sample
+   success A -> B : F1 0.861815 -> 0.898392 (+0.036578)  P 0.8593->0.8984  R 0.8643->0.8984  FP 220->158  FN 211->158
+   fold 2 done in 1055.3s
+
+-- 4. GATE 1 - CONTROL A REPRODUCES THE PRODUCTION SUCCESS HEAD
+   success_f1 expected 0.8643757406010988  got 0.8643757406010988  diff 0.00e+00  PASS
+   predictions vs committed Exp03 B csv: 0 / 10000 differ -> IDENTICAL
+   GATE 1: PASS
+
+-- 5. GATE 2 - LABEL PREDICTIONS UNCHANGED
+   argmax of the 7 meta columns over all 10000 rows vs the committed Exp13 D argmax: 625 / 10000 differ
+   max|dP| vs the committed Exp13 D matrix: 9.364e-01
+   GATE 2: FAIL

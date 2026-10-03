@@ -1,0 +1,255 @@
+{
+  "baseline_reproduction": {
+    "csv_predictions_differ": 0,
+    "csv_predictions_identical": true,
+    "f1": {
+      "abs_diff": 0.0,
+      "expected": 0.8643757406010988,
+      "got": 0.8643757406010988,
+      "pass": true
+    },
+    "n_rows": 10000,
+    "passed": true
+  },
+  "decision": "STOP_LABEL_PARITY",
+  "exclusion_proofs": [
+    {
+      "all_excluded": true,
+      "coverage_max": 1,
+      "coverage_min": 1,
+      "n_outer_train": 6666,
+      "nested": [
+        {
+          "holdout_sha256": "ae75054d6947aaf8f18edb82ad0f315d74c29ce7a68a102e6a601534aaa3b101",
+          "n_fit": 5713,
+          "n_hold": 953,
+          "nested_fold": 0,
+          "overlap": 0,
+          "tag": "outer 0 nested 0"
+        },
+        {
+          "holdout_sha256": "3c814dc264008ae68343330af46f12dca9293f5d5435419916a7935d035d58fa",
+          "n_fit": 5713,
+          "n_hold": 953,
+          "nested_fold": 1,
+          "overlap": 0,
+          "tag": "outer 0 nested 1"
+        },
+        {
+          "holdout_sha256": "bf856c5e8934c871ec70d07ba2d2a76d48e9b94e62bbdc58f940dd9ce2ff3f4f",
+          "n_fit": 5714,
+          "n_hold": 952,
+          "nested_fold": 2,
+          "overlap": 0,
+          "tag": "outer 0 nested 2"
+        },
+        {
+          "holdout_sha256": "221fa63d6bb2f9099e4ca76c73e0fa754aebaab7cf9fda2f2ea28f65ed47755a",
+          "n_fit": 5714,
+          "n_hold": 952,
+          "nested_fold": 3,
+          "overlap": 0,
+          "tag": "outer 0 nested 3"
+        },
+        {
+          "holdout_sha256": "ef59a7fb8e0c411890c6839a9383c21de395582c409b5390823944d25f4ca5ba",
+          "n_fit": 5714,
+          "n_hold": 952,
+          "nested_fold": 4,
+          "overlap": 0,
+          "tag": "outer 0 nested 4"
+        },
+        {
+          "holdout_sha256": "221286243c1dae46a6398046f43a8562e77d5631351370303e16495c7579c13a",
+          "n_fit": 5714,
+          "n_hold": 952,
+          "nested_fold": 5,
+          "overlap": 0,
+          "tag": "outer 0 nested 5"
+        },
+        {
+          "holdout_sha256": "662e660103f8210fcc41c0cb9f544f0c36a14b1a65232c25b41ef2fe8fe0ca86",
+          "n_fit": 5714,
+          "n_hold": 952,
+          "nested_fold": 6,
+          "overlap": 0,
+          "tag": "outer 0 nested 6"
+        }
+      ],
+      "outer_fold": 0,
+      "problems": []
+    },
+    {
+      "all_excluded": true,
+      "coverage_max": 1,
+      "coverage_min": 1,
+      "n_outer_train": 6667,
+      "nested": [
+        {
+          "holdout_sha256": "156cbbc55aea75f4fb7e1a823ca8d9cb084a10785434a405919f073aeecb7f18",
+          "n_fit": 5714,
+          "n_hold": 953,
+          "nested_fold": 0,
+          "overlap": 0,
+          "tag": "outer 1 nested 0"
+        },
+        {
+          "holdout_sha256": "40c8554d68763c430ca437026722d7aa57ad037ab9602c9d5e5217d93f00883d",
+          "n_fit": 5714,
+          "n_hold": 953,
+          "nested_fold": 1,
+          "overlap": 0,
+          "tag": "outer 1 nested 1"
+        },
+        {
+          "holdout_sha256": "af8c9e998d9697f181c020c26fe07b85304069e061370122c4cdbcee1c8d4582",
+          "n_fit": 5714,
+          "n_hold": 953,
+          "nested_fold": 2,
+          "overlap": 0,
+          "tag": "outer 1 nested 2"
+        },
+        {
+          "holdout_sha256": "9984d3e097e953e1fabc05e58226c3f85e685bc643024d45c8d22e0627412c0e",
+          "n_fit": 5715,
+          "n_hold": 952,
+          "nested_fold": 3,
+          "overlap": 0,
+          "tag": "outer 1 nested 3"
+        },
+        {
+          "holdout_sha256": "48d889ecb20688693c0a9fdafb97ef4d1efbcfb97c31d69faee17db0f1f996fc",
+          "n_fit": 5715,
+          "n_hold": 952,
+          "nested_fold": 4,
+          "overlap": 0,
+          "tag": "outer 1 nested 4"
+        },
+        {
+          "holdout_sha256": "9bef1049f66d58de003b4204ed0cecaeea3615c6fad9f665a15b6a1467d95097",
+          "n_fit": 5715,
+          "n_hold": 952,
+          "nested_fold": 5,
+          "overlap": 0,
+          "tag": "outer 1 nested 5"
+        },
+        {
+          "holdout_sha256": "70936ce5ebbb9c2b57d24d02718decc1fa2162109afbd9c0b987eaa5527f78bc",
+          "n_fit": 5715,
+          "n_hold": 952,
+          "nested_fold": 6,
+          "overlap": 0,
+          "tag": "outer 1 nested 6"
+        }
+      ],
+      "outer_fold": 1,
+      "problems": []
+    },
+    {
+      "all_excluded": true,
+      "coverage_max": 1,
+      "coverage_min": 1,
+      "n_outer_train": 6667,
+      "nested": [
+        {
+          "holdout_sha256": "67be48512061bd5e7c016c8bfb6b902e63b5cb6cd8019ec9b078ff217a304186",
+          "n_fit": 5714,
+          "n_hold": 953,
+          "nested_fold": 0,
+          "overlap": 0,
+          "tag": "outer 2 nested 0"
+        },
+        {
+          "holdout_sha256": "22d22fb7f486aebb266d2d24187f205aa094bcccc3bc507f9b8365ae04050023",
+          "n_fit": 5714,
+          "n_hold": 953,
+          "nested_fold": 1,
+          "overlap": 0,
+          "tag": "outer 2 nested 1"
+        },
+        {
+          "holdout_sha256": "ec5bb992600c099d3a4455819290efd156572ea6bddfcddf6cb1f9477f39e06b",
+          "n_fit": 5714,
+          "n_hold": 953,
+          "nested_fold": 2,
+          "overlap": 0,
+          "tag": "outer 2 nested 2"
+        },
+        {
+          "holdout_sha256": "32b0d8d817444586cce96554ef1430d6fe358d661222d157221a4e6d26674177",
+          "n_fit": 5715,
+          "n_hold": 952,
+          "nested_fold": 3,
+          "overlap": 0,
+          "tag": "outer 2 nested 3"
+        },
+        {
+          "holdout_sha256": "b2fcceedc357016e0121dd6f2090d55dfc674de76062fcadd2c263c0f078ea44",
+          "n_fit": 5715,
+          "n_hold": 952,
+          "nested_fold": 4,
+          "overlap": 0,
+          "tag": "outer 2 nested 4"
+        },
+        {
+          "holdout_sha256": "5f9d62a50704028441d0e3694618a1acf1538f70c685d1286fe666522d89ed95",
+          "n_fit": 5715,
+          "n_hold": 952,
+          "nested_fold": 5,
+          "overlap": 0,
+          "tag": "outer 2 nested 5"
+        },
+        {
+          "holdout_sha256": "ec39694e21e2a33644810247e46983eca303ba35452f2d7111e2fc8fd154c933",
+          "n_fit": 5715,
+          "n_hold": 952,
+          "nested_fold": 6,
+          "overlap": 0,
+          "tag": "outer 2 nested 6"
+        }
+      ],
+      "outer_fold": 2,
+      "problems": []
+    }
+  ],
+  "label_parity": {
+    "label_predictions_differ": 625,
+    "max_abs_prob_diff_vs_committed": 0.9364198653847734,
+    "n_rows": 10000,
+    "passed": false,
+    "rows": [
+      {
+        "fold": 0,
+        "label_mismatches": 0,
+        "max_abs_prob_diff": 2.9798827960725305e-08,
+        "n_val": 3334
+      },
+      {
+        "fold": 1,
+        "label_mismatches": 0,
+        "max_abs_prob_diff": 2.9789873678964796e-08,
+        "n_val": 3333
+      },
+      {
+        "fold": 2,
+        "label_mismatches": 0,
+        "max_abs_prob_diff": 2.9797256329011645e-08,
+        "n_val": 3333
+      }
+    ]
+  },
+  "run_id_alignment": {
+    "matches_verified_loader": true,
+    "meta_prob_rows_share_index_with_success_matrix": true,
+    "n_rows": 10000,
+    "n_unique_run_ids": 10000,
+    "run_id_sha256": "840470f9a5e1a4b387f6072e8cae12733bd6045fe3b6fb5376318b6113eb4761"
+  },
+  "runtime_sec": 3365.6,
+  "success_feature_leakage_probe": {
+    "identical": true,
+    "max_abs_diff": 0.0,
+    "n_columns": 185,
+    "n_rows_probed": 400
+  }
+}

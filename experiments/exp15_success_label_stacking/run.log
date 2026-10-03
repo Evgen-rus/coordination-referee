@@ -1,0 +1,156 @@
+
+==============================================================================
+EXP15 - SUCCESS STACKING FROM THE Exp13 LABEL PROBABILITIES
+==============================================================================
+hypothesis : the 185-feature success head never sees the current
+             Exp13 label probabilities; honest out-of-fold
+             probabilities should improve success prediction
+CONTROL A   : 185 Exp03 features, production success LightGBM
+CANDIDATE B : the SAME 185 + 7 raw label probabilities = 192
+NOT touched : label head, fault_turn/L1, Exp14 ep_*, thresholds,
+             class weights, entropy/margins/max-prob/hard-label
+gate        : success >= +0.010, folds >= 2/3, composite >= +0.0015,
+             no fold < -0.005, Macro/Robustness/hit@2 EXACTLY same
+
+-- 1. VERIFIED INPUTS
+   runs=10000 folds=3 verified_checks=32 robust_rows=1290
+   success matrix (10000, 185) (Exp03 B)   wg_* (10000, 12)   foundation (10000, 249)
+   appended columns: lp_clean,lp_dropped_handoff,lp_duplicated_work,lp_deadlock,lp_conflict,lp_goal_drift,lp_runaway_loop
+   success target: 4606 positives / 5394 negatives (prevalence 0.4606)
+   run_id alignment: 10000 unique ids, order sha256 840470f9a5e1a4b3
+
+-- 2. DECLARED BASELINE (read, never re-derived)
+   Exp03 B success_f1 (from build_all's own derivation) = 0.8643757406010988
+   recomputed from the committed Exp03 B csv            = 0.8643757406010988
+   the two agree exactly: True
+   carried Exp13 macro_f1           = 0.8129545586738590
+   carried Exp13 robustness_f1      = 0.7599843692318033
+   carried Exp13 success_f1         = 0.8643757406010988
+   carried Exp13 fault_turn_hit2    = 0.6315277777777778
+   carried Exp13 composite          = 0.7892825105128229
+   committed Exp13 D OOF sha256 = f4e70a4280c825613e54cde7a843915323a89643be78138ad5c48f2ced131853
+   committed sha recomputes: True
+
+   production success params: {'colsample_bytree': 0.8, 'learning_rate': 0.05, 'n_estimators': 500, 'num_leaves': 63, 'objective': 'binary', 'random_state': 42, 'reg_lambda': 1.0, 'subsample': 0.9, 'subsample_freq': 1}
+   production label params  : n_estimators=600 lr=0.05 leaves=63 seed=42
+
+   outer folds re-derived from StratifiedKFold(3, seed=0) and equal to the sealed manifest indices on all 3 folds
+   Exp03's success splits and the label head's outer splits are the SAME 3 folds -> 'same folds' holds by construction, not by agreement
+   success-matrix target-perturbation probe over 400 runs: identical=True
+
+
+-- 3.1 OUTER FOLD 0   train=6666 val=3334
+   outer label: 3334/3334 validation rows match the committed Exp13 D argmax; max|dP| vs committed = 2.980e-08
+   nested 0: label fit on 4444 rows -> 2222 held-out rows
+   nested 1: label fit on 4444 rows -> 2222 held-out rows
+   nested 2: label fit on 4444 rows -> 2222 held-out rows
+   exclusion proof: all 6666 outer-train rows are covered exactly once across 3 nested folds, and every one of them was predicted by a model whose fit set excludes it
+   OOF vs in-sample refit on the same rows: max|dP| = 9.975e-01, 1223/6666 argmax differ -> the training probabilities are NOT in-sample
+   success A -> B : F1 0.867056 -> 0.893519 (+0.026463)  P 0.8549->0.8983  R 0.8796->0.8888  FP 227->153  FN 183->169
+   fold 0 done in 819.1s
+
+
+-- 3.2 OUTER FOLD 1   train=6667 val=3333
+   outer label: 3333/3333 validation rows match the committed Exp13 D argmax; max|dP| vs committed = 2.979e-08
+   nested 0: label fit on 4444 rows -> 2223 held-out rows
+   nested 1: label fit on 4445 rows -> 2222 held-out rows
+   nested 2: label fit on 4445 rows -> 2222 held-out rows
+   exclusion proof: all 6667 outer-train rows are covered exactly once across 3 nested folds, and every one of them was predicted by a model whose fit set excludes it
+   OOF vs in-sample refit on the same rows: max|dP| = 9.974e-01, 1260/6667 argmax differ -> the training probabilities are NOT in-sample
+   success A -> B : F1 0.864286 -> 0.897478 (+0.033192)  P 0.8593->0.9001  R 0.8694->0.8948  FP 218->152  FN 200->161
+   fold 1 done in 540.1s
+
+
+-- 3.3 OUTER FOLD 2   train=6667 val=3333
+   outer label: 3333/3333 validation rows match the committed Exp13 D argmax; max|dP| vs committed = 2.980e-08
+   nested 0: label fit on 4444 rows -> 2223 held-out rows
+   nested 1: label fit on 4445 rows -> 2222 held-out rows
+   nested 2: label fit on 4445 rows -> 2222 held-out rows
+   exclusion proof: all 6667 outer-train rows are covered exactly once across 3 nested folds, and every one of them was predicted by a model whose fit set excludes it
+   OOF vs in-sample refit on the same rows: max|dP| = 9.977e-01, 1219/6667 argmax differ -> the training probabilities are NOT in-sample
+   success A -> B : F1 0.861815 -> 0.893740 (+0.031925)  P 0.8593->0.8923  R 0.8643->0.8952  FP 220->168  FN 211->163
+   fold 2 done in 517.9s
+
+-- 4. GATE 1 - CONTROL A REPRODUCES THE PRODUCTION SUCCESS HEAD
+   success_f1 expected 0.8643757406010988  got 0.8643757406010988  diff 0.00e+00  PASS
+   predictions vs committed Exp03 B csv: 0 / 10000 differ -> IDENTICAL
+   GATE 1: PASS
+
+-- 5. GATE 2 - LABEL PREDICTIONS UNCHANGED
+   argmax of the 7 meta columns over all 10000 rows vs the committed Exp13 D argmax: 0 / 10000 differ
+   max|dP| vs the committed Exp13 D matrix: 2.980e-08
+   GATE 2: PASS
+
+-- 6. HEADLINE METRICS - A vs B
+   success F1   0.8643757406010988 -> 0.8949086161879897   delta +0.0305328755868909
+   precision    0.857815 -> 0.896860   (+0.039045)
+   recall       0.871038 -> 0.892966   (+0.021928)
+   FP 665 -> 473   FN 594 -> 493   TP 4012 -> 4113   TN 4729 -> 4921
+
+   metric                              A                B          delta
+   composite                    0.789283         0.793862    +0.00457993
+   composite delta == 0.15 * success delta: True (4.580e-03 vs 4.580e-03)
+
+-- 7. GATE 3 - MACRO / ROBUSTNESS / hit@2 / L1 EXACTLY UNCHANGED
+   macro_f1           carried 0.8129545586738590  recomputed 0.8129545586738590  diff 0.00e+00  PASS
+   robustness_f1      carried 0.7599843692318033  recomputed 0.7599843692318033  diff 0.00e+00  PASS
+   fault_turn_hit2    carried 0.6315277777777778  recomputed 0.6315277777777778  diff 0.00e+00  PASS
+   fault_turn vector identical to the Exp13 D L1 vector: True (7019 non -1)
+   GATE 3: PASS
+
+-- 8. FOLD STABILITY (success only; other metrics are unchanged)
+   fold 0 n=3334  success F1 0.867056 -> 0.893519  (+0.026463)   FP 227->153  FN 183->169
+   fold 1 n=3333  success F1 0.864286 -> 0.897478  (+0.033192)   FP 218->152  FN 200->161
+   fold 2 n=3333  success F1 0.861815 -> 0.893740  (+0.031925)   FP 220->168  FN 211->163
+   folds won 3/3   worst fold delta +0.026463
+
+-- 9. CHANGED SUCCESS PREDICTIONS (three-way, per Exp11's lesson)
+   changed 741 / 10000 (7.41%)   wrong->right 517   right->wrong 224   wrong->wrong 0
+
+-- 10. CLASS-CONDITIONAL SUCCESS DIAGNOSTICS
+   true class              n  succ.prev      F1_A      F1_B       d    FP_A    FP_B    FN_B
+   clean                2800     0.9464    0.9195    0.9444 +0.0248      49      73     214
+   dropped_handoff      1200     0.1742    0.6935    0.7160 +0.0225     132     112      30
+   duplicated_work      1200     0.6208    0.8857    0.9015 +0.0158     142      86      63
+   deadlock             1200     0.0417    0.3944    0.5816 +0.1872     121      50       9
+   conflict             1200     0.3842    0.8651    0.8856 +0.0205      48      26      74
+   goal_drift           1200     0.1433    0.7200    0.7614 +0.0414      68      46      38
+   runaway_loop         1200     0.2658    0.7674    0.7779 +0.0105     105      80      65
+   (per-class F1 is success-F1 WITHIN that class; a class where success is near-constant is not a meaningful slice)
+
+-- 11. FEATURE IMPORTANCE OF THE 7 PROBABILITIES (candidate B)
+   total gain share of the 7 label probabilities: 0.312150 (31.215%)
+      lp_clean                   0.244783
+      lp_deadlock                0.021270
+      lp_goal_drift              0.012942
+      lp_duplicated_work         0.011371
+      lp_conflict                0.009077
+      lp_dropped_handoff         0.006931
+      lp_runaway_loop            0.005776
+   in top-20: 5 / 7
+
+-- 12. PROBABILITY vs SUCCESS TARGET (diagnostic only, no selection)
+   feature                      pointbiser     spearman         mean
+   lp_clean                         0.5343       0.3785       0.2881
+   lp_dropped_handoff              -0.1806      -0.2421       0.0952
+   lp_duplicated_work               0.1540       0.1155       0.1211
+   lp_deadlock                     -0.3043      -0.3078       0.1213
+   lp_conflict                     -0.0766      -0.1010       0.1331
+   lp_goal_drift                   -0.2416      -0.2695       0.1279
+   lp_runaway_loop                 -0.1151      -0.1622       0.1133
+   computed on the 10000 rows the success head was actually fitted on,
+   i.e. exactly the 7 columns it saw. DIAGNOSTIC ONLY - no feature
+   selection, no pruning, no second variant.
+
+-- 13. PRE-DECLARED PROMOTION GATE (never retuned)
+   success_f1_delta>=+0.010                      +0.030533  PASS
+   folds_won>=2                                  +3.000000  PASS
+   composite_delta>=+0.0015                      +0.004580  PASS
+   no_fold_worse_than_-0.005                     +0.026463  PASS
+   macro_rob_hit2_and_l1_exactly_unchanged       +0.000000  PASS
+   GATE: PASS (5/5)
+   VERDICT: PROMOTE
+
+-- 14. PRODUCTION
+   production build: NO - not built, by protocol
+   see RESULTS.md section 8 for the design that a PASS would imply
