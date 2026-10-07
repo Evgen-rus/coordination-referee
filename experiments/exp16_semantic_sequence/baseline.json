@@ -1,0 +1,23 @@
+{
+  "baseline": "Exp15 production label/success heads with Exp13 L1 localizer",
+  "baseline_commit": "fdd588c4412c7cc5cb4f6a1f18bc1d17cbeb264a",
+  "baseline_zip_sha256": "846dfcf29e47dc16889734e28d2619385d09772db00f23ce1fca9e4a384b18ad",
+  "train_rows": 10000,
+  "train_csv_sha256": "8e8feb4ee284d2acd918b533921631fa905d47adf8d34881f89359964a1bcfbc",
+  "exp13_oof_probability_sha256": "0942f60717655b8e91572363e2eb162ea781781cd54973dbc2e528b5786d827a",
+  "baseline_oof_prediction_sha256": "bad28b0528a291e96d7291f004ae72c6d571a93c38c8483d7adf889be7a291c6",
+  "metrics": {
+    "macro_f1": 0.812954558673859,
+    "robustness_f1": 0.7599843692318033,
+    "success_f1": 0.8949086162,
+    "fault_turn_hit2": 0.6315277777777778,
+    "composite": 0.7938624419
+  },
+  "folds": {
+    "splitter": "StratifiedKFold",
+    "n_splits": 3,
+    "shuffle": true,
+    "random_state": 0
+  },
+  "note": "OOF label probabilities are Exp13 D; success is Exp15 head B. fault_turn uses the fold-specific Exp13 peak-position artifact. Predictions are frozen row-aligned to data/train.csv."
+}
