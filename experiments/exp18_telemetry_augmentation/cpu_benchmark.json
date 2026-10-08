@@ -1,0 +1,35 @@
+{
+  "runs_in_timing_sample": 500,
+  "augmented_views_in_sample": 192,
+  "augmented_views_total": 3809,
+  "sample_input_feature_and_window_seconds": 2.073,
+  "control_one_fold_seconds": 17.157,
+  "candidate_one_fold_seconds": 20.072,
+  "control_train_window_scale_to_full_fold": 16.739,
+  "candidate_train_window_scale_to_full_fold": 16.812,
+  "estimated_full_augmented_input_prep_seconds": 51.4,
+  "estimated_control_plus_candidate_3fold_seconds": 2393.77,
+  "estimated_full_cv_minutes": 39.9,
+  "max_full_cv_seconds": 7200.0,
+  "ready_for_full_cv": true,
+  "augmentation_generation_full_seconds": 3.94,
+  "augmentation_manifest": {
+    "seed": 20261008,
+    "view_count": 3809,
+    "selected_runs_by_transform": {
+      "intent": 1216,
+      "refs": 780,
+      "artifact_subtask": 982,
+      "text": 1502
+    },
+    "runs_with_effective_change_by_transform": {
+      "intent": 1084,
+      "refs": 722,
+      "artifact_subtask": 865,
+      "text": 1502
+    }
+  },
+  "baseline_composite": 0.7938624418508566,
+  "baseline_parity": true,
+  "benchmark_time_seconds": 47.26
+}

@@ -1,0 +1,20 @@
+Exp15 baseline verified: composite=0.7938624419; Exp13 label/turn and Exp15 success exact
+outer folds are the sealed seed-0 StratifiedKFold(3)
+generated 3809 fixed views from 10000 original runs in 3.9s
+exp18 benchmark control: 400 parent groups -> 400 train views, 100 validation runs
+exp18 benchmark candidate: 400 parent groups -> 556 train views, 100 validation runs
+CPU estimate: 39.90 minutes; readiness=True
+full augmented views built: 3809; prep 15.8s
+exp18 control fold 0: 6666 parent groups -> 6666 train views, 3334 validation runs
+control fold 0 reproduced labels; 135.8s
+exp18 control fold 1: 6667 parent groups -> 6667 train views, 3333 validation runs
+control fold 1 reproduced labels; 132.2s
+exp18 control fold 2: 6667 parent groups -> 6667 train views, 3333 validation runs
+control fold 2 reproduced labels; 131.5s
+exp18 outer 0: 6666 parent groups -> 9198 train views, 3334 validation runs
+Exp18 fold 0: composite 0.790570 -> 0.794360 (+0.003790), DH F1 0.6512 -> 0.6657, 167.7s
+exp18 outer 1: 6667 parent groups -> 9173 train views, 3333 validation runs
+Exp18 fold 1: composite 0.798707 -> 0.795885 (-0.002822), DH F1 0.6338 -> 0.6460, 161.6s
+exp18 outer 2: 6667 parent groups -> 9247 train views, 3333 validation runs
+Exp18 fold 2: composite 0.790863 -> 0.794834 (+0.003971), DH F1 0.6797 -> 0.6833, 155.1s
+Exp18 STOP; composite delta +0.001559
