@@ -1,0 +1,322 @@
+{
+  "decision": "STOP",
+  "hypothesis": "frozen semantic turn representations add information missing from Exp13 312 structural features",
+  "baseline": {
+    "macro_f1": 0.812954558673859,
+    "robustness_f1": 0.7599843692318033,
+    "success_f1": 0.8949086161879896,
+    "fault_turn_hit2": 0.6315277777777778,
+    "composite": 0.7938624418508566,
+    "per_class_f1": {
+      "clean": 0.8783947413942225,
+      "dropped_handoff": 0.6550094517958412,
+      "duplicated_work": 0.8410819949281487,
+      "deadlock": 0.8336092715231788,
+      "conflict": 0.9033280507131537,
+      "goal_drift": 0.8443186413263243,
+      "runaway_loop": 0.7349397590361446
+    }
+  },
+  "structural_diagnostic": {
+    "macro_f1": 0.812954558673859,
+    "robustness_f1": 0.7599843692318033,
+    "success_f1": 0.8949086161879896,
+    "fault_turn_hit2": 0.6315277777777778,
+    "composite": 0.7938624418508566,
+    "per_class_f1": {
+      "clean": 0.8783947413942225,
+      "dropped_handoff": 0.6550094517958412,
+      "duplicated_work": 0.8410819949281487,
+      "deadlock": 0.8336092715231788,
+      "conflict": 0.9033280507131537,
+      "goal_drift": 0.8443186413263243,
+      "runaway_loop": 0.7349397590361446
+    }
+  },
+  "semantic_diagnostic": {
+    "macro_f1": 0.629219493939973,
+    "robustness_f1": 0.571111104798585,
+    "success_f1": 0.8949086161879896,
+    "fault_turn_hit2": 0.47,
+    "composite": 0.6386238155978312,
+    "per_class_f1": {
+      "clean": 0.7438439398784777,
+      "dropped_handoff": 0.39430449069003287,
+      "duplicated_work": 0.5990990990990991,
+      "deadlock": 0.7453271028037384,
+      "conflict": 0.6243386243386243,
+      "goal_drift": 0.5874840357598978,
+      "runaway_loop": 0.7101391650099403
+    }
+  },
+  "candidate": {
+    "macro_f1": 0.8161922910779017,
+    "robustness_f1": 0.7728469178429657,
+    "success_f1": 0.8949086161879896,
+    "fault_turn_hit2": 0.6306944444444444,
+    "composite": 0.7986136118723351,
+    "per_class_f1": {
+      "clean": 0.8848982384128613,
+      "dropped_handoff": 0.6475531389026199,
+      "duplicated_work": 0.8267581475128645,
+      "deadlock": 0.846751123825092,
+      "conflict": 0.9015873015873016,
+      "goal_drift": 0.8454953118630248,
+      "runaway_loop": 0.7603027754415476
+    }
+  },
+  "deltas": {
+    "macro_f1": 0.0032377324040426814,
+    "robustness_f1": 0.012862548611162317,
+    "success_f1": 0.0,
+    "fault_turn_hit2": -0.0008333333333333526,
+    "composite": 0.004751170021478512
+  },
+  "per_class_f1_delta": {
+    "clean": 0.0065034970186388374,
+    "dropped_handoff": -0.007456312893221351,
+    "duplicated_work": -0.014323847415284252,
+    "deadlock": 0.013141852301913226,
+    "conflict": -0.0017407491258520924,
+    "goal_drift": 0.0011766705367005637,
+    "runaway_loop": 0.02536301640540295
+  },
+  "folds_won": 2,
+  "folds": [
+    {
+      "fold": 0,
+      "n_train": 6666,
+      "n_valid": 3334,
+      "baseline": {
+        "macro_f1": 0.8013657953937644,
+        "robustness_f1": 0.7762703535088138,
+        "success_f1": 0.8935185185185185,
+        "fault_turn_hit2": 0.6179166666666667,
+        "composite": 0.7905699305185301,
+        "per_class_f1": {
+          "clean": 0.8762198253723678,
+          "dropped_handoff": 0.6511627906976745,
+          "duplicated_work": 0.8337531486146096,
+          "deadlock": 0.831858407079646,
+          "conflict": 0.8930669800235017,
+          "goal_drift": 0.8300970873786407,
+          "runaway_loop": 0.6934023285899095
+        }
+      },
+      "structural_diagnostic": {
+        "macro_f1": 0.8013657953937644,
+        "robustness_f1": 0.7762703535088138,
+        "success_f1": 0.8935185185185185,
+        "fault_turn_hit2": 0.6179166666666667,
+        "composite": 0.7905699305185301,
+        "per_class_f1": {
+          "clean": 0.8762198253723678,
+          "dropped_handoff": 0.6511627906976745,
+          "duplicated_work": 0.8337531486146096,
+          "deadlock": 0.831858407079646,
+          "conflict": 0.8930669800235017,
+          "goal_drift": 0.8300970873786407,
+          "runaway_loop": 0.6934023285899095
+        }
+      },
+      "semantic_diagnostic": {
+        "macro_f1": 0.6315101092823564,
+        "robustness_f1": 0.5927614437904353,
+        "success_f1": 0.8935185185185185,
+        "fault_turn_hit2": 0.46875,
+        "composite": 0.6448481933665647,
+        "per_class_f1": {
+          "clean": 0.7530443253774963,
+          "dropped_handoff": 0.38917089678510997,
+          "duplicated_work": 0.5714285714285714,
+          "deadlock": 0.7125683060109289,
+          "conflict": 0.6395511921458625,
+          "goal_drift": 0.6535087719298246,
+          "runaway_loop": 0.7012987012987013
+        }
+      },
+      "candidate": {
+        "macro_f1": 0.8002885970787892,
+        "robustness_f1": 0.7679035554117107,
+        "success_f1": 0.8935185185185185,
+        "fault_turn_hit2": 0.6133333333333333,
+        "composite": 0.7874812985034334,
+        "per_class_f1": {
+          "clean": 0.8816658202133062,
+          "dropped_handoff": 0.6303030303030303,
+          "duplicated_work": 0.8113695090439277,
+          "deadlock": 0.8424908424908425,
+          "conflict": 0.8915375446960667,
+          "goal_drift": 0.8309178743961353,
+          "runaway_loop": 0.7137355584082157
+        }
+      },
+      "composite_delta": -0.0030886320150966817,
+      "seconds": 420.47
+    },
+    {
+      "fold": 1,
+      "n_train": 6667,
+      "n_valid": 3333,
+      "baseline": {
+        "macro_f1": 0.8197832754159394,
+        "robustness_f1": 0.7624417787286947,
+        "success_f1": 0.8974778905994104,
+        "fault_turn_hit2": 0.6358333333333334,
+        "composite": 0.7987070993133882,
+        "per_class_f1": {
+          "clean": 0.8799582463465553,
+          "dropped_handoff": 0.6338028169014085,
+          "duplicated_work": 0.8487179487179487,
+          "deadlock": 0.8394160583941606,
+          "conflict": 0.910394265232975,
+          "goal_drift": 0.8626974483596598,
+          "runaway_loop": 0.7634961439588689
+        }
+      },
+      "structural_diagnostic": {
+        "macro_f1": 0.8197832754159394,
+        "robustness_f1": 0.7624417787286947,
+        "success_f1": 0.8974778905994104,
+        "fault_turn_hit2": 0.6358333333333334,
+        "composite": 0.7987070993133882,
+        "per_class_f1": {
+          "clean": 0.8799582463465553,
+          "dropped_handoff": 0.6338028169014085,
+          "duplicated_work": 0.8487179487179487,
+          "deadlock": 0.8394160583941606,
+          "conflict": 0.910394265232975,
+          "goal_drift": 0.8626974483596598,
+          "runaway_loop": 0.7634961439588689
+        }
+      },
+      "semantic_diagnostic": {
+        "macro_f1": 0.6266662647623799,
+        "robustness_f1": 0.5244418638642242,
+        "success_f1": 0.8974778905994104,
+        "fault_turn_hit2": 0.47125,
+        "composite": 0.6261902819371575,
+        "per_class_f1": {
+          "clean": 0.725095785440613,
+          "dropped_handoff": 0.39556962025316456,
+          "duplicated_work": 0.592896174863388,
+          "deadlock": 0.7807228915662651,
+          "conflict": 0.6469945355191257,
+          "goal_drift": 0.5431309904153354,
+          "runaway_loop": 0.7022538552787663
+        }
+      },
+      "candidate": {
+        "macro_f1": 0.8158859417129529,
+        "robustness_f1": 0.7813294780852501,
+        "success_f1": 0.8974778905994104,
+        "fault_turn_hit2": 0.6304166666666666,
+        "composite": 0.8009386906343672,
+        "per_class_f1": {
+          "clean": 0.8816872427983539,
+          "dropped_handoff": 0.6144756277695717,
+          "duplicated_work": 0.8316062176165803,
+          "deadlock": 0.8529411764705882,
+          "conflict": 0.9003516998827668,
+          "goal_drift": 0.854320987654321,
+          "runaway_loop": 0.7758186397984886
+        }
+      },
+      "composite_delta": 0.002231591320978943,
+      "seconds": 414.45
+    },
+    {
+      "fold": 2,
+      "n_train": 6667,
+      "n_valid": 3333,
+      "baseline": {
+        "macro_f1": 0.817661949580538,
+        "robustness_f1": 0.7355506816330237,
+        "success_f1": 0.8937399678972713,
+        "fault_turn_hit2": 0.6408333333333334,
+        "composite": 0.790862973716449,
+        "per_class_f1": {
+          "clean": 0.8790406673618353,
+          "dropped_handoff": 0.6796657381615598,
+          "duplicated_work": 0.8409090909090909,
+          "deadlock": 0.8293897882938979,
+          "conflict": 0.9066985645933014,
+          "goal_drift": 0.8401937046004843,
+          "runaway_loop": 0.7477360931435963
+        }
+      },
+      "structural_diagnostic": {
+        "macro_f1": 0.817661949580538,
+        "robustness_f1": 0.7355506816330237,
+        "success_f1": 0.8937399678972713,
+        "fault_turn_hit2": 0.6408333333333334,
+        "composite": 0.790862973716449,
+        "per_class_f1": {
+          "clean": 0.8790406673618353,
+          "dropped_handoff": 0.6796657381615598,
+          "duplicated_work": 0.8409090909090909,
+          "deadlock": 0.8293897882938979,
+          "conflict": 0.9066985645933014,
+          "goal_drift": 0.8401937046004843,
+          "runaway_loop": 0.7477360931435963
+        }
+      },
+      "semantic_diagnostic": {
+        "macro_f1": 0.6250729669331935,
+        "robustness_f1": 0.585058299445281,
+        "success_f1": 0.8937399678972713,
+        "fault_turn_hit2": 0.47,
+        "composite": 0.6398620535125077,
+        "per_class_f1": {
+          "clean": 0.7534311405584477,
+          "dropped_handoff": 0.39800995024875624,
+          "duplicated_work": 0.6304909560723514,
+          "deadlock": 0.7460510328068044,
+          "conflict": 0.575,
+          "goal_drift": 0.5474722564734895,
+          "runaway_loop": 0.7250554323725056
+        }
+      },
+      "candidate": {
+        "macro_f1": 0.8321181145122939,
+        "robustness_f1": 0.7649652609424552,
+        "success_f1": 0.8937399678972713,
+        "fault_turn_hit2": 0.6483333333333333,
+        "composite": 0.8061947010096847,
+        "per_class_f1": {
+          "clean": 0.8914167528438469,
+          "dropped_handoff": 0.6967930029154519,
+          "duplicated_work": 0.8371501272264631,
+          "deadlock": 0.8448275862068966,
+          "conflict": 0.9130434782608695,
+          "goal_drift": 0.8515337423312883,
+          "runaway_loop": 0.7900621118012422
+        }
+      },
+      "composite_delta": 0.01533172729323573,
+      "seconds": 416.74
+    }
+  ],
+  "gate": {
+    "frozen": {
+      "composite_delta_min": 0.005,
+      "macro_f1_delta_min_exclusive": 0.0,
+      "robustness_f1_delta_min_exclusive": 0.0,
+      "folds_won_min": 2,
+      "per_class_f1_drop_max": 0.02
+    },
+    "checks": {
+      "composite_at_least_plus_0_005": false,
+      "macro_f1_improves": true,
+      "robustness_f1_improves": true,
+      "at_least_2_of_3_folds_win": true,
+      "no_class_drops_more_than_0_02": true
+    },
+    "passed": false
+  },
+  "runtime_seconds": 1251.72,
+  "encoder_revision": "46605decb5369335a3847c9f41bb0b896c07dd1a",
+  "event_truncation": "none; tokenizer max length applies per event",
+  "fusion_weight_semantic": 0.5,
+  "fault_turn_head": "unchanged Exp13 L1 peaks; no semantic localizer trained"
+}

@@ -1,0 +1,43 @@
+EXP16 frozen semantic turn sequence; no production changes
+baseline commit=fdd588c4412c7cc5cb4f6a1f18bc1d17cbeb264a composite=0.7938624419 Macro=0.8129545587 Robustness=0.7599843692
+encoder=sentence-transformers/all-MiniLM-L6-v2@46605decb5369335a3847c9f41bb0b896c07dd1a; frozen 384d; mean pool; max_wordpieces=256
+event order=goal, then t / message->state->artifact; no truncation
+fusion=0.50 structural + 0.50 semantic probabilities
+encoder: 128/590146 goal+event strings
+encoder: 590146/590146 goal+event strings
+encoder pass: 4822.9s; events kept=590146 (no event truncation)
+semantic fold seed=1701 epoch=1/10 loss=1.80894
+semantic fold seed=1701 epoch=2/10 loss=1.65182
+semantic fold seed=1701 epoch=3/10 loss=1.51803
+semantic fold seed=1701 epoch=4/10 loss=1.37577
+semantic fold seed=1701 epoch=5/10 loss=1.28656
+semantic fold seed=1701 epoch=6/10 loss=1.20538
+semantic fold seed=1701 epoch=7/10 loss=1.12911
+semantic fold seed=1701 epoch=8/10 loss=1.05883
+semantic fold seed=1701 epoch=9/10 loss=0.98405
+semantic fold seed=1701 epoch=10/10 loss=0.89737
+fold 0 composite 0.790570 -> 0.787481 (-0.003089), 420.5s
+semantic fold seed=1702 epoch=1/10 loss=1.81021
+semantic fold seed=1702 epoch=2/10 loss=1.63335
+semantic fold seed=1702 epoch=3/10 loss=1.49414
+semantic fold seed=1702 epoch=4/10 loss=1.36616
+semantic fold seed=1702 epoch=5/10 loss=1.29113
+semantic fold seed=1702 epoch=6/10 loss=1.21223
+semantic fold seed=1702 epoch=7/10 loss=1.15165
+semantic fold seed=1702 epoch=8/10 loss=1.08878
+semantic fold seed=1702 epoch=9/10 loss=1.01582
+semantic fold seed=1702 epoch=10/10 loss=0.94982
+fold 1 composite 0.798707 -> 0.800939 (+0.002232), 414.4s
+semantic fold seed=1703 epoch=1/10 loss=1.83075
+semantic fold seed=1703 epoch=2/10 loss=1.65117
+semantic fold seed=1703 epoch=3/10 loss=1.48864
+semantic fold seed=1703 epoch=4/10 loss=1.41494
+semantic fold seed=1703 epoch=5/10 loss=1.32103
+semantic fold seed=1703 epoch=6/10 loss=1.23061
+semantic fold seed=1703 epoch=7/10 loss=1.15860
+semantic fold seed=1703 epoch=8/10 loss=1.07415
+semantic fold seed=1703 epoch=9/10 loss=1.00598
+semantic fold seed=1703 epoch=10/10 loss=0.92710
+fold 2 composite 0.790863 -> 0.806195 (+0.015332), 416.7s
+gate: STOP (composite_at_least_plus_0_005)
+decision: STOP; elapsed 1251.7s
