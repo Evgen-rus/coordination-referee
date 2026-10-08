@@ -49,6 +49,9 @@ CV outcomes. No hidden generator or run-ID mapping is used.
   with the existing 3-fold seed 0; assign each synthetic view to its parent's
   fold. Fit only on views whose parents are in the fit side. This prevents an
   original or corrupted view from appearing on opposite sides of any split.
+  Fit the three inner window models sequentially (`workers=1`); the existing
+  Exp14 audit verified workers 1 and 3 produce identical predictions. The
+  LightGBM per-model thread setting and all model parameters stay unchanged.
 - Exact control: run the unaugmented Exp15 corrected 312-feature path on the
   same folds first and require its OOF label predictions to match committed
   Exp13 D. Require the unchanged Exp15 success predictions, L1 peak turns,
