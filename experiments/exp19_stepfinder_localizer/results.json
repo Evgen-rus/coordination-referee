@@ -1,0 +1,339 @@
+{
+  "decision": "STOP",
+  "hypothesis": "full-sequence agent-aware class-conditioned scoring improves primary fault localization over Exp13 L1",
+  "baseline": {
+    "macro_f1": 0.812954558673859,
+    "robustness_f1": 0.7599843692318033,
+    "success_f1": 0.8949086161879896,
+    "fault_turn_hit2": 0.6315277777777778,
+    "composite": 0.7938624418508566,
+    "per_class_f1": {
+      "clean": 0.8783947413942225,
+      "dropped_handoff": 0.6550094517958412,
+      "duplicated_work": 0.8410819949281487,
+      "deadlock": 0.8336092715231788,
+      "conflict": 0.9033280507131537,
+      "goal_drift": 0.8443186413263243,
+      "runaway_loop": 0.7349397590361446
+    },
+    "per_class_hit2": {
+      "dropped_handoff": 0.48083333333333333,
+      "duplicated_work": 0.7458333333333333,
+      "deadlock": 0.7033333333333334,
+      "conflict": 0.6916666666666667,
+      "goal_drift": 0.5758333333333333,
+      "runaway_loop": 0.5916666666666667
+    }
+  },
+  "candidate": {
+    "macro_f1": 0.812954558673859,
+    "robustness_f1": 0.7599843692318033,
+    "success_f1": 0.8949086161879896,
+    "fault_turn_hit2": 0.6509722222222222,
+    "composite": 0.795806886295301,
+    "per_class_f1": {
+      "clean": 0.8783947413942225,
+      "dropped_handoff": 0.6550094517958412,
+      "duplicated_work": 0.8410819949281487,
+      "deadlock": 0.8336092715231788,
+      "conflict": 0.9033280507131537,
+      "goal_drift": 0.8443186413263243,
+      "runaway_loop": 0.7349397590361446
+    },
+    "per_class_hit2": {
+      "dropped_handoff": 0.20083333333333334,
+      "duplicated_work": 0.67,
+      "deadlock": 0.7441666666666666,
+      "conflict": 0.785,
+      "goal_drift": 0.8491666666666666,
+      "runaway_loop": 0.6566666666666666
+    }
+  },
+  "deltas": {
+    "fault_turn_hit2": 0.019444444444444375,
+    "composite": 0.0019444444444444153
+  },
+  "per_class_hit2_delta": {
+    "dropped_handoff": -0.28,
+    "duplicated_work": -0.07583333333333331,
+    "deadlock": 0.04083333333333328,
+    "conflict": 0.09333333333333338,
+    "goal_drift": 0.2733333333333333,
+    "runaway_loop": 0.06499999999999995
+  },
+  "folds_won": 3,
+  "folds": [
+    {
+      "fold": 0,
+      "n_train_runs": 6666,
+      "n_train_faulty_runs": 4800,
+      "n_validation_runs": 3334,
+      "baseline": {
+        "macro_f1": 0.8013657953937644,
+        "robustness_f1": 0.7762703535088138,
+        "success_f1": 0.8935185185185185,
+        "fault_turn_hit2": 0.6179166666666667,
+        "composite": 0.7905699305185301,
+        "per_class_f1": {
+          "clean": 0.8762198253723678,
+          "dropped_handoff": 0.6511627906976745,
+          "duplicated_work": 0.8337531486146096,
+          "deadlock": 0.831858407079646,
+          "conflict": 0.8930669800235017,
+          "goal_drift": 0.8300970873786407,
+          "runaway_loop": 0.6934023285899095
+        },
+        "per_class_hit2": {
+          "dropped_handoff": 0.4475,
+          "duplicated_work": 0.7575,
+          "deadlock": 0.675,
+          "conflict": 0.6875,
+          "goal_drift": 0.5725,
+          "runaway_loop": 0.5675
+        }
+      },
+      "candidate": {
+        "macro_f1": 0.8013657953937644,
+        "robustness_f1": 0.7762703535088138,
+        "success_f1": 0.8935185185185185,
+        "fault_turn_hit2": 0.6341666666666667,
+        "composite": 0.7921949305185301,
+        "per_class_f1": {
+          "clean": 0.8762198253723678,
+          "dropped_handoff": 0.6511627906976745,
+          "duplicated_work": 0.8337531486146096,
+          "deadlock": 0.831858407079646,
+          "conflict": 0.8930669800235017,
+          "goal_drift": 0.8300970873786407,
+          "runaway_loop": 0.6934023285899095
+        },
+        "per_class_hit2": {
+          "dropped_handoff": 0.1775,
+          "duplicated_work": 0.68,
+          "deadlock": 0.715,
+          "conflict": 0.7675,
+          "goal_drift": 0.8375,
+          "runaway_loop": 0.6275
+        }
+      },
+      "hit2_delta": 0.016249999999999987,
+      "composite_delta": 0.0016249999999999876,
+      "train_loss_by_epoch": [
+        30.055269680023194,
+        17.145951522191364,
+        9.15635078907013,
+        5.692803339958191,
+        4.050118794441223,
+        2.8842679377396903,
+        2.0007507292429607,
+        1.7259386420249938,
+        1.3151179639498394,
+        1.367988298535347,
+        1.2003520099322,
+        1.0822510543465613
+      ],
+      "role_vocabulary_size": 15,
+      "seconds": 745.45
+    },
+    {
+      "fold": 1,
+      "n_train_runs": 6667,
+      "n_train_faulty_runs": 4800,
+      "n_validation_runs": 3333,
+      "baseline": {
+        "macro_f1": 0.8197832754159394,
+        "robustness_f1": 0.7624417787286947,
+        "success_f1": 0.8974778905994104,
+        "fault_turn_hit2": 0.6358333333333334,
+        "composite": 0.7987070993133882,
+        "per_class_f1": {
+          "clean": 0.8799582463465553,
+          "dropped_handoff": 0.6338028169014085,
+          "duplicated_work": 0.8487179487179487,
+          "deadlock": 0.8394160583941606,
+          "conflict": 0.910394265232975,
+          "goal_drift": 0.8626974483596598,
+          "runaway_loop": 0.7634961439588689
+        },
+        "per_class_hit2": {
+          "dropped_handoff": 0.4775,
+          "duplicated_work": 0.7375,
+          "deadlock": 0.7125,
+          "conflict": 0.705,
+          "goal_drift": 0.5775,
+          "runaway_loop": 0.605
+        }
+      },
+      "candidate": {
+        "macro_f1": 0.8197832754159394,
+        "robustness_f1": 0.7624417787286947,
+        "success_f1": 0.8974778905994104,
+        "fault_turn_hit2": 0.66125,
+        "composite": 0.8012487659800549,
+        "per_class_f1": {
+          "clean": 0.8799582463465553,
+          "dropped_handoff": 0.6338028169014085,
+          "duplicated_work": 0.8487179487179487,
+          "deadlock": 0.8394160583941606,
+          "conflict": 0.910394265232975,
+          "goal_drift": 0.8626974483596598,
+          "runaway_loop": 0.7634961439588689
+        },
+        "per_class_hit2": {
+          "dropped_handoff": 0.19,
+          "duplicated_work": 0.67,
+          "deadlock": 0.765,
+          "conflict": 0.7975,
+          "goal_drift": 0.865,
+          "runaway_loop": 0.68
+        }
+      },
+      "hit2_delta": 0.025416666666666643,
+      "composite_delta": 0.0025416666666666643,
+      "train_loss_by_epoch": [
+        30.003676223754884,
+        16.25801915804545,
+        10.071747379302979,
+        5.945103576183319,
+        3.8361825712521873,
+        2.8952878737449645,
+        2.115211860338847,
+        1.6972850493590037,
+        1.608855636715889,
+        1.1418571331103642,
+        1.0663740943868956,
+        0.9313989653189977
+      ],
+      "role_vocabulary_size": 15,
+      "seconds": 764.11
+    },
+    {
+      "fold": 2,
+      "n_train_runs": 6667,
+      "n_train_faulty_runs": 4800,
+      "n_validation_runs": 3333,
+      "baseline": {
+        "macro_f1": 0.817661949580538,
+        "robustness_f1": 0.7355506816330237,
+        "success_f1": 0.8937399678972713,
+        "fault_turn_hit2": 0.6408333333333334,
+        "composite": 0.790862973716449,
+        "per_class_f1": {
+          "clean": 0.8790406673618353,
+          "dropped_handoff": 0.6796657381615598,
+          "duplicated_work": 0.8409090909090909,
+          "deadlock": 0.8293897882938979,
+          "conflict": 0.9066985645933014,
+          "goal_drift": 0.8401937046004843,
+          "runaway_loop": 0.7477360931435963
+        },
+        "per_class_hit2": {
+          "dropped_handoff": 0.5175,
+          "duplicated_work": 0.7425,
+          "deadlock": 0.7225,
+          "conflict": 0.6825,
+          "goal_drift": 0.5775,
+          "runaway_loop": 0.6025
+        }
+      },
+      "candidate": {
+        "macro_f1": 0.817661949580538,
+        "robustness_f1": 0.7355506816330237,
+        "success_f1": 0.8937399678972713,
+        "fault_turn_hit2": 0.6575,
+        "composite": 0.7925296403831156,
+        "per_class_f1": {
+          "clean": 0.8790406673618353,
+          "dropped_handoff": 0.6796657381615598,
+          "duplicated_work": 0.8409090909090909,
+          "deadlock": 0.8293897882938979,
+          "conflict": 0.9066985645933014,
+          "goal_drift": 0.8401937046004843,
+          "runaway_loop": 0.7477360931435963
+        },
+        "per_class_hit2": {
+          "dropped_handoff": 0.235,
+          "duplicated_work": 0.66,
+          "deadlock": 0.7525,
+          "conflict": 0.79,
+          "goal_drift": 0.845,
+          "runaway_loop": 0.6625
+        }
+      },
+      "hit2_delta": 0.016666666666666607,
+      "composite_delta": 0.0016666666666665941,
+      "train_loss_by_epoch": [
+        30.745346676508586,
+        17.14109654744466,
+        8.734183066685995,
+        5.539636458555857,
+        4.09026882648468,
+        2.9883928922812144,
+        2.277792669534683,
+        1.7678232912222545,
+        1.639215996861458,
+        1.393072934349378,
+        1.1946750344832737,
+        1.0492329238851865
+      ],
+      "role_vocabulary_size": 15,
+      "seconds": 837.32
+    }
+  ],
+  "gate": {
+    "frozen": {
+      "hit2_delta_min": 0.05,
+      "composite_delta_min": 0.005,
+      "fold_wins_min": 2,
+      "max_per_class_hit2_drop": 0.05
+    },
+    "checks": {
+      "hit2_improves_at_least_0_05": false,
+      "composite_improves_at_least_0_005": false,
+      "hit2_improves_on_at_least_2_of_3_folds": true,
+      "no_class_hit2_drop_over_0_05": false,
+      "label_predictions_unchanged": true,
+      "success_predictions_unchanged": true,
+      "no_validation_based_model_selection": true,
+      "no_fold_overlap": true
+    },
+    "passed": false
+  },
+  "runtime_seconds": {
+    "cv": 2346.93,
+    "peak_process_rss_mb": 1067.0
+  },
+  "cache": {
+    "embedding_sha256": "1602d13b63480346f3c63932f49978e34ec6edc9cf450a88d6f1222f40e39220",
+    "input_csv_sha256": "8e8feb4ee284d2acd918b533921631fa905d47adf8d34881f89359964a1bcfbc",
+    "rows": 10000,
+    "events": 590146,
+    "message_events": 457203,
+    "encoder_recomputed": false
+  },
+  "architecture": {
+    "content": "frozen Exp16 MiniLM 384 -> 128",
+    "role_embedding_dim": 32,
+    "bilstm": "2-layer bidirectional hidden 64 per direction",
+    "attention": "agent-aware 2 x 32",
+    "scales": [
+      1,
+      2
+    ],
+    "alpha": 0.1,
+    "beta": 0.9,
+    "gamma": 0.0,
+    "epochs": 12,
+    "batch_size": 16,
+    "learning_rate": 0.001,
+    "weight_decay": 1e-05,
+    "dropout": 0.5,
+    "lambda_temporal": 0.9,
+    "seed": 42
+  },
+  "baseline_provenance": {
+    "exp15_commit": "fdd588c4412c7cc5cb4f6a1f18bc1d17cbeb264a",
+    "production_changed": false
+  },
+  "public_leaderboard_used": false
+}

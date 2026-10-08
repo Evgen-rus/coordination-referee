@@ -3,4 +3,47 @@ baseline parity exact: Composite=0.7938624419 hit@2=0.6315277778
 events=590146 messages=457203; event order goal / t / message->state->artifact
 folds=StratifiedKFold(3, seed=0); localizer only fits faulty train rows
 benchmark epoch 1/1 train_loss=116.323826; no validation scoring
-CPU estimate 83.97 min; ready=True
+CPU estimate 71.45 min; ready=True
+fold 0: fitting 4800 faulty train runs; roles=14
+fold 0 epoch 1/12 train_loss=30.055270; no validation scoring
+fold 0 epoch 2/12 train_loss=17.145952; no validation scoring
+fold 0 epoch 3/12 train_loss=9.156351; no validation scoring
+fold 0 epoch 4/12 train_loss=5.692803; no validation scoring
+fold 0 epoch 5/12 train_loss=4.050119; no validation scoring
+fold 0 epoch 6/12 train_loss=2.884268; no validation scoring
+fold 0 epoch 7/12 train_loss=2.000751; no validation scoring
+fold 0 epoch 8/12 train_loss=1.725939; no validation scoring
+fold 0 epoch 9/12 train_loss=1.315118; no validation scoring
+fold 0 epoch 10/12 train_loss=1.367988; no validation scoring
+fold 0 epoch 11/12 train_loss=1.200352; no validation scoring
+fold 0 epoch 12/12 train_loss=1.082251; no validation scoring
+fold 0 hit@2 0.617917 -> 0.634167 (+0.016250), composite delta +0.001625, 745.5s
+fold 1: fitting 4800 faulty train runs; roles=14
+fold 1 epoch 1/12 train_loss=30.003676; no validation scoring
+fold 1 epoch 2/12 train_loss=16.258019; no validation scoring
+fold 1 epoch 3/12 train_loss=10.071747; no validation scoring
+fold 1 epoch 4/12 train_loss=5.945104; no validation scoring
+fold 1 epoch 5/12 train_loss=3.836183; no validation scoring
+fold 1 epoch 6/12 train_loss=2.895288; no validation scoring
+fold 1 epoch 7/12 train_loss=2.115212; no validation scoring
+fold 1 epoch 8/12 train_loss=1.697285; no validation scoring
+fold 1 epoch 9/12 train_loss=1.608856; no validation scoring
+fold 1 epoch 10/12 train_loss=1.141857; no validation scoring
+fold 1 epoch 11/12 train_loss=1.066374; no validation scoring
+fold 1 epoch 12/12 train_loss=0.931399; no validation scoring
+fold 1 hit@2 0.635833 -> 0.661250 (+0.025417), composite delta +0.002542, 764.1s
+fold 2: fitting 4800 faulty train runs; roles=14
+fold 2 epoch 1/12 train_loss=30.745347; no validation scoring
+fold 2 epoch 2/12 train_loss=17.141097; no validation scoring
+fold 2 epoch 3/12 train_loss=8.734183; no validation scoring
+fold 2 epoch 4/12 train_loss=5.539636; no validation scoring
+fold 2 epoch 5/12 train_loss=4.090269; no validation scoring
+fold 2 epoch 6/12 train_loss=2.988393; no validation scoring
+fold 2 epoch 7/12 train_loss=2.277793; no validation scoring
+fold 2 epoch 8/12 train_loss=1.767823; no validation scoring
+fold 2 epoch 9/12 train_loss=1.639216; no validation scoring
+fold 2 epoch 10/12 train_loss=1.393073; no validation scoring
+fold 2 epoch 11/12 train_loss=1.194675; no validation scoring
+fold 2 epoch 12/12 train_loss=1.049233; no validation scoring
+fold 2 hit@2 0.640833 -> 0.657500 (+0.016667), composite delta +0.001667, 837.3s
+gate STOP; hit@2 delta +0.019444; composite delta +0.001944
