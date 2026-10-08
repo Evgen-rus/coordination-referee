@@ -1,0 +1,6 @@
+Exp19 cache verified; no encoder pass; 384d frozen MiniLM reused
+baseline parity exact: Composite=0.7938624419 hit@2=0.6315277778
+events=590146 messages=457203; event order goal / t / message->state->artifact
+folds=StratifiedKFold(3, seed=0); localizer only fits faulty train rows
+benchmark epoch 1/1 train_loss=116.323826; no validation scoring
+CPU estimate 83.97 min; ready=True

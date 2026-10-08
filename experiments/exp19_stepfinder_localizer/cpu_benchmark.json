@@ -1,0 +1,51 @@
+{
+  "device": "cpu",
+  "torch_version": "2.14.1+cpu",
+  "torch_threads": 6,
+  "benchmark_faulty_runs": 256,
+  "benchmark_event_lengths": {
+    "min": 21,
+    "median": 56.5,
+    "max": 135
+  },
+  "one_epoch_train_seconds": 7.47,
+  "one_pass_inference_seconds": 0.54,
+  "one_epoch_loss": 116.32382583618164,
+  "estimated_fold_runtime": [
+    {
+      "fold": 0,
+      "train_faulty_runs": 4800,
+      "estimated_train_seconds": 1685.39,
+      "predicted_fault_validation_runs": 2321,
+      "estimated_inference_seconds": 5.45
+    },
+    {
+      "fold": 1,
+      "train_faulty_runs": 4800,
+      "estimated_train_seconds": 1664.2,
+      "predicted_fault_validation_runs": 2350,
+      "estimated_inference_seconds": 5.66
+    },
+    {
+      "fold": 2,
+      "train_faulty_runs": 4800,
+      "estimated_train_seconds": 1671.9,
+      "predicted_fault_validation_runs": 2348,
+      "estimated_inference_seconds": 5.6
+    }
+  ],
+  "estimated_full_3fold_seconds": 5038.2,
+  "estimated_full_3fold_minutes": 83.97,
+  "peak_process_rss_mb": 637.2,
+  "max_events_per_run": 189,
+  "max_full_turns_retained": true,
+  "max_full_cv_seconds": 7200.0,
+  "ready_for_full_cv": true,
+  "cache_sha256": "1602d13b63480346f3c63932f49978e34ec6edc9cf450a88d6f1222f40e39220",
+  "input_csv_sha256": "8e8feb4ee284d2acd918b533921631fa905d47adf8d34881f89359964a1bcfbc",
+  "alignment": {
+    "message_events": 457203,
+    "faulty_targets": 7200,
+    "all_targets_mapped": true
+  }
+}
