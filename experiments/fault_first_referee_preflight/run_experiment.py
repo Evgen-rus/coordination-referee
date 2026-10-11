@@ -373,9 +373,13 @@ def run_cv(output_dir=None):
     results = {
         "experiment": "exp21_fault_first_referee",
         "decision": "PASS_GATE" if passed else "STOP",
+        "cv_started": True,
+        "cv_completed": True,
         "baseline": base, "candidate": candidate, "deltas": deltas,
         "per_class_f1_delta": class_deltas, "folds": fold_metrics,
         "gate": GATE, "gate_passed": passed,
+        "promotion_gate": {"passed": passed, "evaluated": True,
+                           "criterion": "Composite strictly greater than Exp15"},
         "fold_training_seconds": fold_train_seconds,
         "fold_validation_inference_seconds": fold_infer_seconds,
         "training_seconds_total": float(sum(fold_train_seconds)),

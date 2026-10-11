@@ -1,0 +1,237 @@
+{
+  "experiment": "exp21_fault_first_referee",
+  "decision": "STOP",
+  "baseline": {
+    "macro_f1": 0.812954558673859,
+    "robustness_f1": 0.7599843692318033,
+    "success_f1": 0.8949086161879896,
+    "fault_turn_hit2": 0.6315277777777778,
+    "per_class_f1": {
+      "clean": 0.8783947413942225,
+      "dropped_handoff": 0.6550094517958412,
+      "duplicated_work": 0.8410819949281487,
+      "deadlock": 0.8336092715231788,
+      "conflict": 0.9033280507131537,
+      "goal_drift": 0.8443186413263243,
+      "runaway_loop": 0.7349397590361446
+    },
+    "composite": 0.7938624418508566
+  },
+  "candidate": {
+    "macro_f1": 0.7524623928806672,
+    "robustness_f1": 0.7436449601656562,
+    "success_f1": 0.8949086161879896,
+    "fault_turn_hit2": 0.6611111111111111,
+    "per_class_f1": {
+      "clean": 0.8226348364279399,
+      "dropped_handoff": 0.5156626506024097,
+      "duplicated_work": 0.7130820399113083,
+      "deadlock": 0.7340339531123686,
+      "conflict": 0.8502715283165244,
+      "goal_drift": 0.8373729476153244,
+      "runaway_loop": 0.7941787941787942
+    },
+    "composite": 0.7624898400210572
+  },
+  "deltas": {
+    "composite": -0.031372601829799396,
+    "macro_f1": -0.06049216579319183,
+    "robustness_f1": -0.01633940906614717,
+    "success_f1": 0.0,
+    "fault_turn_hit2": 0.029583333333333295
+  },
+  "per_class_f1_delta": {
+    "clean": -0.05575990496628258,
+    "dropped_handoff": -0.13934680119343157,
+    "duplicated_work": -0.12799995501684047,
+    "deadlock": -0.09957531841081013,
+    "conflict": -0.05305652239662928,
+    "goal_drift": -0.006945693710999845,
+    "runaway_loop": 0.05923903514264961
+  },
+  "folds": [
+    {
+      "fold": 0,
+      "n_valid": 3334,
+      "baseline": {
+        "macro_f1": 0.8013657953937644,
+        "robustness_f1": 0.7762703535088138,
+        "success_f1": 0.8935185185185185,
+        "fault_turn_hit2": 0.6179166666666667,
+        "per_class_f1": {
+          "clean": 0.8762198253723678,
+          "dropped_handoff": 0.6511627906976745,
+          "duplicated_work": 0.8337531486146096,
+          "deadlock": 0.831858407079646,
+          "conflict": 0.8930669800235017,
+          "goal_drift": 0.8300970873786407,
+          "runaway_loop": 0.6934023285899095
+        },
+        "composite": 0.7905699305185301
+      },
+      "candidate": {
+        "macro_f1": 0.7511177145837277,
+        "robustness_f1": 0.7533945728030503,
+        "success_f1": 0.8935185185185185,
+        "fault_turn_hit2": 0.6558333333333334,
+        "per_class_f1": {
+          "clean": 0.8143646408839779,
+          "dropped_handoff": 0.5392156862745098,
+          "duplicated_work": 0.6930983847283406,
+          "deadlock": 0.7285714285714285,
+          "conflict": 0.857849196538937,
+          "goal_drift": 0.8329571106094809,
+          "runaway_loop": 0.7917675544794189
+        },
+        "composite": 0.7635186116037375
+      },
+      "composite_delta": -0.02705131891479262
+    },
+    {
+      "fold": 1,
+      "n_valid": 3333,
+      "baseline": {
+        "macro_f1": 0.8197832754159394,
+        "robustness_f1": 0.7624417787286947,
+        "success_f1": 0.8974778905994104,
+        "fault_turn_hit2": 0.6358333333333334,
+        "per_class_f1": {
+          "clean": 0.8799582463465553,
+          "dropped_handoff": 0.6338028169014085,
+          "duplicated_work": 0.8487179487179487,
+          "deadlock": 0.8394160583941606,
+          "conflict": 0.910394265232975,
+          "goal_drift": 0.8626974483596598,
+          "runaway_loop": 0.7634961439588689
+        },
+        "composite": 0.7987070993133882
+      },
+      "candidate": {
+        "macro_f1": 0.7628758023969116,
+        "robustness_f1": 0.7404994155530382,
+        "success_f1": 0.8974778905994104,
+        "fault_turn_hit2": 0.6854166666666667,
+        "per_class_f1": {
+          "clean": 0.8339943342776204,
+          "dropped_handoff": 0.5131195335276968,
+          "duplicated_work": 0.7309048178613397,
+          "deadlock": 0.7542997542997543,
+          "conflict": 0.8423326133909287,
+          "goal_drift": 0.8635235732009926,
+          "runaway_loop": 0.8019559902200489
+        },
+        "composite": 0.7697261053432936
+      },
+      "composite_delta": -0.02898099397009468
+    },
+    {
+      "fold": 2,
+      "n_valid": 3333,
+      "baseline": {
+        "macro_f1": 0.817661949580538,
+        "robustness_f1": 0.7355506816330237,
+        "success_f1": 0.8937399678972713,
+        "fault_turn_hit2": 0.6408333333333334,
+        "per_class_f1": {
+          "clean": 0.8790406673618353,
+          "dropped_handoff": 0.6796657381615598,
+          "duplicated_work": 0.8409090909090909,
+          "deadlock": 0.8293897882938979,
+          "conflict": 0.9066985645933014,
+          "goal_drift": 0.8401937046004843,
+          "runaway_loop": 0.7477360931435963
+        },
+        "composite": 0.790862973716449
+      },
+      "candidate": {
+        "macro_f1": 0.7419293242537393,
+        "robustness_f1": 0.7155580623513373,
+        "success_f1": 0.8937399678972713,
+        "fault_turn_hit2": 0.6420833333333333,
+        "per_class_f1": {
+          "clean": 0.8201923076923077,
+          "dropped_handoff": 0.4851657940663176,
+          "duplicated_work": 0.710926694329184,
+          "deadlock": 0.7195121951219512,
+          "conflict": 0.8517200474495848,
+          "goal_drift": 0.8175519630484989,
+          "runaway_loop": 0.7884362680683311
+        },
+        "composite": 0.7481235062326279
+      },
+      "composite_delta": -0.04273946748382107
+    }
+  ],
+  "gate": {
+    "composite_delta_min_exclusive": 0.0,
+    "fold_weight_replay_must_match_exactly": true
+  },
+  "gate_passed": false,
+  "fold_training_seconds": [
+    843.3268406999996,
+    838.8885165000102,
+    840.114604900009
+  ],
+  "fold_validation_inference_seconds": [
+    5.684211599989794,
+    5.540107999986503,
+    5.57866759999888
+  ],
+  "training_seconds_total": 2522.3299621000187,
+  "validation_inference_seconds_total": 16.802987199975178,
+  "saved_weight_replay_seconds": 17.356234800012317,
+  "saved_weight_replay_exact": true,
+  "experiment_seconds": 2601.5660878999624,
+  "input_build_seconds": 37.26520940003684,
+  "rows": 10000,
+  "events": 590146,
+  "baseline_prediction_sha256": "bad28b0528a291e96d7291f004ae72c6d571a93c38c8483d7adf889be7a291c6",
+  "train_sha256": "8e8feb4ee284d2acd918b533921631fa905d47adf8d34881f89359964a1bcfbc",
+  "candidate_B_production_changed": false,
+  "leaderboard_used": false,
+  "data_origin": "GitHub repository demo train; not platform hidden-test data",
+  "torch": "2.14.1+cpu",
+  "torch_threads": 6,
+  "cpu_count": 12,
+  "fold_model_manifest": [
+    {
+      "fold": 0,
+      "path": "D:\\My_dev_project\\coordination-referee\\experiments\\fault_first_referee_preflight\\fold_models\\fold_0.pt",
+      "sha256": "22be5da6da1af661425bd2b5682130b37e5cac2a9285f9266dace9a2f326b646",
+      "bytes": 9166601
+    },
+    {
+      "fold": 1,
+      "path": "D:\\My_dev_project\\coordination-referee\\experiments\\fault_first_referee_preflight\\fold_models\\fold_1.pt",
+      "sha256": "4202ba01c0f5afd58f3848c1b48bc09130f31c150c02f8e6bb1656d171962ff0",
+      "bytes": 9166601
+    },
+    {
+      "fold": 2,
+      "path": "D:\\My_dev_project\\coordination-referee\\experiments\\fault_first_referee_preflight\\fold_models\\fold_2.pt",
+      "sha256": "03cf3a482f504ccafa9e6e4a22989ecb6e4bfe3fe9726ab5357f567fce3cf976",
+      "bytes": 9166601
+    }
+  ],
+  "folds_config": {
+    "splitter": "StratifiedKFold",
+    "n_splits": 3,
+    "shuffle": true,
+    "random_state": 0,
+    "model_seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "oof_predictions_sha256": "2d432f783b302ab1c25f5da4bb3661d36d88c06890a6bf45e5803b1cf003010e",
+  "oof_probabilities_sha256": "d29bab6123763db16be6828eb21b32b949c2a15500dcabae7040387cd6531208",
+  "oof_fault_turn_sha256": "0b22593696b90134632dd8cd2e9752d81e8267086ff01490e571f9c9240492ce",
+  "cv_started": true,
+  "cv_completed": true,
+  "promotion_gate": {
+    "passed": false,
+    "evaluated": true,
+    "criterion": "Composite strictly greater than Exp15"
+  }
+}
