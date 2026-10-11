@@ -1,14 +1,14 @@
 status: complete
-covers: [exp16, exp18, exp19]
-hypotheses: Exp16 tested frozen MiniLM event-sequence probabilities fused 50:50 with Exp15 structure; Exp18 tested one schema-rate training-only telemetry-loss augmentation; Exp19 tested a fixed StepFinder-inspired sequence localizer replacing only Exp13 L1.
-transfer: Exp16 gained +0.004751 composite but missed +0.005 and concentrated gains in fold 2; Exp18 gained +0.001559 against +0.008 with a slight hit@2 loss; Exp19 gained +0.001944 composite and +0.019444 hit@2 but failed both thresholds and sharply harmed two classes.
-headroom: The strongest remaining measured signal is relational: Exp13's direct wait graph added +0.020796 composite and +0.119258 deadlock F1 under corrected semantics; the current 312-feature baseline includes those 12 wait summaries but not a unified temporal agent-task graph.
-noise: Reblending semantic/structural probabilities, changing augmentation rates, tuning the localizer, or selecting per-class routes from these same OOF folds is not supported; the hybrid's +0.007875 composite is retrospective and not a promotion result.
-warrant: Warrant one pre-registered sparse, typed, time-ordered agent-task interaction graph experiment beyond the existing wait summaries; first require a measured CPU train-plus-test estimate below 1800 seconds, and treat the existing three-fold OOF as internal evidence only.
+covers: [exp16, exp18, exp19, exp20]
+hypotheses: Exp16 tested fixed frozen-semantic fusion; Exp18 tested schema-rate telemetry-loss augmentation; Exp19 tested a full-sequence fault-turn-only localizer; Exp20 tested whether fixed Control A reproduces Exp15 before graph Candidate B.
+transfer: Exp16 missed its +0.005 gate and most gain came from fold 2; Exp18 gained only +0.001559 against +0.008; Exp19 improved hit@2 but missed both gates and harmed two classes; Exp20 produced no Candidate B result because historical Control A differed on 47 fold-0 labels.
+headroom: Exp13 wait-graph features added +0.020796 composite under corrected semantics; beyond that, existing experiments leave joint use of both past and future event context for root-cause class and onset untested. Frozen Exp15 OOF remains a valid comparator without retraining Control A.
+noise: Reblending, changing augmentation rates, localizer tuning, hindsight per-class routing, and repeated reruns to obtain parity are unsupported. Exp20's two isolated fold-0 replays matched frozen labels exactly, but they do not identify why the historical run diverged.
+warrant: One preregistered full-context event-sequence experiment is warranted only if it uses frozen Exp15 OOF as baseline, measures all available demo-train folds, freezes architecture and gate before CV, and passes the 1800-second runtime preflight; OOF remains internal evidence, not independent validation.
 
 ---
 
-# Root-Cause Review — Exp16 / Exp18 / Exp19
+# Root-Cause Review — Exp16 / Exp18 / Exp19 / Exp20
 
 **Current production baseline:** Exp15, Composite `0.7938624419`. The Exp15 ZIP and production code remain unchanged. This review uses only committed reports, machine-readable results, and saved OOF artifacts. No model, embedding, or parameter search was run.
 
@@ -19,8 +19,9 @@ warrant: Warrant one pre-registered sparse, typed, time-ordered agent-task inter
 | Exp16 | Frozen MiniLM event sequence adds shifted-vocabulary information; fixed 50:50 fusion with Exp13 structure. | Composite `0.7986136119` (`+0.0047511700`, gate `+0.005`); Macro `+0.003238`, Robustness `+0.012863`, hit@2 `-0.000833`; 2/3 fold wins. | Composite missed by `0.00024883`; fold deltas were `-0.003089`, `+0.002232`, `+0.015332`, so fold 2 supplied most of the lift. Semantic-only Composite was `0.638624`. This is a weak, fold-sensitive semantic channel, not evidence that MiniLM has no signal. |
 | Exp18 | One training-only view corrupted at official telemetry-loss rates improves Robustness, especially `dropped_handoff`. | Composite `0.7954212064` (`+0.0015587645`, gate `+0.008`); Macro `+0.001045`, Robustness `+0.004423`, hit@2 `-0.000694`; 2/3 fold wins. | The augmentation changed 563 labels but transferred only a small net composite gain. It improved `dropped_handoff` F1 by `+0.010076`, while `goal_drift` fell `0.008087`. Simulating missing telemetry alone did not close the target gap. |
 | Exp19 | A fixed full-sequence StepFinder-inspired scorer improves the primary fault turn over Exp13 L1. | Composite `0.7958068863` (`+0.0019444444`, gate `+0.005`); hit@2 `0.6509722222` (`+0.0194444444`, gate `+0.05`); 3/3 folds improved. | Localizer signal is real in each fold but too small overall; class hit@2 fell `0.280000` on `dropped_handoff` and `0.075833` on `duplicated_work`, violating the `0.05` cap. A single scorer does not transfer uniformly across fault types. |
+| Exp20 | Fixed Control A, with unchanged Exp15 model parameters and folds, reproduces the frozen Exp15 baseline before Candidate B. | Preflight STOP: 47/10,000 labels differed, all in fold 0; Candidate B was not trained. A later isolated fold-0 replay, repeated once, matched frozen classes on all 3,334 rows and matched itself bit-for-bit. | The replay narrows the issue to an execution-context-sensitive historical discrepancy, but no saved historical intermediate matrices or process-load log identify its first causal stage. The old divergence is therefore unexplained, not fixed. The separate diagnostic reconstruction using replayed fold 0 plus saved folds 1–2 matches Exp15 metrics; it is not a fresh full CV. |
 
-The three STOPs are not evidence of one implementation defect: baseline reproduction and frozen gates passed, and each run measured its declared candidate. They show that (a) fixed semantic fusion did not clear its narrow gate, (b) one synthetic corruption policy had limited transfer, and (c) one shared localizer had substantial class-specific trade-offs.
+Exp16–Exp19 tested declared candidates and failed their gates. Exp20 is different: its baseline gate failed before Candidate B, so it provides no evidence for or against the proposed graph features. The isolated replays reproduce the frozen predictions, but cannot retroactively establish why the historical pipeline run diverged.
 
 ## Hybrid result — diagnostic only
 
@@ -30,31 +31,29 @@ A leave-one-fold-out routing diagnostic selected the same four Exp19 classes on 
 
 ## Does the evidence warrant a new representation?
 
-It does **not prove** that a graph is necessary. Exp16–Exp19 reject their specific fixed candidates, not every semantic or relational representation. But further blending, corruption-rate changes, or per-class tuning on the same OOF outputs has no valid warrant: the hybrid itself is post hoc.
+It does **not prove** that a graph or a neural sequence model is necessary. Exp16–Exp19 reject their specific fixed candidates, not every semantic or temporal representation. Exp20's failed historical baseline means graph Candidate B has no interpretable score. Further blending, corruption-rate changes, or per-class tuning on the same OOF outputs has no valid warrant: the hybrid itself is post hoc.
 
 There is separate positive evidence for relational representation. Under corrected production semantics, the existing Exp13 directed wait-dependency block improved Composite from `0.7684867329` to `0.7892835288` (`+0.020796`), deadlock F1 by `+0.119258`, and Robustness by `+0.023142`; no class F1 fell. That 12-column wait graph is already part of Exp15's 312-feature label channel. Therefore repeating the wait graph is not a new experiment. The ontology and schema also expose task assignment/handoff, waits, artifact delivery, and shared-state writes that a broader graph could link explicitly.
 
-**One warranted next direction:** a sparse, typed, time-ordered graph of agent-role ↔ subtask interactions, with observable handoff/wait/result edges and artifact/state-key links. It must add relations beyond the existing `wg_*` summaries and preserve event time. This is a representation-level hypothesis, not a claim of expected score gain. Do not combine it with a hybrid retune or a new sequence encoder.
+**One warranted new representation direction:** model the complete typed event sequence with both past and future context, and predict the ontology-selected root-cause class and its onset jointly. This differs from Exp01's pointwise/past-only ranker and Exp19's localizer-only replacement; it also lets later resolution events contextualize earlier symptom events. Keep the Exp15 success predictions fixed. The justification is architectural coverage of an untested dependency, not evidence that it will lift score: the Exp13 wait graph supplies positive relational evidence, while Exp16's fixed 50:50 semantic blend was weak and fold-sensitive. Do not combine this with new graph feature blocks, probability blending, or per-class routing.
 
 ## Runtime and validation constraints
 
 - The Exp15 production ZIP measured `593.4 s` for 10,000 training and 4,000 test runs on CPU, leaving `1,206.6 s` of the 1,800 s budget in that measured environment.
 - Exp16's MiniLM encoder alone took `4,822.9 s` for 590,146 training events on CPU. This rules out the measured CPU path for Exp15 + MiniLM + StepFinder. No GPU/A100 end-to-end timing exists; do not infer one.
 - Exp19's three-fold CV took `2,346.93 s` and peak RSS `1,067 MB`; those research-CV numbers are not a production single-fit estimate. No Exp19/Exp16 offline production bundle was built.
-- A sparse graph avoids the measured MiniLM encoding cost, but its runtime is unmeasured. Before any CV, benchmark the full intended training/inference path against the 1,800 s limit; if it fails, stop. No A100 speed claim can substitute for a measurement.
+- Exp16's CPU MiniLM pass is not viable under the job limit. A small scratch-trained temporal network can avoid encoder packaging and encoding cost, but its full 3-fold research CV and one final train+test pass have not been measured. Benchmark it on representative sequences before CV; if the projected train+test path exceeds `1,800 s` or cannot fit the actual available job profile, stop. No A100 timing is known.
 - The saved 3-fold OOFs are internal validation on the same 10,000 training runs. The hidden test shift labels are unavailable; Robustness F1 is a train-side proxy. There is no independent external confirmation of the hybrid or a graph candidate.
 
 ## Protocol and remaining blockers
 
-This review covers the exact current STOP tail. No Exp20 is created here. Before a future graph experiment, freeze its input representation, folds, baseline reproduction checks, runtime gate, and promotion gate; run only after the protocol guard accepts this review. Production remains blocked until an accepted result and an offline runtime fit the platform limit. External generalization remains unverified without independent evaluation data.
+This review covers the exact current STOP tail. Exp20's diagnostic outcome is technical STOP before Candidate B. The guard must be rerun after this revision; guard acceptance is not promotion. Any next experiment needs a frozen architecture, data representation, folds, runtime gate, and promotion gate before CV. Production remains unchanged. External generalization remains unverified without independent evaluation data.
 
-After updating this review, `.venv/Scripts/python.exe experiments/protocol_guard.py` returned exit code `0`: current best `exp15`, STOP tail `exp16, exp18, exp19`, review present/current, and the guard says a new experiment may be started. This is protocol permission only; it is not authorization to create or run Exp20 here.
-
-The protocol guard currently reads `results.json` only from `promotion_gate`; Exp16, Exp18, and Exp19 store their gate under `gate`. Their historical CSV verdicts are STOP, so this does not change the current tail, but the guard does not independently cross-check those JSON gates.
+The protocol guard reads historical STOPs from `experiments/results.csv`; Exp20's results are correctly logged as a preflight STOP. The review records the historical baseline mismatch separately from the later isolated parity diagnostic.
 
 ## Archived prior review
 
-The following Exp09–Exp12 review is retained for historical context only; the machine-readable header at the top of this file covers Exp16, Exp18, and Exp19.
+The following Exp09–Exp12 review is retained for historical context only; the machine-readable header at the top of this file covers Exp16, Exp18, Exp19, and Exp20.
 
 # Root-Cause Review — Exp09 / Exp10 / Exp11 / Exp12
 
