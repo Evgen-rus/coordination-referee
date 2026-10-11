@@ -1,0 +1,52 @@
+{
+  "rows_benchmarked": 513,
+  "events_benchmarked": 30385,
+  "tokens_benchmarked": 1055773,
+  "input_build_seconds": 1.954,
+  "encoder_plus_gru_train_batches": 8,
+  "train_batch_seconds": [
+    0.1949,
+    0.2199,
+    0.1435,
+    0.1711,
+    0.1589,
+    0.1625,
+    0.1751,
+    0.1323
+  ],
+  "events_per_train_batch": [
+    892,
+    831,
+    919,
+    1092,
+    1030,
+    953,
+    1013,
+    911
+  ],
+  "train_batch_seconds_mean": 0.1698,
+  "inference_seconds": 0.888,
+  "inference_seconds_per_batch": 0.0269,
+  "estimated_candidate_train_10000_seconds": 1273.3,
+  "estimated_candidate_infer_4000_seconds": 6.7,
+  "estimated_input_build_14000_seconds": 53.3,
+  "estimated_exp15_plus_candidate_seconds": 1926.8,
+  "conservative_estimate_with_25pct_margin_seconds": 2260.2,
+  "estimated_three_fold_candidate_cv_seconds": 2548.7,
+  "estimated_input_arrays_14000_bytes": 183358791,
+  "observed_process_rss_mb": 565.9,
+  "torch": "2.14.1+cpu",
+  "torch_threads": 6,
+  "cpu_count": 12,
+  "invariant_checks": {
+    "target_perturbation": "PASS",
+    "agent_rename": "PASS",
+    "raw_agent_ids_in_semantic_text": "PASS",
+    "earlier_metadata_invariant_to_future_events": "PASS",
+    "same_t_order_message_state_artifact": "PASS",
+    "205_messages_retained": "PASS"
+  },
+  "deterministic_cpu_inference": "PASS",
+  "single_model_train_plus_infer_estimate_under_1800": false,
+  "note": "CPU estimate is from this local 12-logical-CPU environment; no DSWorks instance or GPU timing was measured."
+}
