@@ -48,5 +48,9 @@
   },
   "deterministic_cpu_inference": "PASS",
   "single_model_train_plus_infer_estimate_under_1800": false,
-  "note": "CPU estimate is from this local 12-logical-CPU environment; no DSWorks instance or GPU timing was measured."
+  "note": "CPU estimate is from this local 12-logical-CPU environment; local pretraining is permitted and contest inference only loads weights; no DSWorks instance or GPU timing was measured.",
+  "pretrained_candidate_infer_plus_input_seconds": 60.0,
+  "pretrained_exp15_plus_candidate_seconds": 653.4,
+  "pretrained_conservative_estimate_with_25pct_margin_seconds": 668.4,
+  "pretrained_package_inference_estimate_under_1800": true
 }

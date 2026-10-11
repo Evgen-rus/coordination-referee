@@ -1,5 +1,15 @@
 # Fault-First Referee — pre-CV feasibility review
 
+## Superseding one-shot plan — 2026-10-11
+
+The earlier STOP below assumed the candidate had to train inside the contest
+job. The user has now authorized local pretraining and inference-only packaged
+weights; the official task FAQ confirms this is permitted. The old measured
+benchmark is unchanged. `PLAN.md` supersedes the old gate and runtime decision:
+the fixed candidate package estimate is 653.4 seconds, or 668.4 seconds with a
+25% margin on candidate input/inference. No Exp21 CV result had been observed
+when that plan was committed.
+
 **Status: STOP before CV.** The root-cause review is current and
 `protocol_guard.py` permits a next experiment, but this prototype fails the
 measured CPU runtime gate. No OOF training, model selection, production edit,

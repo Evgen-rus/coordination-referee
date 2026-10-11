@@ -263,6 +263,9 @@ def run_preflight():
     candidate_est = train_est + infer_est + input_est
     full_est = 593.4 + candidate_est
     conservative_est = 593.4 + candidate_est * 1.25
+    pretrained_candidate_est = input_est + infer_est
+    pretrained_full_est = 593.4 + pretrained_candidate_est
+    pretrained_conservative_est = 593.4 + pretrained_candidate_est * 1.25
     result = {
         "rows_benchmarked": len(sample),
         "events_benchmarked": int(data.event_offsets[-1]),
@@ -281,6 +284,12 @@ def run_preflight():
         "conservative_estimate_with_25pct_margin_seconds": round(
             conservative_est, 1),
         "estimated_three_fold_candidate_cv_seconds": round(cv_est, 1),
+        "pretrained_candidate_infer_plus_input_seconds": round(
+            pretrained_candidate_est, 1),
+        "pretrained_exp15_plus_candidate_seconds": round(
+            pretrained_full_est, 1),
+        "pretrained_conservative_estimate_with_25pct_margin_seconds": round(
+            pretrained_conservative_est, 1),
         "estimated_input_arrays_14000_bytes": int(estimated_input_bytes),
         "observed_process_rss_mb": (None if peak_rss_mb is None else
                                      round(peak_rss_mb, 1)),
@@ -291,7 +300,10 @@ def run_preflight():
         "deterministic_cpu_inference": "PASS",
         "single_model_train_plus_infer_estimate_under_1800":
             conservative_est <= 1800,
+        "pretrained_package_inference_estimate_under_1800":
+            pretrained_conservative_est <= 1800,
         "note": "CPU estimate is from this local 12-logical-CPU environment; "
+                "pretraining is offline and the contest job only loads weights; "
                 "no DSWorks instance or GPU timing was measured.",
     }
     out = HERE / "diagnostics"
