@@ -14,7 +14,7 @@ Use only `agents`, `messages`, `artifacts`, `shared_state`, and their observable
 
 Build events from messages, state writes, and artifacts. Sort by `(numeric t, event-type rank, original list index)`, with the frozen rank **message → state → artifact**. Do not rewrite or renumber source `t`; at equal `t`, all messages precede state writes, which precede artifacts, and source order resolves ties within each type. Events without a valid numeric `t` cannot establish temporal links.
 
-Subtask matching is exact after trimming outer whitespace and case-folding; no fuzzy, lexical, or semantic matching. A concrete assignment is a `handoff` with empty `refs`, nonempty `intent`, and known `from`/`to` Agent nodes. The delegator and assignee are attributes of one Agent→Subtask assignment edge. A matching assignee response is a later `inform`, `status`, `state_update`, or `final` message from `to` with the same exact Subtask key; this is an observable response proxy because the schema has no dedicated acknowledgement field. It does not inspect message prose.
+Subtask matching is exact after trimming outer whitespace and case-folding; no fuzzy, lexical, or semantic matching. A concrete assignment is a `handoff` with empty `refs`, nonempty `intent`, and nonempty observed `from`/`to` IDs, which establish run-local Agent nodes even if absent from `agents`. The delegator and assignee are attributes of one Agent→Subtask assignment edge. A matching assignee response is a later `inform`, `status`, `state_update`, or `final` message from `to` with the same exact Subtask key; this is an observable response proxy because the schema has no dedicated acknowledgement field. It does not inspect message prose. Other-task activity is a later non-`system` message from the assignee with a different nonempty intent, before result or run end.
 
 An Artifact→Subtask edge uses a nonempty artifact `subtask`, or a unique, explicit `refs` link from a handoff with a nonempty matching `intent`. A result is a later artifact for that Subtask, or a later handoff with nonempty `refs` and the exact `intent`; when refs resolve uniquely to artifacts, their creator (`by`) is the result actor, otherwise the observable handoff sender is used. A result closes every currently open assignment for the exact Subtask. Missing or conflicting identifiers never create a guessed link. A repeated assignment before that first result remains a separate open assignment.
 
@@ -22,7 +22,7 @@ Other graph edges are: assignee Agent→Subtask response; Agent→Artifact creat
 
 ## Fixed candidate feature block (24 numeric columns)
 
-Let `A` be concrete assignments, `R` assignments with a later linked result, `S` the subset with a matching assignee response, and `O` the subset whose assignee emits a message with a different nonempty intent before the result (or run end). Rates use their named set as denominator and are zero for an empty denominator. Time span is `max(1, max(event.t)-min(event.t))`; normalized durations divide by this span. Delivery delay is `result.t-assignment.t` in source turns.
+Let `A` be concrete assignments, `R` assignments with a later linked result, `S` the subset with a matching assignee response, and `O` the subset whose assignee emits a non-`system` message with a different nonempty intent before the result (or run end). Rates use their named set as denominator and are zero for an empty denominator. Time span is `max(1, max(event.t)-min(event.t))`; normalized durations divide by this span. Delivery delay is `result.t-assignment.t` in source turns. The open-assignment area integrates the count after each event up to the next event time and ends at the final observed event time; no duration is invented after the run ends.
 
 | Feature | Fixed definition |
 | --- | --- |
@@ -42,14 +42,14 @@ Let `A` be concrete assignments, `R` assignments with a later linked result, `S`
 | `g_repeat_assignment_before_result` | Assignment edges added while that exact Subtask already has an open edge |
 | `g_repeat_before_result_rate` | Previous count / `|A|` |
 | `g_other_executor_deliveries` | Resolved assignments whose linked result actor differs from the assigned agent |
-| `g_other_executor_delivery_rate` | Previous count / `|R|` |
+| `g_other_executor_delivery_rate` | Previous count / `|R|`; results without a known actor remain in the denominator and are never called substitutions |
 | `g_wait_task_links` | Wait edges with explicit Subtask and named awaited agent |
 | `g_wait_resolved_by_named_agent_rate` | Such waits followed by a same-Subtask result from the named agent / `g_wait_task_links` |
 | `g_wait_to_delivery_delay_mean_rel` | Mean wait-to-result delay / time span, over resolved links |
 | `g_state_multiwriter_keys` | Number of state keys written by more than one distinct known Agent |
 | `g_state_cross_writer_events` | Writes whose known writer differs from the preceding known writer on that key |
 | `g_state_cross_writer_overrides` | Cross-writer events whose `op` is exactly `override` |
-| `g_state_cross_writer_value_changes` | Cross-writer events whose exact `value` differs from the preceding write on that key |
+| `g_state_cross_writer_value_changes` | Cross-writer events whose type-preserving canonical JSON `value` differs from the preceding write on that key; omit comparisons with a missing value |
 
 All 24 columns are output in this order as finite float64 values; no feature selection, threshold, or post-result deletion is allowed. Existing `wg_*` columns stay in Exp15 and are not regenerated or replaced. Exact column equality with any of the 312 incumbent columns is a pre-CV STOP, not a reason to edit the block.
 
