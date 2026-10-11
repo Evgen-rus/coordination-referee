@@ -1,0 +1,32 @@
+Exp20 Control A isolated fold-0 diagnostic; no Candidate B
+Started UTC: 2026-10-11T07:32:46.880601+00:00
+Train CSV SHA256: 8e8feb4ee284d2acd918b533921631fa905d47adf8d34881f89359964a1bcfbc
+Verified manifest data SHA256: 8e8feb4ee284d2acd918b533921631fa905d47adf8d34881f89359964a1bcfbc
+Run ID SHA256: 840470f9a5e1a4b387f6072e8cae12733bd6045fe3b6fb5376318b6113eb4761
+Fold 0 validation SHA256: c495670bda7b098c948dfe0be629eafa5b0f748178366e4a7e33536b0883cc33
+Outer fold sizes: [3334, 3333, 3333]
+Verified manifest code SHA256: 163400c1c305f206068cff054e292158ed89dc48111b695ec179dd2484ae34af
+Current Exp07 code SHA256: 163400c1c305f206068cff054e292158ed89dc48111b695ec179dd2484ae34af
+Current cache fingerprint: 887595aea4584932
+Cache files: ['D:\\My_dev_project\\coordination-referee\\experiments\\exp07_fault_windows\\.cache\\build_all.887595aea4584932.pkl', 'D:\\My_dev_project\\coordination-referee\\experiments\\exp07_fault_windows\\.cache\\windows.887595aea4584932.pkl']
+Python=3.11.16 LightGBM=4.7.0 NumPy=2.4.6 scikit-learn=1.9.1 joblib=1.6.0
+CPU logical=12 joblib=12
+Thread environment: {"LOKY_MAX_CPU_COUNT": null, "MKL_NUM_THREADS": null, "NUMEXPR_NUM_THREADS": null, "OMP_DYNAMIC": null, "OMP_NUM_THREADS": null, "OMP_PLACES": null, "OMP_PROC_BIND": null, "OPENBLAS_NUM_THREADS": null}
+Fold construction: seed-0 StratifiedKFold(3); window inner fits: workers=3 default, threads=-1
+Current corrected_fold_matrices source: 820fd552c6f74e262602d0cfb049904d88305d4c11f71872b319e2e6db152249
+Current Exp20 source: 124fd184c8530a759a66d943ed0f14f917de874883bc8f4fcfd6e1250baa4b16
+[cache] HIT  build_all
+[cache] HIT  windows
+Foundation matrix: shape=(10000, 249) dtype=float64 sha256=9d2ec053fd688f448f6643d779fcbf0404279151c5dc1e4fe2df65d6daeb87c0
+Foundation column names SHA256: d1ac1ff0af11db525cb4a88cf14cf7af9fc19547e073418fb1a78a9632d98fdd
+Window dataset X: shape=(457203, 83) dtype=float64 sha256=75844d2c272d54581131aef0f197c138af3e2d5571180e6d63ad5ef28020374e
+Window targets/run-index SHA256: 5937485b77927a419c08f04a98a634f61bf269f3588a2a9627da7e2e58d0e0f1 / e64c028f301ed914f9001d1acd7ce7b5eb9dd0554d83182685c8cced3a4e1c76
+Frozen Exp13 wg_* matrix: shape=(10000, 12) dtype=float64 sha256=8009571285716226972e8d358e019ff486cadcb8d14f9bddaa4b6e486081a05c
+[   4.6s]   [fold 0] stacking verified: 6666 outer-train runs, each cross-fitted from a model excluding it (3 inner folds, no overlap)
+matrix:     fold 0: corrected 300-col matrices built  129.6s
+repeat 1: labels differ vs frozen=0/3334; vs previous Exp20 Control A=47; max|dP|=0.000000030
+[ 156.6s]   [fold 0] stacking verified: 6666 outer-train runs, each cross-fitted from a model excluding it (3 inner folds, no overlap)
+matrix:     fold 0: corrected 300-col matrices built  124.5s
+repeat 2: labels differ vs frozen=0/3334; vs previous Exp20 Control A=47; max|dP|=0.000000030
+Repeat probabilities bit-identical: True
+Saved probabilities, intermediate hashes, and mismatch CSV under D:\My_dev_project\coordination-referee\experiments\exp20_agent_task_graph\diagnostics\control_a_fold0_20261011

@@ -1,0 +1,21 @@
+{
+  "absolute_metric_differences_vs_exp15": {
+    "composite": 0.0,
+    "fault_turn_hit2": 0.0,
+    "macro_f1": 0.0,
+    "robustness_f1": 0.0,
+    "success_f1": 1.1102230246251565e-16
+  },
+  "all_metrics_within_1e_12": true,
+  "l1_turn_mismatches_vs_frozen": 0,
+  "label_mismatches_vs_frozen": 0,
+  "method": "new isolated fold-0 Control A probabilities + previously saved original Control A folds 1 and 2; no additional fits for folds 1/2",
+  "note": "Diagnostic reconstruction, not a new full three-fold CV execution; Exp20 original STOP artifacts are unchanged.",
+  "reconstructed_metrics": {
+    "composite": 0.7938624418508566,
+    "fault_turn_hit2": 0.6315277777777778,
+    "macro_f1": 0.812954558673859,
+    "robustness_f1": 0.7599843692318033,
+    "success_f1": 0.8949086161879896
+  }
+}
