@@ -1,0 +1,7 @@
+EXP20 - Temporal Agent-Task Graph; fixed plan committed before CV
+corrected fold-local incumbent 312 + graph 24 matrices ready in 419.3s
+Control A: fitting unchanged Exp15 312-feature model across the fixed folds
+Control A fold 0 complete: train=6666 val=3334 elapsed=24.3s
+Control A fold 1 complete: train=6667 val=3333 elapsed=21.9s
+Control A fold 2 complete: train=6667 val=3333 elapsed=21.1s
+STOP before candidate CV: Control A did not reproduce frozen Exp15 baseline

@@ -1,0 +1,37 @@
+{
+  "baseline_production_runtime_sec": 593.4,
+  "estimated_extraction_14000_sec": 4.691713599488139,
+  "estimated_incremental_model_sec": 4.738748500007205,
+  "estimated_total_production_sec": 602.8304620994953,
+  "events_per_sec": 184983.15841245843,
+  "feature_extraction_sec": 0.3351223999634385,
+  "lightgbm_batch": {
+    "candidate_336": {
+      "features": 336,
+      "fit_sec": 104.69325140002184,
+      "infer_4000_sec": 0.3568659999873489,
+      "predicted_rows": 4000,
+      "rows_test": 4000,
+      "rows_train": 10000
+    },
+    "control_312": {
+      "features": 312,
+      "fit_sec": 99.89196709997486,
+      "infer_4000_sec": 0.41940180002711713,
+      "predicted_rows": 4000,
+      "rows_test": 4000,
+      "rows_train": 10000
+    }
+  },
+  "logical_cpu_count": 12,
+  "peak_rss_mb": 590.5625,
+  "processor": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+  "ram_limit_mb": 16384,
+  "ready": true,
+  "runs_per_sec": 2983.9843594731324,
+  "runtime_limit_sec": 1800.0,
+  "sample_events": 61992,
+  "sample_runs": 1000,
+  "source": "Exp15 packaged smoke record in experiments/results.csv",
+  "warning": "Model timing uses a deterministic full-size synthetic matrix; it estimates incremental LightGBM cost only. No research CV time is treated as production time."
+}

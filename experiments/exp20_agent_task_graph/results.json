@@ -1,0 +1,107 @@
+{
+  "candidate_B_cv_started": false,
+  "candidate_B_trained": false,
+  "control_A_cv_completed": true,
+  "decision": "STOP_PREFLIGHT",
+  "details": {
+    "control_A": {
+      "completed": true,
+      "label_mismatches": 47,
+      "metrics": {
+        "composite": {
+          "abs_diff": 0.0007483484690495867,
+          "expected": 0.7938624418508566,
+          "got": 0.7946107903199062,
+          "pass": false
+        },
+        "fault_turn_hit2": {
+          "abs_diff": 0.0001388888888889106,
+          "expected": 0.6315277777777778,
+          "got": 0.6313888888888889,
+          "pass": false
+        },
+        "macro_f1": {
+          "abs_diff": 0.0008012848985908816,
+          "expected": 0.812954558673859,
+          "got": 0.8137558435724499,
+          "pass": false
+        },
+        "robustness_f1": {
+          "abs_diff": 0.0014463796345726143,
+          "expected": 0.7599843692318033,
+          "got": 0.761430748866376,
+          "pass": false
+        },
+        "success_f1": {
+          "abs_diff": 1.1102230246251565e-16,
+          "expected": 0.8949086161879897,
+          "got": 0.8949086161879896,
+          "pass": true
+        }
+      },
+      "mismatches_by_fold": {
+        "0": 47,
+        "1": 0,
+        "2": 0
+      },
+      "turns_identical": false
+    },
+    "labels_identical": false,
+    "metrics": {
+      "composite": {
+        "abs_diff": 0.0007483484690495867,
+        "expected": 0.7938624418508566,
+        "got": 0.7946107903199062,
+        "pass": false
+      },
+      "fault_turn_hit2": {
+        "abs_diff": 0.0001388888888889106,
+        "expected": 0.6315277777777778,
+        "got": 0.6313888888888889,
+        "pass": false
+      },
+      "macro_f1": {
+        "abs_diff": 0.0008012848985908816,
+        "expected": 0.812954558673859,
+        "got": 0.8137558435724499,
+        "pass": false
+      },
+      "robustness_f1": {
+        "abs_diff": 0.0014463796345726143,
+        "expected": 0.7599843692318033,
+        "got": 0.761430748866376,
+        "pass": false
+      },
+      "success_f1": {
+        "abs_diff": 1.1102230246251565e-16,
+        "expected": 0.8949086161879897,
+        "got": 0.8949086161879896,
+        "pass": true
+      }
+    },
+    "prechecks": {
+      "fold_partition": "passed",
+      "graph_feature_novelty": "passed",
+      "run_id_alignment": "passed",
+      "target_leakage_and_agent_rename": "passed before Control A"
+    },
+    "runtime": {
+      "benchmark_peak_rss_mb": 590.5625,
+      "control_A_fit_sec": 67.30000000000001,
+      "matrix_build_sec": 419.3,
+      "production_estimate_sec": 602.8304620994953,
+      "research_pre_candidate_logged_stage_sec": 486.6
+    },
+    "turns_identical": false
+  },
+  "experiment": "exp20",
+  "leaderboard_used": false,
+  "production_changed": false,
+  "promotion_gate": {
+    "evaluated": false,
+    "passed": false,
+    "reason": "baseline parity failed before Candidate B"
+  },
+  "reason": "Control A did not reproduce frozen Exp15 baseline",
+  "zip_created": false
+}

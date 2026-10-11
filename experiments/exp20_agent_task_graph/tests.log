@@ -1,0 +1,23 @@
+test_saved_exp15_baseline_metrics_and_turns_are_exact (experiments.exp20_agent_task_graph.test_features.FrozenBaselineTests.test_saved_exp15_baseline_metrics_and_turns_are_exact) ... D:\My_dev_project\coordination-referee\experiments\exp10_ab_probability_blend\blend.py:181: ResourceWarning: unclosed file <_io.BufferedReader name='D:\\My_dev_project\\coordination-referee\\data\\train.csv'>
+  h.update(hashlib.sha256(open(train_csv, "rb").read()).digest())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+D:\My_dev_project\coordination-referee\experiments\exp10_ab_probability_blend\blend.py:183: ResourceWarning: unclosed file <_io.BufferedReader name='D:\\My_dev_project\\coordination-referee\\baseline\\features.py'>
+  h.update(hashlib.sha256(open(p, "rb").read()).digest())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_all_rows_and_long_event_stream_are_retained (experiments.exp20_agent_task_graph.test_features.TemporalGraphTests.test_all_rows_and_long_event_stream_are_retained) ... ok
+test_assignment_to_result_link_uses_exact_intent_and_original_t (experiments.exp20_agent_task_graph.test_features.TemporalGraphTests.test_assignment_to_result_link_uses_exact_intent_and_original_t) ... ok
+test_deterministic_finite_output (experiments.exp20_agent_task_graph.test_features.TemporalGraphTests.test_deterministic_finite_output) ... ok
+test_event_order_is_message_then_state_then_artifact_at_equal_t (experiments.exp20_agent_task_graph.test_features.TemporalGraphTests.test_event_order_is_message_then_state_then_artifact_at_equal_t) ... ok
+test_fixed_folds_have_no_overlap_and_cover_every_row_once (experiments.exp20_agent_task_graph.test_features.TemporalGraphTests.test_fixed_folds_have_no_overlap_and_cover_every_row_once) ... ok
+test_missing_and_conflicting_identifiers_do_not_guess_links (experiments.exp20_agent_task_graph.test_features.TemporalGraphTests.test_missing_and_conflicting_identifiers_do_not_guess_links) ... ok
+test_reassignment_to_another_agent_and_substitute_delivery (experiments.exp20_agent_task_graph.test_features.TemporalGraphTests.test_reassignment_to_another_agent_and_substitute_delivery) ... ok
+test_response_without_result_and_other_task_activity (experiments.exp20_agent_task_graph.test_features.TemporalGraphTests.test_response_without_result_and_other_task_activity) ... ok
+test_target_fields_and_agent_id_renaming_do_not_change_features (experiments.exp20_agent_task_graph.test_features.TemporalGraphTests.test_target_fields_and_agent_id_renaming_do_not_change_features) ... ok
+test_wait_to_delivery_and_state_writer_relations (experiments.exp20_agent_task_graph.test_features.TemporalGraphTests.test_wait_to_delivery_and_state_writer_relations) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.917s
+
+OK
+  robustness mask: cache hit (robustness_mask.8f9fa8ad20cd8a4a.npy)
