@@ -18,6 +18,14 @@ Control A was fitted on the fixed outer folds. Candidate B was not trained.
 
 No candidate CV was run. Exp15 production remains unchanged.
 
+## Control A by fold
+
+| Fold | Rows | Frozen composite | Control A composite | Delta | Frozen Macro | Control A Macro | Frozen Robustness | Control A Robustness | Frozen hit@2 | Control A hit@2 |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 3334 | 0.7905699305 | 0.7928372676 | +0.0022673371 | 0.8013657954 | 0.8037982873 | 0.7762703535 | 0.7806413848 | 0.6179166667 | 0.6175000000 |
+| 1 | 3333 | 0.7987070993 | 0.7987070993 | +0.0000000000 | 0.8197832754 | 0.8197832754 | 0.7624417787 | 0.7624417787 | 0.6358333333 | 0.6358333333 |
+| 2 | 3333 | 0.7908629737 | 0.7908629737 | +0.0000000000 | 0.8176619496 | 0.8176619496 | 0.7355506816 | 0.7355506816 | 0.6408333333 | 0.6408333333 |
+
 ## Runtime
 
 - Corrected incumbent matrix build: 419.3 s.

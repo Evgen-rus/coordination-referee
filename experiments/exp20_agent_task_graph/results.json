@@ -46,6 +46,119 @@
       },
       "turns_identical": false
     },
+    "control_A_fold_diagnostics": [
+      {
+        "composite_delta_vs_frozen": 0.002267337080116172,
+        "control_A": {
+          "composite": 0.7928372675986463,
+          "fault_turn_hit2": 0.6175,
+          "macro_f1": 0.8037982872549465,
+          "per_class_f1": {
+            "clean": 0.8767263427109975,
+            "conflict": 0.892271662763466,
+            "deadlock": 0.8324873096446701,
+            "dropped_handoff": 0.656934306569343,
+            "duplicated_work": 0.8379746835443038,
+            "goal_drift": 0.8282582216808769,
+            "runaway_loop": 0.7019354838709677
+          },
+          "robustness_f1": 0.7806413847735811,
+          "success_f1": 0.8935185185185185
+        },
+        "fold": 0,
+        "frozen_Exp15": {
+          "composite": 0.7905699305185301,
+          "fault_turn_hit2": 0.6179166666666667,
+          "macro_f1": 0.8013657953937644,
+          "per_class_f1": {
+            "clean": 0.8762198253723678,
+            "conflict": 0.8930669800235017,
+            "deadlock": 0.831858407079646,
+            "dropped_handoff": 0.6511627906976745,
+            "duplicated_work": 0.8337531486146096,
+            "goal_drift": 0.8300970873786407,
+            "runaway_loop": 0.6934023285899095
+          },
+          "robustness_f1": 0.7762703535088138,
+          "success_f1": 0.8935185185185185
+        },
+        "n_val": 3334
+      },
+      {
+        "composite_delta_vs_frozen": 0.0,
+        "control_A": {
+          "composite": 0.7987070993133882,
+          "fault_turn_hit2": 0.6358333333333334,
+          "macro_f1": 0.8197832754159394,
+          "per_class_f1": {
+            "clean": 0.8799582463465553,
+            "conflict": 0.910394265232975,
+            "deadlock": 0.8394160583941606,
+            "dropped_handoff": 0.6338028169014085,
+            "duplicated_work": 0.8487179487179487,
+            "goal_drift": 0.8626974483596598,
+            "runaway_loop": 0.7634961439588689
+          },
+          "robustness_f1": 0.7624417787286947,
+          "success_f1": 0.8974778905994104
+        },
+        "fold": 1,
+        "frozen_Exp15": {
+          "composite": 0.7987070993133882,
+          "fault_turn_hit2": 0.6358333333333334,
+          "macro_f1": 0.8197832754159394,
+          "per_class_f1": {
+            "clean": 0.8799582463465553,
+            "conflict": 0.910394265232975,
+            "deadlock": 0.8394160583941606,
+            "dropped_handoff": 0.6338028169014085,
+            "duplicated_work": 0.8487179487179487,
+            "goal_drift": 0.8626974483596598,
+            "runaway_loop": 0.7634961439588689
+          },
+          "robustness_f1": 0.7624417787286947,
+          "success_f1": 0.8974778905994104
+        },
+        "n_val": 3333
+      },
+      {
+        "composite_delta_vs_frozen": 0.0,
+        "control_A": {
+          "composite": 0.790862973716449,
+          "fault_turn_hit2": 0.6408333333333334,
+          "macro_f1": 0.817661949580538,
+          "per_class_f1": {
+            "clean": 0.8790406673618353,
+            "conflict": 0.9066985645933014,
+            "deadlock": 0.8293897882938979,
+            "dropped_handoff": 0.6796657381615598,
+            "duplicated_work": 0.8409090909090909,
+            "goal_drift": 0.8401937046004843,
+            "runaway_loop": 0.7477360931435963
+          },
+          "robustness_f1": 0.7355506816330237,
+          "success_f1": 0.8937399678972713
+        },
+        "fold": 2,
+        "frozen_Exp15": {
+          "composite": 0.790862973716449,
+          "fault_turn_hit2": 0.6408333333333334,
+          "macro_f1": 0.817661949580538,
+          "per_class_f1": {
+            "clean": 0.8790406673618353,
+            "conflict": 0.9066985645933014,
+            "deadlock": 0.8293897882938979,
+            "dropped_handoff": 0.6796657381615598,
+            "duplicated_work": 0.8409090909090909,
+            "goal_drift": 0.8401937046004843,
+            "runaway_loop": 0.7477360931435963
+          },
+          "robustness_f1": 0.7355506816330237,
+          "success_f1": 0.8937399678972713
+        },
+        "n_val": 3333
+      }
+    ],
     "labels_identical": false,
     "metrics": {
       "composite": {
