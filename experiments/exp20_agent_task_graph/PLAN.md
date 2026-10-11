@@ -65,7 +65,7 @@ Use saved Exp15 `success_pred_B.npy` unchanged, after verifying its 10,000-row a
 
 ## Pre-CV checks and runtime gate
 
-Before the single candidate CV: run the unit tests below; verify target perturbation invariance, deterministic output, consistent agent-ID renaming, exact event tie order, no train/validation overlap, 10,000-row run-ID alignment, full row retention, and exact Control A parity. Compare each graph column against the existing 312 columns and STOP on exact duplicates. Report maximum absolute correlation as a diagnostic only; it cannot select or alter features.
+Before the single candidate CV: run the unit tests below; verify target perturbation invariance, deterministic output, consistent agent-ID renaming, exact event tie order, no train/validation overlap, 10,000-row run-ID alignment, full row retention, and exact Control A parity. Compare each graph column against the existing 312 columns and STOP on exact duplicates; also STOP if the fixed block contains no nonconstant, nonduplicate column. Report maximum absolute correlation as a diagnostic only; it cannot select or alter features.
 
 Benchmark graph extraction on 500–1,000 representative runs, plus one representative LightGBM fit/inference batch, without MiniLM or multiple concurrent heavy trainings. Estimate the added cost for 10,000 train + 4,000 test and add it to the measured Exp15 production runtime of 593.4 s. Only proceed when this measurement-based total is no more than 1,800 s and memory is within the existing production environment; otherwise record a preflight STOP and do not run candidate CV. Do not substitute a GPU/A100 estimate. This estimate is separate from research CV runtime.
 
