@@ -10,7 +10,7 @@ warrant: One preregistered full-context event-sequence experiment is warranted o
 
 # Root-Cause Review — Exp16 / Exp18 / Exp19 / Exp20
 
-**Current production baseline:** Exp15, Composite `0.7938624419`. The Exp15 ZIP and production code remain unchanged. This review uses only committed reports, machine-readable results, and saved OOF artifacts. No model, embedding, or parameter search was run.
+**Current production baseline:** Exp15, Composite `0.7938624419`. The Exp15 ZIP and production code remain unchanged. This review uses only committed reports, machine-readable results, and saved OOF artifacts. No Exp16–Exp20 candidate was refit or retuned. The later, separate Fault-First runtime preflight is recorded in `experiments/fault_first_referee_preflight/PRELIMINARY_REPORT.md`.
 
 ## Hypotheses and observed transfer
 
@@ -42,7 +42,7 @@ There is separate positive evidence for relational representation. Under correct
 - The Exp15 production ZIP measured `593.4 s` for 10,000 training and 4,000 test runs on CPU, leaving `1,206.6 s` of the 1,800 s budget in that measured environment.
 - Exp16's MiniLM encoder alone took `4,822.9 s` for 590,146 training events on CPU. This rules out the measured CPU path for Exp15 + MiniLM + StepFinder. No GPU/A100 end-to-end timing exists; do not infer one.
 - Exp19's three-fold CV took `2,346.93 s` and peak RSS `1,067 MB`; those research-CV numbers are not a production single-fit estimate. No Exp19/Exp16 offline production bundle was built.
-- Exp16's CPU MiniLM pass is not viable under the job limit. A small scratch-trained temporal network can avoid encoder packaging and encoding cost, but its full 3-fold research CV and one final train+test pass have not been measured. Benchmark it on representative sequences before CV; if the projected train+test path exceeds `1,800 s` or cannot fit the actual available job profile, stop. No A100 timing is known.
+- Exp16's CPU MiniLM pass is not viable under the job limit. The separate scratch-trained Fault-First preflight measured an Exp15-plus-candidate point estimate of `1,926.8 s` on the local 12-logical-CPU host, above `1,800 s`; its 3-fold candidate CV estimate is `2,548.7 s`. No full CV or DSWorks/GPU run occurred. Do not substitute an unmeasured GPU estimate.
 - The saved 3-fold OOFs are internal validation on the same 10,000 training runs. The hidden test shift labels are unavailable; Robustness F1 is a train-side proxy. There is no independent external confirmation of the hybrid or a graph candidate.
 
 ## Protocol and remaining blockers
